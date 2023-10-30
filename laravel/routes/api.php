@@ -42,7 +42,7 @@ Route::controller(AuthController::class)
 });
 
 Route::controller(OpcionesController::class)->prefix('/saiv/opciones')
-->middleware('auth:api','role:Super Administrador|Administrador|Usuario')->group(function (){
+->middleware('auth:api','role:Super Administrador|Administrador|Usuaria/o')->group(function (){
     Route::get('index','index');
     Route::get('municipios/{departamento}','getMunicipios');
     Route::get('seguimiento/juridico/index','indexSeguimientoJuridico');
@@ -52,7 +52,7 @@ Route::controller(OpcionesController::class)->prefix('/saiv/opciones')
 
 // Archivos de Casos
 Route::controller(ArchivosController::class)->prefix('/saiv/archivos')
-->middleware('auth:api', 'role:Super Administrador|Administrador|Usuario')->group(function (){
+->middleware('auth:api', 'role:Super Administrador|Administrador|Usuaria/o')->group(function (){
     Route::post('cargar/caso','cargarArchivosCaso');
     Route::get('show/caso/{key}', 'showArchivosCasos');
     Route::get('descargar/{key}','descargarArchivo');
@@ -64,7 +64,7 @@ Route::controller(ArchivosController::class)->prefix('/saiv/archivos')
 // Modulo Casos
 Route::controller(CasosController::class)->prefix('/saiv/casos')
 ->group(function (){
-    Route::middleware('auth:api', 'role:Super Administrador|Administrador|Usuario')->group(function(){
+    Route::middleware('auth:api', 'role:Super Administrador|Administrador|Usuaria/o')->group(function(){
         Route::post('index','index');
         Route::post('guardar','store');
         Route::post('show','showCaso');

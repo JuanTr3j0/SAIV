@@ -61,6 +61,7 @@
                 :titulo="'Contraseña'"
                 v-model:value="formulario.contraseña"
               />
+         
               <FormInput
                 v-show="!showVer"
                 :id="'usuario-repetir-contrasena'"
@@ -226,6 +227,9 @@ export default {
       ];
     }
     const handledClickGuardar = async() =>{
+      console.log('Contraseña antes de enviar:', formulario.contraseña);
+// Código para enviar la solicitud
+
       loading.value = true;                
       try {
           const _response = await servicios.actualizarCrear(formulario, 'auth/registro');

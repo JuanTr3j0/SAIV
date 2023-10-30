@@ -47,7 +47,7 @@ export default defineComponent({
     setup:() => {
         const nivel_0 = ['Super Administrador'];
         const nivel_2 = ['Administrador','Super Administrador'];
-        const nivel_3 = ['Usuario','Super Administrador', 'Administrador'];
+        const nivel_3 = ['Usuaria/o','Super Administrador', 'Administrador'];
         return{
             menu:[
                 { 

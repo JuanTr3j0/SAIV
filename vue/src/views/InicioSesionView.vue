@@ -133,7 +133,7 @@ export default {
             loading.value = true;
 
             const data = response._response.data;
-
+            console.log(data.permisos)
             store.commit('sesion', data);            
             alert.value.errores = ['Iniciando Sesión'];
 
@@ -141,7 +141,7 @@ export default {
           }
         }else if(response._error!==null){
           const status = response._error.response.status;
-          console.log(response._error);
+          console.log("Errores: "+response._error);
           if( status === 401 || status === 403) {
             
             alert.value.tipo = 'warning'; 

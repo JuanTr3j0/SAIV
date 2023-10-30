@@ -14,6 +14,7 @@ class AuthController extends Controller
 {
     public function rol($user){
         $roles = [
+            'Usuaria/o',
             'Usuario',
             'Administrador',
             'Super Administrador'
@@ -40,7 +41,7 @@ class AuthController extends Controller
 
         $validator = Validator::make($request->all(),([
             'usuario'       =>  'required',
-            'correo'        =>  ['required','email:rfc,dns','max:25','string','unique:users,email'.(is_null($_usuario) ? null : ','.$_id_usuario)],
+            'correo'        =>  ['required','email:rfc,dns','max:30','string','unique:users,email'.(is_null($_usuario) ? null : ','.$_id_usuario)],
             'oficina'       =>  'required',
             'tipo_usuario'  =>  'required',
             'contraseña'    =>  'required|min:8',
@@ -55,13 +56,14 @@ class AuthController extends Controller
             $oficina = auth()->user()->hasRole('Super Administrador') ? $request->oficina :  auth()->user()->oficina;
 
        /* Este es el código que crea el usuario. */
+       $pass = "test: ".$request->contraseña;
         $user = User::updateOrCreate(
             [ 'id' =>  $_id_usuario],
             [
                 'name' => $request->usuario,
                 'email' => $request->correo,
                 'oficina' => $oficina,
-                'password' => bcrypt($request->contrasena)
+                'password' => bcrypt($request->contraseña)
             ]
         );
 
@@ -95,7 +97,7 @@ class AuthController extends Controller
         creado correctamente. */
         return response()->json([
             'key' => DB::select(DB::raw("select md5(".$user->id.") as 'key';"))[0]->key,
-            'mensaje' => 'Registro Guardado',
+            'mensaje' => 'Registro Guardado +'.$pass,
             'usuario' => $user->hasRole('Usuaria/o')
         ], 201);
     }

@@ -5,11 +5,13 @@ export default createStore({
     
     //Usuario
     USUARIO:{ 
+      permisos:localStorage.getItem('permisos'),
       usuario:localStorage.getItem('usuario'), 
       access_token:localStorage.getItem('access_token'), 
       correo:localStorage.getItem('correo'),
       oficina:localStorage.getItem('oficina'),
-      acceso:localStorage.getItem('acceso')
+      acceso:localStorage.getItem('acceso'),
+      
     },
 
     //Peticiones HTTP

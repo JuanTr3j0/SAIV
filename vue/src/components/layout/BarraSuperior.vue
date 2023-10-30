@@ -20,7 +20,9 @@
                         data-icon="octicon-star"
                         data-size="large"
                         data-show-count="true"
-                    >{{store.state.USUARIO.acceso??'Desconocido'}}</label>
+                    >
+                    {{store.state.USUARIO.acceso??'Desconocido'}}
+                 </label>
                 </li> 
             </ul>          
             <!-- Place this tag where you want the button to render. -->
