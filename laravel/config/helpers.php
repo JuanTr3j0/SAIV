@@ -1,0 +1,72 @@
+<?php
+if (! function_exists('query_busqueda')) {
+    function query_busqueda($objeto, $columns, $term)
+    {
+        if($term){
+            $words_search = explode(" ",$term);
+            $objeto = $objeto::where(function ($query) use ($columns,$words_search) {
+                foreach ($words_search as $word) {
+                    $query = $query->where(function ($query) use ($columns, $word) {
+                        foreach ($columns as $column) {
+                            $query->orWhere($column,'like',"%$word%");
+                        }
+                    });
+                }
+            });
+            return $objeto;
+        }else 
+            return new $objeto;
+    }
+}
+
+if (! function_exists('getEnunms')) {
+    function getEnunms($tabla, $column){
+        $type = \Illuminate\Support\Facades\DB::select(\Illuminate\Support\Facades\DB::raw('SHOW COLUMNS FROM '.$tabla.' WHERE Field = "'.$column.'"'))[0]->Type;
+        
+        preg_match('/^enum\((.*)\)$/', $type, $matches);
+        $values = array();
+
+        foreach(explode('\',', $matches[1]) as $value){
+            $values[] = trim($value, "'");
+        }
+
+        return $values;
+    }
+}
+
+if (! function_exists('edad')) {
+    function edad($fecha_nacimiento){
+        $nacimiento = strval($fecha_nacimiento)." 06:00:00";
+        $actual = \Carbon\Carbon::now();
+        return $actual->diffInYears($nacimiento, $actual->toDateTimeString());
+    }        
+}
+
+if (! function_exists('tipo_denuncia')) {
+    function tipo_denuncia(){
+        $oficina = \App\Models\User::select('oficinas.codigo as codigo')
+        ->join('oficinas', 'oficinas.id', '=', 'users.oficina')
+        ->findOrFail(auth()->id());
+        
+        // return (object)[
+        //     "denuncia" => 'UAI'.$oficina->codigo,
+        //     "sin_denuncia" => 'SUAI'.$oficina->codigo
+        // ];
+
+        return (object)[
+            "denuncia" => 'D'.$oficina->codigo,
+            "sin_denuncia" => 'SD'.$oficina->codigo,
+            "diligencia" => 'DIL'.$oficina->codigo,
+        ];
+    }        
+}
+
+if (! function_exists('bitacora_errores')) {
+    function bitacora_errores($archivo, $e){
+        $bitacora = new \App\Models\BitacoraErrores();        
+        $bitacora -> usuario    = auth()->id();
+        $bitacora -> error      = 'Linea -> '.$e->getLine().' Error -> '.$e->getMessage();
+        $bitacora -> archivo    = $archivo;
+        $bitacora -> save();
+    }        
+}
