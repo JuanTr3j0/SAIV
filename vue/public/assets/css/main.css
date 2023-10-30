@@ -1888,9 +1888,10 @@ section {
 }
 
 .hero p {
-  color: rgba(255, 255, 255, 0.6);
-  font-weight: 400;
-  margin-bottom: 30px;
+  text-align: center !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+  font-weight: 400 !important;
+  margin-bottom: 30px !important;
 }
 
 .hero .btn-get-started {
@@ -2560,7 +2561,7 @@ section {
   font-size: 14px;
   background-color: var(--color-primary);
   padding: 50px 0;
-  color: white;
+  color: white !important;
 }
 
 .footer .footer-info .logo {
@@ -2584,6 +2585,7 @@ section {
 .footer .footer-info p {
   font-size: 14px;
   font-family: var(--font-primary);
+  color: white !important;
 }
 
 .footer .social-links a {
@@ -2610,6 +2612,7 @@ section {
   font-weight: bold;
   position: relative;
   padding-bottom: 12px;
+  color: white !important;
 }
 
 .footer .footer-links {
@@ -2652,6 +2655,7 @@ section {
 
 .footer .footer-contact p {
   line-height: 26px;
+  color: white !important;
 }
 
 .footer .copyright {

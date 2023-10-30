@@ -80,7 +80,7 @@ Route::controller(CasosController::class)->prefix('/saiv/casos')
 
 // Modulo Seguimiento Jurídico
 Route::controller(SeguimientoJuridicoController::class)->prefix('/saiv/seguimiento/juridico')
-->middleware('auth:api', 'role:Super Administrador|Administrador|Usuario')->group(function (){
+->middleware('auth:api', 'role:Super Administrador|Administrador|Usuaria/o')->group(function (){
     Route::post('index','index');  
     Route::post('guardar','store');
     Route::get('obtener/{key}','show');
@@ -92,7 +92,7 @@ Route::controller(SeguimientoJuridicoController::class)->prefix('/saiv/seguimien
 
 // Modulo Ludoteca
 Route::controller(LudotecaController::class)->prefix('/saiv/ludoteca')
-->middleware('auth:api', 'role:Super Administrador|Administrador|Usuario')->group(function (){
+->middleware('auth:api', 'role:Super Administrador|Administrador|Usuaria/o')->group(function (){
     Route::post('index','index');  
     Route::post('historico/index','indexHistorico');  
     Route::post('guardar','store');
@@ -103,7 +103,7 @@ Route::controller(LudotecaController::class)->prefix('/saiv/ludoteca')
 
 // Modulo Camara Gessell
 Route::controller(ProgramacionController::class)->prefix('/saiv/camara/gessell/programacion')
-->middleware('auth:api', 'role:Super Administrador|Administrador|Usuario')->group(function (){
+->middleware('auth:api', 'role:Super Administrador|Administrador|Usuaria/o')->group(function (){
     Route::post('index','index');  
     Route::post('guardar','store');
     Route::get('obtener/{key}','show');
@@ -112,7 +112,7 @@ Route::controller(ProgramacionController::class)->prefix('/saiv/camara/gessell/p
 });
 
 Route::controller(AtencionMenoresEdadController::class)->prefix('/saiv/camara/gessell/atencion/menores')
-->middleware('auth:api', 'role:Super Administrador|Administrador|Usuario')->group(function (){
+->middleware('auth:api', 'role:Super Administrador|Administrador|Usuaria/o')->group(function (){
     Route::post('index','index');  
     Route::post('guardar','store');
     Route::get('obtener/{key}','show');
@@ -122,7 +122,7 @@ Route::controller(AtencionMenoresEdadController::class)->prefix('/saiv/camara/ge
 
 // Agendas
 Route::controller(AgendaController::class)->prefix('/saiv/agenda')
-->middleware('auth:api', 'role:Super Administrador|Administrador|Usuario')->group(function (){
+->middleware('auth:api', 'role:Super Administrador|Administrador|Usuaria/o')->group(function (){
     Route::post('guardar','store');
     Route::get('obtener/{key}','show');
     Route::delete('borrar','destroy'); 
