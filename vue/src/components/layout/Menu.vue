@@ -47,7 +47,9 @@ export default defineComponent({
     setup:() => {
         const nivel_0 = ['Super Administrador'];
         const nivel_2 = ['Administrador','Super Administrador'];
-        const nivel_3 = ['Usuaria/o','Super Administrador', 'Administrador'];
+        const nivel_3 = ['Usuaria','Super Administrador', 'Administrador'];
+        //const nivel_3 = ['Super Administrador'];
+        const nivel_4 = ['Administrador','Super Administrador'];
         return{
             menu:[
                 { 
@@ -72,28 +74,28 @@ export default defineComponent({
                     text:"Registro Casos",          
                     url:"/saiv/casos", 
                     icono:"bx bxs-box bx-sm  bx-burst-hover mx-2",
-                    acceso:nivel_3
+                    acceso:nivel_4
                 },
                 {   
                     tipo:"item",          
                     text:"Seguimiento Jurídico",    
                     url:"/saiv/seguimiento/juridico",  
                     icono:'bx bxs-building-house bx-sm mx-2 bx-burst-hover',
-                    acceso:nivel_3
+                    acceso:nivel_0
                 },
                 { 
                     tipo:"item",
                     text:"Atención Ludoteca",
                     url:"/saiv/ludoteca",
                     icono:"bx bxs-calendar-event bx-sm  bx-burst-hover mx-2",
-                    acceso:nivel_3
+                    acceso:nivel_0
                 },
                 {
                     tipo:"item",
-                    text:"Camára Gessell",
+                    text:"Cámara Gesell",
                     url:"/saiv/camara/gessell",
                     icono:"bx bxs-food-menu bx-sm  bx-burst-hover mx-2",
-                    acceso:nivel_3
+                    acceso:nivel_0
                 },
                 { 
                     tipo:"item",
@@ -134,21 +136,21 @@ export default defineComponent({
                 { 
                     tipo:"encabezado",    
                     text:"Administración",      
-                    acceso:nivel_2 
+                    acceso:nivel_0 
                 },
                 { 
                     tipo:"item",          
                     text:"Usuarias/os",                
                     url:"/saiv/usuarios", 
                     icono:"bx bx-group bx-sm  bx-burst-hover mx-2",
-                    acceso:nivel_2
+                    acceso:nivel_0
                 },
                 { 
                     tipo:"item",          
                     text:"Bitácora Errores",                
                     url:"/bitacora/errores",
                     icono:'bx bxs-bug bx-sm mx-2  bx-burst-hover', 
-                    acceso:nivel_2
+                    acceso:nivel_0
                 },
             ],
             store

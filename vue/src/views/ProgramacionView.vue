@@ -100,7 +100,7 @@
                         @handleClickAgendaVer="handleClickAgendaVer"
                         @handleClickAgendaItem="handleClickAgendaItem"
                         ref="fullcalendarRef"
-                        :title="'Cámara Gessell / Programación'"
+                        :title="'Cámara Gesell / Programación'"
                     />
                 </div>
             </template>

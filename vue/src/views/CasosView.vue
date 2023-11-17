@@ -13,6 +13,8 @@
                     :periodos = "periodos"
                     :titleFiltro = "'Tipo de Denuncia'"
                     :arrayFiltro = "['Todos', 'Denuncia', 'Sin Denuncia', 'Diligencia']"
+                    :titleOficinas = "'Oficinas'"
+                    :arrayOficinas = "['Todos','Chalatenango', 'Ciudad Delgado', 'Soyapango', 'San Salvador']"
                     @handleChangedLoading="handleChangedLoading"
                     @handleChangedData="handleChangedData"
                 >

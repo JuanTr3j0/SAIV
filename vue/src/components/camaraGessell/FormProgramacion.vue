@@ -4,7 +4,7 @@
             <form action="">
                 <div class="row py-1 gy-2 mt-1 border border-2 border-primary rounded-3">
                     <div class="col-md-12 mt-2">
-                        <h3 class="align-text-bottom"><i class='bx bxs-certification bx-md'></i>Camara Gessell / Programación</h3>                            
+                        <h3 class="align-text-bottom"><i class='bx bxs-certification bx-md'></i>Camara Gesell / Programación</h3>                            
                     </div>
                     <FormInputVue
                         :id="id+'correlativo'"

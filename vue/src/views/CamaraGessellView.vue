@@ -3,7 +3,7 @@
         <h4 class="fw-bold py-3 mb-2">
             <span class="text-muted fw-light text-center">
                 SAIV{{store.state.USUARIO.oficina}} /
-            </span> {{itemBoolean ? 'Cámara Gessell / Programación':'Cámara Gessell / Atención a Menores'}}
+            </span> {{itemBoolean ? 'Cámara Gesell / Programación':'Cámara Gesell / Atención a Menores'}}
         </h4>
         <div class="row">
             <div class="col-md-12">

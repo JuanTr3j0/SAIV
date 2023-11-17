@@ -35,6 +35,17 @@
                     </select>
                 </div>   
             </div>
+
+            <div class="col-sm-12 col-md-12 m-1 col-lg-3" v-if="(arrayOficinas ?? false) && (titleOficinas ?? false) ">
+                <div class="input-group border-primary flex justify-content-end">
+                    <span class="input-group-text border-primary bg-primary text-white text-center border-white" for="tipo-oficina">{{titleOficinas}}<i class=' bx bxs-label' ></i></span>
+                    <select class="form-select bg-primary text-white" id="tipo-oficina" v-model="tipoFiltro" @change="handleChangeOficina(tipoFiltro)" >                                     
+                        <template v-for="item in arrayOficinas" :key="item" >
+                            <option class=" bg-primary text-white" :value="item">{{item}}</option>
+                        </template>
+                    </select>
+                </div>   
+            </div>
             
         </div>
         <div class="row" v-auto-animate>
@@ -114,6 +125,8 @@ export default defineComponent({
     props: [  
         'arrayFiltro',
         'titleFiltro',
+        'titleOficinas',
+        'arrayOficinas',
         'classTable',
         'columnas',
         'periodos',
@@ -145,6 +158,7 @@ export default defineComponent({
         const busqueda          = ref(null);
         const busquedaBoolean   = ref(false);
         const filtro            = ref(null);
+        const oficina           = ref(null);
         const tipoFiltro        = ref('Todos');
         const current_page      = ref(null);
         const last_page         = ref(null);
@@ -168,6 +182,7 @@ export default defineComponent({
                 filtro:filtro.value, 
                 busqueda:busqueda.value, 
                 porPagina: parseInt(pageSize.value),
+                oficina: oficina.value,
                 ordenColumnas: columnsSort
             }, url.value);
 
@@ -209,6 +224,11 @@ export default defineComponent({
             await fetch();
         }
 
+        
+        const handleChangeOficina = async(_oficina) => {
+            oficina.value = _oficina;
+            await fetch();
+        }
         const handleResetUrl = () => {
             url.value = urlOriginal.value;
         }
@@ -260,6 +280,7 @@ export default defineComponent({
             handlechangeSort,
             HandlePageChanged,
             handleChangeFiltro,
+            handleChangeOficina,
             handleChangePeriodo,
             handleActualizarDatos,
         }

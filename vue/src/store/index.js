@@ -15,7 +15,7 @@ export default createStore({
     },
 
     //Peticiones HTTP
-    //URL_SERVER:'https://www.saiv.solidar-suisse-sv.org/apiPublic/api/', // Producción debe protocolo HTTPS
+   // URL_SERVER:'https://www.saiv.solidar-suisse-sv.org/apiPublic/api/', // Producción debe protocolo HTTPS
     URL_SERVER:'http://127.0.0.1:8000/api/', // Desarrollo debe protocolo HTTP
     HEADERS:null,
     
