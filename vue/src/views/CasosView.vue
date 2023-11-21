@@ -14,7 +14,7 @@
                     :titleFiltro = "'Tipo de Denuncia'"
                     :arrayFiltro = "['Todos', 'Denuncia', 'Sin Denuncia', 'Diligencia']"
                     :titleOficinas = "'Oficinas'"
-                    :arrayOficinas = "['Todos','Chalatenango', 'Ciudad Delgado', 'Soyapango', 'San Salvador']"
+                    :arrayOficinas = "opcionesOficinas ?? []"
                     @handleChangedLoading="handleChangedLoading"
                     @handleChangedData="handleChangedData"
                 >
@@ -149,6 +149,7 @@ export default defineComponent({
         const loading = ref(true);
         const showVer = ref(false);
         const tipoCaso = ref('Todos');
+        const tipoOficina = ref('Todas');
         const modalCasoRef = ref(null);
         const formCasoRef  = ref(null);
         const tablaCasosRef = ref(null);
@@ -158,11 +159,13 @@ export default defineComponent({
         const modalCasoArchivosRef = ref(null);
         const modalArchivosCasosRef = ref(null);
         const periodos = ref([]);
+        const opcionesOficinas = ref(null);
 
         onMounted(async () => {
             loading.value = true;
             await cargarPeriodos();
-            loading.value = false;
+            loading.value = false; 
+            opcionesOficinas.value = await servicio.obtener('auth/opciones');
         });
 
         const cargarPeriodos = async() => {
@@ -347,6 +350,7 @@ export default defineComponent({
             tipoCaso,
             urlTabla:'saiv/casos/index',
             periodos,
+            opcionesOficinas,
 
             // Metodos
             borrarCaso,
