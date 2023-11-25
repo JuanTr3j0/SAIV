@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DelitosLeiv;
-use App\Http\Requests\StoreDelitosLeivRequest;
+use App\Http\Requests\StoreDelitosLeivRequest;
 use App\Http\Requests\UpdateDelitosLeivRequest;
 
 class DelitosLeivController extends Controller

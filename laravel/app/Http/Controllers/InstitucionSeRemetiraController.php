@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\InstitucionSeRemetira;
-use App\Http\Requests\StoreInstitucionSeRemetiraRequest;
+use App\Http\Requests\StoreInstitucionSeRemetiraRequest;
 use App\Http\Requests\UpdateInstitucionSeRemetiraRequest;
 
 class InstitucionSeRemetiraController extends Controller

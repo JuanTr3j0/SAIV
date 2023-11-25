@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AtencionBrindada;
-use App\Http\Requests\StoreAtencionBrindadaRequest;
+use App\Http\Requests\StoreAtencionBrindadaRequest;
 use App\Http\Requests\UpdateAtencionBrindadaRequest;
 
 class AtencionBrindadaController extends Controller

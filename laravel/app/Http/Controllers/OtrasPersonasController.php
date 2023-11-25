@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\OtrasPersonas;
-use App\Http\Requests\StoreOtrasPersonasRequest;
+use App\Http\Requests\StoreOtrasPersonasRequest;
 use App\Http\Requests\UpdateOtrasPersonasRequest;
 
 class OtrasPersonasController extends Controller
