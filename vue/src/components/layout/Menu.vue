@@ -63,7 +63,14 @@ export default defineComponent({
                     url:"/saiv/perfil", 
                     icono:"bx bx-user bx-sm  bx-burst-hover mx-2", 
                     acceso:nivel_3
-                },                
+                }, 
+                { 
+                    tipo:"item",          
+                    text:"Seleccionar Oficina",          
+                    url:"/saiv/oficina", 
+                    icono:"bx bxs-box bx-sm  bx-burst-hover mx-2",
+                    acceso:nivel_4
+                },               
                 { 
                     tipo:"encabezado",    
                     text:"SIAV"+store.state.USUARIO.oficina,
