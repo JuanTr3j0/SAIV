@@ -1,21 +1,37 @@
 
-<script>
-import CardOficina from '@/components/layout/CardOficina.vue';
-</script>
+
+
 <template>
      <div class="container-fluid flex-grow-1 container-p-y">
         <h4 class="fw-bold py-3 mb-4">
             <span class="text-muted fw-light text-center">Seleccionar Oficina </span>
         </h4>
         <!-- Bordered Table -->
-       
+     
+
         <div class="row">
-           
-           
-           
+            <CardOficina title="Chalatenango" imageSrc="https://saiv.solidar-suisse-sv.org/assets/img/chalatenango.png" />
+            <CardOficina title="San Salvador" imageSrc="https://saiv.solidar-suisse-sv.org/assets/img/san-salvador.png" />
+            <CardOficina title="Soyapango" imageSrc="https://saiv.solidar-suisse-sv.org/assets/img/soyapango.png" />
+            <CardOficina title="Ciudad Delgado" imageSrc="https://saiv.solidar-suisse-sv.org/assets/img/delgado.png" />
         </div>
     </div>
 </template>
+
+<script>
+import CardOficina from '@/components/layout/CardOficina.vue';
+
+export default {
+  components: {
+    CardOficina
+  },
+  data() {
+    return {
+      
+    };
+  }
+};
+</script>
 <style scoped>
     .card {
   transition: box-shadow 0.3s, background-color 0.3s;

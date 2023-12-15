@@ -1,188 +1,76 @@
+<!-- CardComponent.vue -->
 <template>
     <div class="col-md-3">
-                <div class="card">
-                    <!-- Agrega la imagen aquí -->
-                    <div class="card-body m-2">
-                        <h5 class="card-title">Card 1</h5> 
-                        <img src="https://saiv.solidar-suisse-sv.org/assets/img/chalatenango.png" class="card-img-top" alt="Card Image">
-                    </div>
-                   
-                </div>
-            </div>
-</template>
-
-<script>
-
-export default defineComponent({
-    props: [  
-        'arrayFiltro',
-        'titleFiltro',
-        'titleOficinas',
-        'arrayOficinas',
-        'classTable',
-        'columnas',
-        'periodos',
-        'url',
-    ],
-    watch:{
-        periodos(nuevo){
-
-            if(nuevo??[].length === 0){
-                this.periodo = null;
-            }
-
-            if((nuevo ?? []).length > 0)
-                this.periodo = this.periodos[0];
-
-            this.handleChangePeriodo();
-
-        },
-    },
-    setup(props, { emit }) {
-        const pageSize          = ref(10)
-        const columnasProp      = ref(props.columnas)
-        const pageSizeBoolean   = ref(false)
-        const loading           = ref(true)
-        const data              = ref([])
-        const urlOriginal       = ref(store.state.URL_SERVER + props.url)
-        const url               = ref(store.state.URL_SERVER + props.url)
-        const links             = ref([])
-        const busqueda          = ref(null);
-        const busquedaBoolean   = ref(false);
-        const filtro            = ref(null);
-        const oficina           = ref(null);
-        const tipoFiltro        = ref('Todos');
-        const tipoOficina       = ref('Todas');
-        const current_page      = ref(null);
-        const last_page         = ref(null);
-        const total             = ref(null);
+      <div class="card">
+        <!-- Agrega la imagen aquí -->
+        <div class="card-body m-2">
+          <h5 class="card-title">{{ title }}</h5>
+          <img :src="imageSrc" class="card-img-top" alt="Card Image">
+        </div>
+      </div>
+    </div>
+  </template>
   
-        const periodo = ref(null);   
-        
-        const handleChangePeriodo = async() =>{
-            handleResetUrl();
-            await fetch();
-        }     
+  <script>
+  export default {
+    props: {
+      title: {
+        type: String,
+        required: true
+      },
+      imageSrc: {
+        type: String,
+        required: true
+      }
+    }
+  };
+  </script>
 
-        const fetch = async() => {
-            loading.value = true;
-            emit('handleChangedLoading',loading.value);
+<style scoped>
+.card {
+transition: box-shadow 0.3s, background-color 0.3s;
+background-color: #125363; /* Fondo de color inicial */
+color: #fff; /* Color de texto blanco para contrastar con el fondo */
+border-radius: 15px; /* Ajusta el radio del borde para dar una forma atractiva */
+position: relative;
+overflow: hidden;
+box-shadow: 0 0 29px 0 rgba(0, 0, 0, 0.08);
+margin-bottom: 30px; /* Espacio entre las tarjetas */
+}
 
-            const columnsSort = columnasProp.value.map(item =>{ return {columna: item.nombre, sort: item.sort, order: getSortToOrder(item.sortIcon)}});
+.card:hover {
+box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+background-color: rgb(23, 107, 133); /* Fondo de color al pasar el cursor */
+}
 
-            const result = await servicios.datosTabla({
-                periodo:periodo.value,
-                filtro:filtro.value, 
-                busqueda:busqueda.value, 
-                porPagina: parseInt(pageSize.value),
-                oficina: oficina.value,
-                ordenColumnas: columnsSort
-            }, url.value);
+.center-img {
+display: flex;
+align-items: center;
+justify-content: center;
+height: 100%;
+}
 
-            data.value = result.data;
-            links.value = result.links;
-            loading.value = result.cargando;
-            current_page.value = result.current_page;
-            last_page.value = result.last_page;
-            total.value = result.total;
+.center-img img {
+width: 100%; /* Ajusta el ancho de la imagen para cubrir completamente el contenedor */
+height: 50%; /* Altura automática para mantener la proporción original */
+border-radius: 15px; /* Ajusta el radio del borde para dar una forma atractiva */
+}
 
-            emit('handleChangedData', data.value)
-            emit('handleChangedLoading',loading.value)
-        }
+.card-img-top{
+    max-width: 12rem; 
+    max-height: 12rem;
+    object-fit: contain;
+}
+.card-body {
+text-align: center;
+padding: 20px; /* Ajusta el espacio alrededor del texto */
+border-radius: 15px; /* Ajusta el radio del borde para dar una forma atractiva */
+}
 
-        const HandlePageChanged = async(_url) => {
-            url.value = _url;
-            await fetch();
-        }
+.card-title {
+font-weight: 700;
+font-size: 24px;
+color: #fff; /* Color de texto blanco para el título */
+}
 
-        const getSortToOrder = sortIcon =>{
-            if (typeof sortIcon === 'undefined'||sortIcon === null)
-                return null;
-            let order = null;
-            if(sortIcon === 'bx-sort-down')
-                order = 'Desc';
-            else if(sortIcon === 'bx-sort-up')
-                order = 'Asc';
-            else 
-                order =  null;
-            return order;
-        }
-
-        const handleActualizarDatos = async() => {
-            await fetch();
-        }
-
-        const handleChangeFiltro = async(_filtro) => {
-            filtro.value = _filtro;
-            await fetch();
-        }
-
-        
-        const handleChangeOficina = async(_oficina) => {
-            oficina.value = _oficina;
-            await fetch();
-        }
-        const handleResetUrl = () => {
-            url.value = urlOriginal.value;
-        }
-
-        onMounted(() => {
-            fetch();
-        })
-
-        const handlechangeSort = col => {
-            if(!col.sort)
-                return;
-            
-            columnasProp.value.forEach(item => {
-                if(col.nombre!==item.nombre)
-                    item.sortIcon = 'bx-minus';
-            });
-
-            if(col.sortIcon === 'bx-minus')
-                col.sortIcon = 'bx-sort-down';
-
-            else if(col.sortIcon === 'bx-sort-down')
-                col.sortIcon = 'bx-sort-up';
-
-            else if(col.sortIcon === 'bx-sort-up')
-                col.sortIcon = 'bx-minus';
-
-            handleActualizarDatos();
-        }
-
-        return {
-            // Variables
-            url,
-            data,
-            links,
-            periodo,
-            loading,
-            busqueda,
-            pageSize,
-            tipoOficina,
-            tipoFiltro,
-            columnasProp,
-            busquedaBoolean,
-            pageSizeBoolean,
-            current_page,
-            last_page,
-            total,
-
-            // Metodos
-            handleResetUrl,
-            handlechangeSort,
-            HandlePageChanged,
-            handleChangeFiltro,
-            handleChangeOficina,
-            handleChangePeriodo,
-            handleActualizarDatos,
-        }
-    },
-    components: {
-        Pagination,
-        FormSelectOpcionVue
-    },
-})
-
-</script>
+</style>

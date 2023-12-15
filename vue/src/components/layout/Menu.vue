@@ -68,9 +68,9 @@ export default defineComponent({
                     tipo:"item",          
                     text:"Seleccionar Oficina",          
                     url:"/saiv/oficina", 
-                    icono:"bx bxs-box bx-sm  bx-burst-hover mx-2",
+                    icono:"bx bxs-building-house  bx-burst-hover mx-2",
                     acceso:nivel_4
-                },               
+                },              
                 { 
                     tipo:"encabezado",    
                     text:"SIAV"+store.state.USUARIO.oficina,
