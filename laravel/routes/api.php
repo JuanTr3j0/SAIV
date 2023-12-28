@@ -59,30 +59,23 @@ Route::controller(AuthController::class)
 ->prefix('/auth')->group(function () {
 
     Route::post('iniciar/sesion', 'login')->middleware('guest');
-
-    Route::get('refrescar/sesion', 'refrescarInfoSession');
-
-    Route::middleware('auth:api', 'role:Super Administrador|Administrador')->group(function() {
-
-        Route::post('index','index');
-
-        Route::post('registro','signUp');     
-
+    
+    Route::middleware(['auth:api', 'role:Super Administrador|Administrador'])->group(function() {
         
+        Route::post('index','index'); 
+        Route::post('cambio/oficina','cambioOficina');
+        Route::post('registro','signUp');
 
         Route::get('logout', 'logout');
-
-        Route::get('opciones', 'opciones');  
-
+        Route::get('opciones', 'opciones');
         Route::get('obtener/{key}', 'show');
+        Route::get('refrescar/sesion', 'refrescarInfoSession');
 
-        
-
-        Route::delete('registro', 'destroy');   
-
+        Route::delete('registro', 'destroy');
         Route::delete('estado/{key}','destroy');
 
     });
+    
 
 });
 
@@ -90,7 +83,7 @@ Route::controller(AuthController::class)
 
 Route::controller(OpcionesController::class)->prefix('/saiv/opciones')
 
-->middleware('auth:api','role:Super Administrador|Administrador|Usuaria')->group(function (){
+->middleware(['auth:api','role:Super Administrador|Administrador|Usuaria'])->group(function (){
 
     Route::get('index','index');
 

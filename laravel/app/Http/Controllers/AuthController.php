@@ -29,7 +29,7 @@ class AuthController extends Controller
     public function rol($user){
 
         $roles = [
-            'Usuaria',
+            'Usuaria/o',
             'Administrador',
             'Super Administrador'
         ];
@@ -294,7 +294,20 @@ class AuthController extends Controller
 
     }
 
+    public function cambioOficina(Request $request){
+        try {
+            
+            
+            $id_usuario = auth()->id();
 
+            return response()->json([
+                "mensaje" =>$id_usuario,
+            ], 201);     
+        }catch (\Exception $e) {
+            bitacora_errores('AuthController.php', $e);
+            return response()->json(['error' => 'Linea -> '.$e->getLine().' Error -> '.$e->getMessage()]);
+        }
+    }
 
     /**
 
