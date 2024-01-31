@@ -6,28 +6,50 @@
         <h4 class="fw-bold py-3 mb-4">
             <span class="text-muted fw-light text-center">Seleccionar Oficina </span>
         </h4>
-        <!-- Bordered Table -->
-     
-
-        <div class="row">
-            <CardOficina title="Chalatenango" imageSrc="https://saiv.solidar-suisse-sv.org/assets/img/chalatenango.png" />
-            <CardOficina title="San Salvador" imageSrc="https://saiv.solidar-suisse-sv.org/assets/img/san-salvador.png" />
-            <CardOficina title="Soyapango" imageSrc="https://saiv.solidar-suisse-sv.org/assets/img/soyapango.png" />
-            <CardOficina title="Ciudad Delgado" imageSrc="https://saiv.solidar-suisse-sv.org/assets/img/delgado.png" />
-        </div>
-    </div>
+       <div class="row">
+        <CardOficina
+          v-for="(item, index) in oficinas"
+          :key="index"
+          :title="item.title"
+          :imageSrc="item.url"
+          :codigo="item.codigo"
+        />
+       </div>
+        
+     </div>
 </template>
 
 <script>
 import CardOficina from '@/components/layout/CardOficina.vue';
-
+import ref from 'vue'
 export default {
   components: {
     CardOficina
   },
   data() {
     return {
-      
+      oficinas:[
+        {
+          title:'Chalatenango',
+          url:'https://saiv.solidar-suisse-sv.org/assets/img/chalatenango.png',
+          codigo:'CH'
+        },
+        {
+          title:'San Salvador',
+          url:'https://saiv.solidar-suisse-sv.org/assets/img/san-salvador.png',
+          codigo:'SS'
+        },
+        {
+          title:'Ciudad Delgado',
+          url:'https://saiv.solidar-suisse-sv.org/assets/img/delgado.png',
+          codigo:'CD'
+        },
+        {
+          title:'Soyapango',
+          url:'https://saiv.solidar-suisse-sv.org/assets/img/soyapango.png',
+          codigo:'Soyapango'
+        }
+      ]
     };
   }
 };

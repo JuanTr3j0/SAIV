@@ -76,7 +76,7 @@ export default{
          
     },
     descargarArchivo: async (url, _nombre) => {
-        axios({
+        await axios({
             url: store.state.URL_SERVER+url,
             method: 'GET',
             headers: store.state.HEADERS,

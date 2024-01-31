@@ -47,9 +47,9 @@ export default defineComponent({
     setup:() => {
         const nivel_0 = ['Super Administrador'];
         const nivel_2 = ['Administrador','Super Administrador'];
-        const nivel_3 = ['Usuaria','Super Administrador', 'Administrador'];
+        const nivel_3 = ['Usuaria/o','Super Administrador', 'Administrador'];
         //const nivel_3 = ['Super Administrador'];
-        const nivel_4 = ['Administrador','Super Administrador'];
+        const nivel_4 = ['Super Administrador'];
         return{
             menu:[
                 { 
@@ -81,28 +81,29 @@ export default defineComponent({
                     text:"Registro Casos",          
                     url:"/saiv/casos", 
                     icono:"bx bxs-box bx-sm  bx-burst-hover mx-2",
-                    acceso:nivel_4
+                    acceso:nivel_3
                 },
+                
                 {   
                     tipo:"item",          
                     text:"Seguimiento Jurídico",    
                     url:"/saiv/seguimiento/juridico",  
                     icono:'bx bxs-building-house bx-sm mx-2 bx-burst-hover',
-                    acceso:nivel_0
+                    acceso:nivel_3
                 },
                 { 
                     tipo:"item",
                     text:"Atención Ludoteca",
                     url:"/saiv/ludoteca",
                     icono:"bx bxs-calendar-event bx-sm  bx-burst-hover mx-2",
-                    acceso:nivel_0
+                    acceso:nivel_3
                 },
                 {
                     tipo:"item",
                     text:"Cámara Gesell",
                     url:"/saiv/camara/gessell",
                     icono:"bx bxs-food-menu bx-sm  bx-burst-hover mx-2",
-                    acceso:nivel_0
+                    acceso:nivel_3
                 },
                 { 
                     tipo:"item",
@@ -133,13 +134,13 @@ export default defineComponent({
                     icono:'bx bx-line-chart bx-sm mx-2',
                     acceso:nivel_3
                 },
-                { 
+                */{ 
                     tipo:"item",          
                     text:"Reportes",       
-                    url:"#",
+                    url:"/saiv/reportes",
                     icono:'bx bxs-report bx-sm mx-2',
                     acceso:nivel_3
-                },*/
+                },
                 { 
                     tipo:"encabezado",    
                     text:"Administración",      
