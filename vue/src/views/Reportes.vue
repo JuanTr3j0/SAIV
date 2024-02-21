@@ -4,59 +4,15 @@
             <span class="text-muted fw-light text-center">SAIV{{ store.state.USUARIO.oficina }} /</span> Reportes
         </h4>
         <div class="card">
+
             <div class="card-body" style="display: 100% !important;" v-auto-animate="{ duration: 250 }">
                 <div class="row">
-                    <div class="col-md-4 border border-black border-primary rounded border-3"
-                        v-for="reporte in reportesJson" :key="reporte.name" v-auto-animate="{ duration: 250 }">
-                        <div class="m-3 text-center">
-                            <i class='bx bxs-report text-primary' style="font-size: 5rem;"></i>
-                            <h1 class="strong text-primary">Reportes {{ reporte.name }}</h1>
-                        </div>
-                        <div class="input-group input-group mb-2">
-                            <span
-                                class="input-group-text border-primary bg-primary fw-bold text-white text-center border-white"
-                                for="tipo-caso">Seleccionar<i class='bx bxs-label'></i>
-                            </span>
-                            <select class="form-select bg-label-primary border-primary text-white" :disabled="loading"
-                                id="table-opciones-id" v-model="reporte.tipo" @change="() => { }">
-                                <template v-for="item in reporte.tipos" :key="item">
-                                    <option class=" bg-label-primary text-white fw-bold">{{ item }}</option>
-                                </template>
-                            </select>
-                        </div>
-                        <div class="input-group input-group mb-2" v-if="reporte.tipo === 'MENSUAL'">
-                            <span
-                                class="input-group-text border-primary bg-primary fw-bold text-white text-center border-white"
-                                for="tipo-caso">
-                                Meses<i class='bx bxs-label'></i>
-                            </span>
-                            <select class="form-select bg-label-primary border-primary text-white" id="table-opciones-id"
-                                :disabled="loading" v-model="reporte.mes" @change="handleChangePeriodo();">
-                                <template v-for="item in meses" :key="item">
-                                    <option class=" bg-label-primary text-white fw-bold">{{ item }}</option>
-                                </template>
-                            </select>
-                        </div>
-                        <div class="input-group input-group mb-2">
-                            <span
-                                class="input-group-text border-primary bg-primary fw-bold text-white text-center border-white"
-                                for="tipo-caso">
-                                Periodos<i class='bx bxs-label'></i>
-                            </span>
-                            <select class="form-select bg-label-primary border-primary text-white" id="table-opciones-id"
-                                v-model="reporte.periodo" @change="handleChangePeriodo();" :disabled="loading">
-                                <template v-for="item in (periodos ?? [])" :key="item">
-                                    <option class=" bg-label-primary text-white fw-bold">{{ item }}</option>
-                                </template>
-                            </select>
-                        </div>
-                        <div class="row px-2 mb-3">
-                            <button type="button" class="btn-primary mt-2 mb-1 btn btn-block"
-                                @click="descargarExcel(reporte)" style="width: 100%;" :disabled="loading">
-                                <i class='bx bxs-download' :class="loading ? 'bx-spin bx-loader-alt' : ' bxs-download'"></i> {{
-                                    loading ? 'Espere...' : 'Descargar' }}</button>
-                        </div>
+
+                    <div class="col-md-4 m-1 border border-black border-primary rounded border-3"
+                        v-for="reporteName in reporteNames" :key="reporteName">
+                        <CardReporte :reporteName="reporteName" />
                     </div>
+
                 </div>
             </div>
         </div>
@@ -64,12 +20,22 @@
 </template>
 
 <script>
+import CardReporte from '@/components/CardReporte.vue';
 import store from '@/store'
 import { onMounted, ref } from 'vue';
 import servicio from '@/services/crud'
 import otros from '@/services/otros';
 
 export default {
+    components: {
+        CardReporte
+    },
+    data() {
+        return {
+            reporteNames: ['Casos', 'Jurídico', 'Ludoteca', 'Gesell'], // Ejemplo de nombres de reportes
+            oficina: 'Oficina Central' // Ejemplo de oficina
+        };
+    },
     setup(props) {
         const periodo = ref(null);
         const opciones = ref(["prueba"])
@@ -92,7 +58,7 @@ export default {
         ])
         const reportesJson = ref([
             {
-                "name": "Casos",
+              
                 "periodos": periodos.value,
                 "tipos": [
                     "MENSUAL",
