@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\TraitJuridico;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 
 use App\Http\Controllers\Traits\TraitCasos;
+use App\Http\Controllers\Traits\TraitLudoteca;
 
 class ExcelController extends Controller
 {
-    use TraitCasos;
+    use TraitCasos, TraitLudoteca,TraitJuridico;
 
     public function caso($id){
         try {
@@ -47,35 +49,33 @@ class ExcelController extends Controller
 
     public function casos($reporte, $tipo, $mes, $anio){
         try {
+            $meses = [];
+            $tipo === 'MENSUAL' && $meses = [$mes];
+            $tipo ==='PRIMER TRIMESTRE' && $meses = [1,2,3];
+            $tipo ==='SEGUNDO TRIMESTRE' && $meses = [4,5,6];
+            $tipo ==='TERCER TRIMESTRE' && $meses = [7,8,9];  
+            $tipo ==='CUARTO TRIMESTRE' && $meses = [10,11,12]; 
+
             switch ($reporte) {
                 case 'CASOS':
                     switch ($tipo) {
                         case 'MENSUAL':
                             $where = ['casos.mes' => $mes, 'casos.anio' => $anio];                        
-                            return $this -> reporteCasos($where, [], $tipo, $mes, $anio, $reporte);
-                            break;
+                            return $this -> reporteCasos($where, $meses, $tipo, $mes, $anio, $reporte);
                         case 'PRIMER TRIMESTRE': case 'SEGUNDO TRIMESTRE': case'TERCER TRIMESTRE':
                             $where = ['casos.anio' => $anio];
-                            $tipo ==='PRIMER TRIMESTRE' && $whereIn = [1,2,3,4];
-                            $tipo ==='SEGUNDO TRIMESTRE' && $whereIn = [5,6,7,8];
-                            $tipo ==='TERCER TRIMESTRE' && $whereIn = [9,10,11,12];                        
-                            return $this -> reporteCasos($where, $whereIn, $tipo, $mes, $anio, $reporte);
-                            break;
+                            return $this -> reporteCasos($where, $meses, $tipo, $mes, $anio, $reporte);
                         case 'ANUAL':
                             $where = ['casos.anio' => $anio];                        
-                            return $this -> reporteCasos($where, [], $tipo, $mes, $anio, $reporte);
-                            break;                        
+                            return $this -> reporteCasos($where, [], $tipo, $mes, $anio, $reporte);                   
                         default:
                             return $this -> reporteCasos([], [], [], [], [], []);
-                            break;
-                    }                    
-                break; 
-                case 'JURIDICO':
-                break;               
+                    }         
                 case 'LUDOTECA':
-                break;               
-                case 'GESELL':
-                break;               
+                   return $this -> reporteLudoteca($meses, $tipo, $anio, $reporte);            
+                
+                case 'JURÍDICO':
+                    return $this -> reporteJuridico($meses, $tipo, $anio, $reporte);            
                 default:
                     # code...
                 break;

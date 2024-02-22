@@ -297,12 +297,22 @@ class AuthController extends Controller
     public function cambioOficina(Request $request){
         try {
             
-            
             $id_usuario = auth()->id();
+            $codigo = $request->codigo;
+
+            if($codigo == '' || !auth()->user()->hasRole('Super Administrador'))
+                return new \Exception('Parametros  para actualizacion de oficina o rol del usuario actual incorrectos');
+
+            $user = User::findOrFail($id_usuario);
+            $user -> oficina = Oficinas::where('codigo','like',$codigo)->first()->id;
+            $user -> save();
 
             return response()->json([
-                "mensaje" =>$id_usuario,
-            ], 201);     
+                "usuario"       => $user->name,
+                "correo"        => $user->email,
+                "acceso"        => $this->rol($user),
+                "oficina"       => User::select('oficinas.codigo as codigo')->join('oficinas', 'oficinas.id', '=', 'users.oficina')->findOrFail(auth()->id())->codigo,
+            ], 201);
         }catch (\Exception $e) {
             bitacora_errores('AuthController.php', $e);
             return response()->json(['error' => 'Linea -> '.$e->getLine().' Error -> '.$e->getMessage()]);

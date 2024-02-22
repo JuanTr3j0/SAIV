@@ -100,7 +100,7 @@ class CasosController extends Controller
             ->where('casos.estado', true);
 
             //Cuando el usuario es administrador no se filtrara en base a
-           $is_admin = auth()->user()->hasRole('Super Administrador');
+           $is_admin = false;//auth()->user()->hasRole('Super Administrador');
             if(!$is_admin) 
                  $paginado = $paginado->where( function ($query)
                 {
