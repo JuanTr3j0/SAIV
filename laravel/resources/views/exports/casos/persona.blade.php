@@ -28,9 +28,7 @@
 
             <th style="{{ 'vertical-align: middle;' }} margin: 15%; font: bold;" colspan="33" height="40">                   
 
-                <!-- REPORTE {{ $tipo.' SAIV'.strtoupper($oficina).' '.($tipo==='MENSUAL' ? obtener_mes($mes):'').' '.$anio }} -->
-<!-- OFICINA NO SIRVE, HAY QUE ARREGLARLO -->
-                REPORTE {{ $tipo.' SAIV'.' '.($tipo==='MENSUAL' ? obtener_mes($mes):'').' '.$anio }}
+                REPORTE {{ $tipo.' SAIV'.strtoupper($oficina).' '.($tipo==='MENSUAL' ? obtener_mes($mes):'').' '.$anio }}
 
             </th>
 

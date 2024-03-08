@@ -50,6 +50,7 @@
             <th style="<?php echo e($style_celdas); ?>" width= "25"> CODIGO </th>
             <th style="<?php echo e($style_celdas); ?>" width= "25"> PARENTESCO RESPONSABLE</th>
             <th style="<?php echo e($style_celdas); ?>" width= "25"> PARENTESCO RESPONSABLE OTRO</th>
+            <th style="<?php echo e($style_celdas); ?>" width= "25"> TIPO DE VIOLENCIA</th>
             <th style="<?php echo e($style_celdas); ?>" width= "25"> TIPO ATENCION</th>
             <th style="<?php echo e($style_celdas); ?>" width= "25"> ESCOLARIDAD</th>
             <th style="<?php echo e($style_celdas); ?>" width= "25"> TIPO ATENCION FECHA</th>
@@ -75,6 +76,7 @@
                 <td style="<?php echo e($style_celdas); ?>"><?php echo e($ludoteca -> codigo ?: ' -- '); ?></td>
                 <td style="<?php echo e($style_celdas); ?>"><?php echo e($ludoteca -> parentesco_responsable ?: ' -- '); ?></td>
                 <td style="<?php echo e($style_celdas); ?>"><?php echo e($ludoteca -> parentesco_responsable_otro ?: ' -- '); ?></td>
+                <td style="<?php echo e($style_celdas); ?>"><?php echo e($ludoteca -> ludoteca_tipo_violencia); ?></td>
                 <td style="<?php echo e($style_celdas); ?>"><?php echo e($ludoteca -> tipo_atencion ?: ' -- '); ?></td>
                 <td style="<?php echo e($style_celdas); ?>"><?php echo e($ludoteca -> escolaridad ?: ' -- '); ?></td>
                 <td style="<?php echo e($style_celdas); ?>"><?php echo e($ludoteca -> tipo_atencion_fecha_hora ?: ' -- '); ?></td>

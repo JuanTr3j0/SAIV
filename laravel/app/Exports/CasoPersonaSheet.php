@@ -80,19 +80,10 @@ class CasoPersonaSheet implements FromView, WithTitle, WithStyles, WithDrawings
 
     {
 
-        $this->personas = collect($this->personas)->map(
-
-            function($item){
-
-                $caso = ((object)$item);
-
-                $caso -> fuenteIngresos = $this -> concatenarArray($caso->fuenteIngresos);
-
-                return $caso;
-
-            }
-
-        );
+        $this->personas = collect($this->personas)->map(function($item) {
+            $item->fuenteIngresos = $this->concatenarArray($item->fuenteIngresos);
+            return $item;
+        });        
 
         return view('exports.casos.persona', [
             'personas' => $this->personas,
@@ -100,7 +91,8 @@ class CasoPersonaSheet implements FromView, WithTitle, WithStyles, WithDrawings
             'mes' => $this->mes,
             'anio' => $this->anio,
             'reporte' => $this->reporte,
-            'title' =>  $this -> title
+            'title' =>  $this -> title,
+            'oficina' => $this -> oficina,
         ]);
 
     }

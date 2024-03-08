@@ -49,6 +49,7 @@
             <th style="{{ $style_celdas }}" width= "25"> CODIGO </th>
             <th style="{{ $style_celdas }}" width= "25"> PARENTESCO RESPONSABLE</th>
             <th style="{{ $style_celdas }}" width= "25"> PARENTESCO RESPONSABLE OTRO</th>
+            <th style="{{ $style_celdas }}" width= "25"> TIPO DE VIOLENCIA</th>
             <th style="{{ $style_celdas }}" width= "25"> TIPO ATENCION</th>
             <th style="{{ $style_celdas }}" width= "25"> ESCOLARIDAD</th>
             <th style="{{ $style_celdas }}" width= "25"> TIPO ATENCION FECHA</th>
@@ -74,6 +75,7 @@
                 <td style="{{ $style_celdas }}">{{ $ludoteca -> codigo ?: ' -- '  }}</td>
                 <td style="{{ $style_celdas }}">{{ $ludoteca -> parentesco_responsable ?: ' -- '  }}</td>
                 <td style="{{ $style_celdas }}">{{ $ludoteca -> parentesco_responsable_otro ?: ' -- '  }}</td>
+                <td style="{{ $style_celdas }}">{{ $ludoteca -> ludoteca_tipo_violencia   }}</td>
                 <td style="{{ $style_celdas }}">{{ $ludoteca -> tipo_atencion ?: ' -- '  }}</td>
                 <td style="{{ $style_celdas }}">{{ $ludoteca -> escolaridad ?: ' -- '  }}</td>
                 <td style="{{ $style_celdas }}">{{ $ludoteca -> tipo_atencion_fecha_hora ?: ' -- '  }}</td>

@@ -9,10 +9,11 @@ use Illuminate\Support\Facades\DB;
 
 use App\Http\Controllers\Traits\TraitCasos;
 use App\Http\Controllers\Traits\TraitLudoteca;
+use App\Http\Controllers\Traits\TraitGesell;
 
 class ExcelController extends Controller
 {
-    use TraitCasos, TraitLudoteca,TraitJuridico;
+    use TraitCasos, TraitLudoteca,TraitJuridico,TraitGesell;
 
     public function caso($id){
         try {
@@ -75,7 +76,10 @@ class ExcelController extends Controller
                    return $this -> reporteLudoteca($meses, $tipo, $anio, $reporte);            
                 
                 case 'JURÍDICO':
-                    return $this -> reporteJuridico($meses, $tipo, $anio, $reporte);            
+                    return $this -> reporteJuridico($meses, $tipo, $anio, $reporte);     
+                
+                case 'GESELL':
+                    return $this -> reporteGesell($meses, $tipo, $anio, $reporte);     
                 default:
                     # code...
                 break;

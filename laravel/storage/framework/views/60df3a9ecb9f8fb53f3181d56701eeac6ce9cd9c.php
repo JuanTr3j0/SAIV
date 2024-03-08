@@ -28,7 +28,7 @@
 
             <th style="<?php echo e('vertical-align: middle;'); ?> margin: 15%; font: bold;" colspan="33" height="40">                   
 
-                REPORTE <?php echo e($tipo.' SAIV'.' '.($tipo==='MENSUAL' ? obtener_mes($mes):'').' '.$anio); ?>
+                REPORTE <?php echo e($tipo.' SAIV'.strtoupper($oficina).' '.($tipo==='MENSUAL' ? obtener_mes($mes):'').' '.$anio); ?>
 
 
             </th>
