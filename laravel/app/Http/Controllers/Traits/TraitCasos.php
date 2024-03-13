@@ -44,76 +44,41 @@ trait TraitCasos{
 
             $whereIdCaso = 'md5(casos.id) like "'.$key.'"';
 
-
-
             if(!Casos::whereRaw($whereIdCaso)->where('estado', true)->exists())
-
                 return response()->json(['error'=>'No se encontro el caso.('.$key.')'],204);
 
-
-
             $select = [
-
                 DB::raw('md5(`casos`.`id`) as `key`'),
-
                 DB::raw('case when `casos`.`fecha_registro` is NULL
-
                     then
-
                         DATE_FORMAT(`casos`.`created_at`, "%Y-%m-%d %H:%i")
-
                     else
-
                         DATE_FORMAT(`casos`.`fecha_registro`, "%Y-%m-%d %H:%i")
 
                     end as "fechaRegistro"'
-
                 ),
-
                 'denuncia                       as denuncia',
-
                 'mes                            as mes',
-
                 'correlativo',
-
                 'anio                           as  anio',
-
                 'circunstancia_del_hecho        as  circunstanciaDelHecho',
-
                 'victima_fk                     as  victima',
-
                 'responsable_fk                 as  responsable',
-
                 'fecha_hecho                    as  fechaHecho',
-
                 DB::raw('DATE_FORMAT(hora_hecho,  "%H:%i")  as  horaHecho'),
-
                 'casos.id                       as  agresores',
-
                 'tipos_violencia                as  tiposViolencia',
-
                 'modalidad_violencia            as  modalidadViolencia',
-
                 'delito_codigo_penal            as  delitoCodigoPenal',
-
                 'delito_codigo_penal_otro       as  delitoCodigoPenalOtro',
-
                 'departamentos.id               as  departamentoOcurrencia',
-
                 'municipio_ocurrencia_fk        as  municipioOcurrencia',
-
                 'institucion_remitente          as  institucionRemitente',
-
                 'institucion_remitente_otra     as  institucionRemitenteOtra',
-
                 "casos.id                       as  institucionSeRemite",
-
                 "casos.id                       as  tipoAsistencia",
-
                 "casos.id                       as  archivosCasos",
-
                 "casos.id                       as  delitoLeivs",
-
             ];
 
 

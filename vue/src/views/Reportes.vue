@@ -97,8 +97,9 @@ export default {
             loading.value = true;
 
             let nombreArchivo = "REPORTE_" + reporte.name.toUpperCase() + "_" + (reporte.tipo === 'MENSUAL' ? reporte.mes : reporte.tipo) + "_" + reporte.periodo;
+
             try {
-                await otros.descargarArchivo('saiv/descargar/excel/reporte/' + reporte.name.toUpperCase() + '/' + reporte.tipo + '/' + reporte.mes + '/' + reporte.periodo, nombreArchivo + '.xls')
+                await otros.descargarArchivo('saiv/descargar/excel/reporte/' + reporte.name.toUpperCase() + '/' + reporte.tipo + '/' +  meses.value.findIndex(reporte.mes)+1 + '/' + reporte.periodo, nombreArchivo + '.xls')
                 loading.value = false
             } catch (error) {
                 console.log(error)

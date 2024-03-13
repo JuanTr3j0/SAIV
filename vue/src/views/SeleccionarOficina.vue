@@ -48,6 +48,16 @@ export default {
           title:'Soyapango',
           url:'https://saiv.solidar-suisse-sv.org/assets/img/soyapango.png',
           codigo:'Soyapango'
+        },
+        {
+          title:'San Miguel',
+          url:'https://saiv.solidar-suisse-sv.org/assets/img/san-miguel.png',
+          codigo:'SM'
+        },
+        {
+          title:'El Salvador',
+          url:'https://saiv.solidar-suisse-sv.org/assets/img/el salvador.png',
+          codigo:'ES'
         }
       ]
     };

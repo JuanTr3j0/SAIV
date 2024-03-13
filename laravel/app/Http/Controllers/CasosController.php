@@ -99,17 +99,9 @@ class CasosController extends Controller
                 ->leftJoin('personas as p2', 'p2.id', "=", "casos.responsable_fk")
             ->where('casos.estado', true);
 
-            //Cuando el usuario es administrador no se filtrara en base a
-           $is_admin = false;//auth()->user()->hasRole('Super Administrador');
-            if(!$is_admin) 
-                 $paginado = $paginado->where( function ($query)
-                {
-                    //esta parte de aquí está filtrando por oficinas
-                    $query->where('denuncia','like', tipo_denuncia()->denuncia)
-                    ->orWhere('denuncia','like', tipo_denuncia()->sin_denuncia)
-                    ->orWhere('denuncia','like', tipo_denuncia()->diligencia);
-                });
-            else{
+           $user_oficina = Oficinas::select('codigo')->findOrFail(auth()->user()->oficina)->codigo;
+          
+            if($user_oficina === 'ES'){ //aqui esta filtrando por oficina esto debo poner en el trait xD
                 $codigo = trim($request->oficina) == 'Todas' || $request->oficina === null ? null : Oficinas::select('codigo')->findOrFail($request->oficina)->codigo;
                 $filtro  = $request->filtro == 'Todos' || $request->filtro === null ? null : $request->filtro;
 
@@ -123,12 +115,17 @@ class CasosController extends Controller
 
                 $tipo_caso = $tipo_caso === null ? '': trim($tipo_caso);
                 $codigo = $codigo === null ? '' : trim($codigo);
-                
                 $tipo_caso === '' && $codigo !== '' && $paginado = $paginado->whereRaw("casos.denuncia like '%".$codigo."'");
-                $tipo_caso !== '' && $codigo === '' && $paginado = $paginado->whereRaw("casos.denuncia like '".$tipo_caso."'%");
-                $tipo_caso !== '' && $codigo !== '' && $paginado = $paginado->whereRaw("casos.denuncia like '".$tipo_caso.$codigo."'");
-                
-            }
+                $tipo_caso !== '' && $codigo === '' && $paginado = $paginado->whereRaw("casos.denuncia like '".$tipo_caso."%'");
+                $tipo_caso !== '' && $codigo !== '' && $paginado = $paginado->whereRaw("casos.denuncia like '".$tipo_caso.$codigo."'"); 
+            }else 
+                $paginado = $paginado->where( function ($query)
+                {
+                    //esta parte de aquí está filtrando por oficinas
+                    $query->where('denuncia','like', tipo_denuncia()->denuncia)
+                    ->orWhere('denuncia','like', tipo_denuncia()->sin_denuncia)
+                    ->orWhere('denuncia','like', tipo_denuncia()->diligencia);
+                });
 
             foreach ($ordenColumnas as $key => $value) {
                 $columna = (object) $value;
@@ -160,7 +157,7 @@ class CasosController extends Controller
             
             
             
-            if($request->filtro !== 'Todos' && $request->filtro!== null && !$is_admin){
+            if($request->filtro !== 'Todos' && $request->filtro!== null && $user_oficina !== 'ES'){
                 $tipo_caso = $request->filtro === 'Denuncia' ? tipo_denuncia()->denuncia:($request->filtro === 'Sin Denuncia' ? tipo_denuncia()->sin_denuncia : ($request->filtro === 'Diligencia' ? tipo_denuncia()->diligencia: null));
                 $paginado->whereRaw('casos.denuncia like "'.$tipo_caso.'"');
             }
@@ -168,7 +165,7 @@ class CasosController extends Controller
 
             if($periodo !== 'Todos')
                 $paginado->where('casos.anio', intval($periodo));
-
+            #return $paginado->toSql();
             $paginado = $paginado->paginate($por_pagina);
 
             $paginado->getCollection()->transform( function($value){

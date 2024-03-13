@@ -125,7 +125,7 @@ const columnas = [
     {nombre:"Violencia",                class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"tiposViolencia"},
     {nombre:"Mod. Violencia",           class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"modalidadViolencia"},
     {nombre:"Instit. Que Remite",       class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"institucionRemitente"},
-    {nombre:"Instit. Dónde se Remite",  class:"text-center bg-label-primary text-white fw-bold",  sort:false,  sortIcon:'bx-minus', key:"institucionDondeSeRemite"},
+    {nombre:"Instit. Dónde se Remite",  class:"text-center bg-label-primary text-white fw-bold",  sort:false, sortIcon:'bx-minus', key:"institucionDondeSeRemite"},
     {nombre:"Fecha Hecho",              class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"fechaHecho"},
     {nombre:"Departamento",             class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"departamento"},
     {nombre:"Municipio",                class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"municipio"},
@@ -149,7 +149,6 @@ export default defineComponent({
         const loading = ref(true);
         const showVer = ref(false);
         const tipoCaso = ref('Todos');
-        const tipoOficina = ref('Todas');
         const modalCasoRef = ref(null);
         const formCasoRef  = ref(null);
         const tablaCasosRef = ref(null);
@@ -188,7 +187,7 @@ export default defineComponent({
         };
 
         const handleClickNuevo = () => {
-            showVer.value = null;
+            showVer.value = false;
             formCasoRef.value.resetForm();
             modalCasoRef.value.showModal();
         };
@@ -204,7 +203,7 @@ export default defineComponent({
         
         //Acciones de la Tabla
         const handleClickVer =  (json) => {showVer.value  = true; cargarCaso(json)};
-        const handleClickEditar = (json) => {showVer.value  = null; cargarCaso(json)};
+        const handleClickEditar = (json) => {showVer.value  = false; cargarCaso(json)};
         const handleClickBorrar = (json) => {advertenciaRef.value.setJson(json); modalCasoBorrarRef.value.showModal(); }
 
         // Cargo archivos en el modal

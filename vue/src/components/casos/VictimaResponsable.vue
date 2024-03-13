@@ -41,7 +41,7 @@
         <template v-slot:otras-personas-responsable>
             <InformacionHijosOtrosVue
                 :id="'responsable'"                
-                :persona="victima" 
+                :persona="responsable" 
                 :showVer="showVer" 
                 :loading="loading"
                 :opciones="opciones"

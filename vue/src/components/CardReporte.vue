@@ -109,6 +109,7 @@ export default {
                     "PRIMER TRIMESTRE",
                     "SEGUNDO TRIMESTRE",
                     "TERCER TRIMESTRE",
+                    "CUARTO TRIMESTRE",
                     "ANUAL",
                 ],
                 "tipo": "ANUAL",
@@ -139,9 +140,10 @@ export default {
         const descargarExcel = async (reporte) => {
             loading.value = true;
 console.log("modulo: "+reporte.name)
+console.log(meses.value.findIndex(mes => mes === reporte.mes) + 1)
             let nombreArchivo = "REPORTE_" + reporte.name.toUpperCase() + "_" + (reporte.tipo === 'MENSUAL' ? reporte.mes : reporte.tipo) + "_" + reporte.periodo;
             try {
-                await otros.descargarArchivo('saiv/descargar/excel/reporte/' + reporte.name.toUpperCase() + '/' + reporte.tipo + '/' + reporte.mes + '/' + reporte.periodo, nombreArchivo + '.xls')
+                await otros.descargarArchivo('saiv/descargar/excel/reporte/' + reporte.name.toUpperCase() + '/' + reporte.tipo + '/' + (parseInt(meses.value.findIndex(mes => mes === reporte.mes)) + 1) + '/' + reporte.periodo, nombreArchivo + '.xls')
                 loading.value = false
             } catch (error) {
                 console.log(error)

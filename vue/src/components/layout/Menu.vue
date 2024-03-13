@@ -49,7 +49,7 @@ export default defineComponent({
         const nivel_2 = ['Administrador','Super Administrador'];
         const nivel_3 = ['Usuaria/o','Super Administrador', 'Administrador'];
         //const nivel_3 = ['Super Administrador'];
-        const nivel_4 = ['Super Administrador'];
+        const nivel_4 = ['Super Administradora'];
         return{
             menu:[
                 { 
@@ -68,8 +68,8 @@ export default defineComponent({
                     tipo:"item",          
                     text:"Seleccionar Oficina",          
                     url:"/saiv/oficina", 
-                    icono:"bx bxs-building-house  bx-burst-hover mx-2",
-                    acceso:nivel_4
+                    icono:"bx bxs-building-house bx-sm mx-2 bx-burst-hover",
+                    acceso:nivel_0
                 },              
                 { 
                     tipo:"encabezado",    
@@ -139,7 +139,7 @@ export default defineComponent({
                     text:"Reportes",       
                     url:"/saiv/reportes",
                     icono:'bx bxs-report bx-sm mx-2',
-                    acceso:nivel_3
+                    acceso:nivel_4
                 },
                 { 
                     tipo:"encabezado",    

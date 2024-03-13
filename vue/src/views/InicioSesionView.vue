@@ -105,8 +105,8 @@ export default {
     const loading = ref(false);
     const alert = ref({ tipo:null, errores:[] });
     const form = { 
-      correo:"bitzide@bitzide.com", 
-      contrasena:"password" 
+      correo:"", 
+      contrasena:"" 
     };
     const formulario = reactive(JSON.parse(JSON.stringify(form)));
     

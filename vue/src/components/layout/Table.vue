@@ -36,13 +36,13 @@
                 </div>   
             </div>
 
-            <div class="col-sm-12 col-md-12 m-1 col-lg-3" v-if="(arrayOficinas ?? false) && (titleOficinas ?? false) ">
+            <div class="col-sm-12 col-md-12 m-1 col-lg-3" v-if="(arrayOficinas ?? false) && (titleOficinas ?? false) " v-show="store.state.USUARIO.oficina==='ES'">
                 <div class="input-group border-primary flex justify-content-end">
                     <span class="input-group-text border-primary bg-primary text-white text-center border-white" for="tipo-oficina">{{titleOficinas}}<i class=' bx bxs-label' ></i></span>
                     <select class="form-select bg-primary text-white" id="tipo-oficina" v-model="tipoOficina" @change="handleChangeOficina(tipoOficina)" >                                     
                         <option class="bg-primary text-white">Todas</option>
                         <template v-for="item in arrayOficinas === null || typeof arrayOficinas === 'undefined' ? [] : arrayOficinas.oficinas" :key="item.key" >
-                            <option class="bg-primary text-white" :value="item.key">{{item.opcion}}</option>
+                            <option class="bg-primary text-white" :value="item.key" v-if="item.opcion !== 'El Salvador (ES)'">{{item.opcion}}</option>
                         </template>
                     </select>
                 </div>   
@@ -277,6 +277,7 @@ export default defineComponent({
             current_page,
             last_page,
             total,
+            store,
 
             // Metodos
             handleResetUrl,

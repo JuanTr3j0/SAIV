@@ -12,12 +12,13 @@
             <div class="col-md-2" v-if="!(showVer??false)">
                 <label class=" fw-semibold d-block" for="caso-tipo-hecho"> Tipo de Caso</label>
                 <div class="col-md-12">
-                    <select :value="denuncia" @input="updateDenuncia" :disabled="(disabledTipoCaso?? false) "
+                 
+                    <select :value="denuncia" @input="updateDenuncia" 
                         class="form-select" id="caso-tipo-hecho" aria-label="Default select example">
                         <option value="" :selected="denuncia??'selected'">Seleccione</option>
                         <template v-for="(item, _key) in denuncias" :key="_key">
                             <option :value="item" :selected="item===denuncia?'selected':null">
-                                {{item.substr(0,2)==='SD'?'Sin Denuncia':(item.substr(0,2)==='DI'?'Diligencia':'Denuncia')}}
+                                {{item.substr(0,2)==='SD'?'Sin Denuncia':(item.substr(0,2)==='DIL'?'Diligencia':'Denuncia')}}
                             </option>
                         </template>
                     </select>
