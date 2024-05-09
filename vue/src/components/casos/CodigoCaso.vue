@@ -18,7 +18,7 @@
                         <option value="" :selected="denuncia??'selected'">Seleccione</option>
                         <template v-for="(item, _key) in denuncias" :key="_key">
                             <option :value="item" :selected="item===denuncia?'selected':null">
-                                {{item.substr(0,2)==='SD'?'Sin Denuncia':(item.substr(0,2)==='DIL'?'Diligencia':'Denuncia')}}
+                                {{item.substr(0,2)==='SD'?'Sin Denuncia':(item.substr(0,3)==='DIL'?'Diligencia':'Denuncia')}}
                             </option>
                         </template>
                     </select>

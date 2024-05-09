@@ -4,7 +4,7 @@
                     <div 
                         v-for="reporte in reportesJson" :key="reporte.name" v-auto-animate="{ duration: 250 }">
                         <div class="m-3 text-center">
-                            <i class='bx bxs-report text-primary' style="font-size: 5rem;"></i>
+                            <i class='bx bxs-box {{ icon }} text-primary' style="font-size: 5rem;"></i>
                             <h1 class="strong text-primary">Reportes {{ reporteName }}</h1>
                         </div>
                         <div class="input-group input-group mb-2">
@@ -66,7 +66,7 @@ export default {
     name: "CardReporte",
     props:{
         icon:{
-            require:true,
+            required:true,
         },
         reporteName:{
             type: String,

@@ -105,53 +105,33 @@ export default defineComponent({
                     icono:"bx bxs-food-menu bx-sm  bx-burst-hover mx-2",
                     acceso:nivel_3
                 },
-                { 
-                    tipo:"item",
-                    text:"Estadisticas",
-                    url:"/saiv/estadisticas",
-                    icono:"bx bxs-bar-chart-alt-2 bx-sm bx-burst-hover mx-2",
-                    acceso:nivel_3
-                },
-                /*{ 
-                    tipo:"item",
-                    text:"Programación Camára Gessell",
-                    url:"/saiv/camara/gessell/programacion",
-                    icono:"bx bxs-food-menu bx-sm  bx-burst-hover mx-2",
-                    acceso:nivel_3
-                },
-                { 
-                    tipo:"item",
-                    text:"Menores de Edad Camára Gessell",
-                    url:"/saiv/camara/gessell/menores/edad",
-                    icono:"bx bxs-food-menu bx-sm  bx-burst-hover mx-2",
-                    acceso:nivel_3
-                },
-                
-                { 
-                    tipo:"item",
-                    text:"Observatorio de Violencia",
-                    url:"#",
-                    icono:'bx bx-line-chart bx-sm mx-2',
-                    acceso:nivel_3
-                },
-                */{ 
-                    tipo:"item",          
-                    text:"Reportes",       
-                    url:"/saiv/reportes",
-                    icono:'bx bxs-report bx-sm mx-2',
-                    acceso:nivel_4
-                },
+               
                 { 
                     tipo:"encabezado",    
                     text:"Administración",      
                     acceso:nivel_0 
                 },
                 { 
+                    tipo:"item",
+                    text:"Estadisticas",
+                    url:"/saiv/estadisticas",
+                    icono:"bx bxs-bar-chart-alt-2 bx-sm bx-burst-hover mx-2",
+                    acceso:nivel_2
+                },
+        
+            { 
+                    tipo:"item",          
+                    text:"Reportes",       
+                    url:"/saiv/reportes",
+                    icono:'bx bxs-report bx-sm mx-2',
+                    acceso:nivel_2
+                },
+                { 
                     tipo:"item",          
                     text:"Usuarias/os",                
                     url:"/saiv/usuarios", 
                     icono:"bx bx-group bx-sm  bx-burst-hover mx-2",
-                    acceso:nivel_0
+                    acceso:nivel_2
                 },
                 { 
                     tipo:"item",          

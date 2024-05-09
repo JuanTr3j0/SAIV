@@ -9,8 +9,8 @@
                 <div class="row">
 
                     <div class="col-md-4 m-1 border border-black border-primary rounded border-3"
-                        v-for="reporteName in reporteNames" :key="reporteName">
-                        <CardReporte :reporteName="reporteName" />
+                        v-for="item in cardReportesJson" :key="reporteName">
+                        <CardReporte :reporteName="item.reporteName" :icon="item.iconsReporte"/>
                     </div>
 
                 </div>
@@ -32,7 +32,24 @@ export default {
     },
     data() {
         return {
-            reporteNames: ['Casos', 'Jurídico', 'Ludoteca', 'Gesell'], // Ejemplo de nombres de reportes
+            cardReportesJson: [{
+                "iconsReporte":'bx-burst-hover',
+                "reporteName": 'Casos'
+            },
+            {
+                "iconsReporte":'bx-burst-hover',
+                "reporteName": 'Jurídico'
+            },
+            {
+                "iconsReporte":'bx-burst-hover',
+                "reporteName": 'Ludoteca'
+            },
+            {
+                "iconsReporte":'bx-burst-hover',
+                "reporteName": 'Gesell'
+            },
+        ],
+            //  reporteNames: [], // Ejemplo de nombres de reportes
             oficina: 'Oficina Central' // Ejemplo de oficina
         };
     },
@@ -58,7 +75,7 @@ export default {
         ])
         const reportesJson = ref([
             {
-              
+
                 "periodos": periodos.value,
                 "tipos": [
                     "MENSUAL",
@@ -99,7 +116,7 @@ export default {
             let nombreArchivo = "REPORTE_" + reporte.name.toUpperCase() + "_" + (reporte.tipo === 'MENSUAL' ? reporte.mes : reporte.tipo) + "_" + reporte.periodo;
 
             try {
-                await otros.descargarArchivo('saiv/descargar/excel/reporte/' + reporte.name.toUpperCase() + '/' + reporte.tipo + '/' +  meses.value.findIndex(reporte.mes)+1 + '/' + reporte.periodo, nombreArchivo + '.xls')
+                await otros.descargarArchivo('saiv/descargar/excel/reporte/' + reporte.name.toUpperCase() + '/' + reporte.tipo + '/' + meses.value.findIndex(reporte.mes) + 1 + '/' + reporte.periodo, nombreArchivo + '.xls')
                 loading.value = false
             } catch (error) {
                 console.log(error)

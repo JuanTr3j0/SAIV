@@ -135,10 +135,11 @@ import ref from "vue"
         // ESTADISTICAS DE AGRESORES CASOS
         'Casos por Conocimiento o No del Agresor',
         'Casos por Relación Víctima con Agresor',
-        'Número de Agresores por Caso',
+        //'Número de Agresores por Caso',
         'Casos por Edad del Agresor',
         'Agresores por Municipio de Residencia',
-        'Número de Agresores por Caso (NO FUNCIONA)',
+        //Arreglar despues, no furula
+       // 'Número de Agresores por Caso (NO FUNCIONA)',
         'Agresores por Relacion con la Víctima',
         'Ocupación Agresores',
         'Agresores con Formación Militar',
