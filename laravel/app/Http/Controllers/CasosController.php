@@ -260,11 +260,13 @@ class CasosController extends Controller
         }
     }
 
-    public function reglasCodigo(){
+    // REGLAS DE VALIDACION PARA EL REQUEST DE CASOS REGISTRO/UPDATE
+    public function reglasCaso(){
         return  [
             'denuncia' => 'required|string',
             'mes' => 'required',
-            'anio' => 'required'
+            'anio' => 'required',
+            'fechaRegistro' =>['required', 'regex:/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/u']
         ];
     }
 
@@ -292,6 +294,7 @@ class CasosController extends Controller
         ];
     }
 
+     // MENSAJES DE VALIDACION PARA EL REQUEST DE CASOS REGISTRO/UPDATE
     private function mensajesVictima(){
         return [
             //Campos de Victima
@@ -320,17 +323,20 @@ class CasosController extends Controller
         ];
     }
 
+    private function mjsCasos(){
+        return [
+            /*'mes.min' => 'El campo mes debe ser mayor a 1.',
+            'mes.max' => 'El campo mes debe ser menor o igual a 12.',*/ 
+            'denuncia.required' => 'Tipo de caso es obligatorio',
+            'fechaRegistro.required' => 'Fecha de registro es obligatorio',
+            'fechaRegistro.regex'   =>  'Formato fecha registro incorrecto (Ejemplo de forma: 30/12/1990 22:00)'
+        ];
+    }
+
     public function store(Request $request)
     {
         //Validacion de Codigo
-        $validator = Validator::make($request->all(), $this->reglasCodigo(),
-            [
-                /*'mes.min' => 'El campo mes debe ser mayor a 1.',
-                'mes.max' => 'El campo mes debe ser menor o igual a 12.',*/ 
-                'denuncia.required' => 'El campo tipo de caso es obligatorio'
-            ]
-        );
-
+        $validator = Validator::make($request->all(), $this->reglasCaso(), $this->mjsCasos());
         if($validator->fails()) { return response()->json(['error'=>$validator->errors()->all()]); }
 
         $__victima = (object)$request->victima;

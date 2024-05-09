@@ -142,11 +142,11 @@ class AuthController extends Controller
 
         // Asigno el rol al usuario
 
-        if($rol === 'Usuaria' && auth()->user()->hasRole('Administrador'))
+        if($rol === 'Usuaria/o' && auth()->user()->hasRole('Administrador'))
 
             $user->assignRole($rol);
 
-        else if(($rol === 'Administrador' || $rol === 'Usuaria') && auth()->user()->hasRole('Super Administrador'))
+        else if(($rol === 'Administrador' || $rol === 'Usuaria/o') && auth()->user()->hasRole('Super Administrador'))
 
             $user->assignRole($rol);
 
@@ -154,7 +154,7 @@ class AuthController extends Controller
 
         // Asigno permisos para usuario        
 
-        foreach ($request->permisos as $key => $value) {
+        /*foreach ($request->permisos as $key => $value) {
 
             $modulo = (object)$value;
 
@@ -162,7 +162,7 @@ class AuthController extends Controller
 
                 $permiso = (object) $value;
 
-                if(boolval($permiso->bool) && $rol === 'Usuaria'){
+                if(boolval($permiso->bool) && $rol === 'Usuaria/o'){
 
                     $user->givePermissionTo($modulo->modulo.' '.$permiso->name);
 
@@ -174,11 +174,7 @@ class AuthController extends Controller
 
             }
 
-        }
-
-        
-
-
+        }*/
 
         /* Esta es la respuesta que se enviará al usuario. Contiene un mensaje de que el usuario se ha
 
@@ -190,7 +186,7 @@ class AuthController extends Controller
 
             'mensaje' => 'Registro Guardado',
 
-            'usuario' => $user->hasRole('Usuaria')
+            'usuario' => $user->hasRole($rol)
 
         ], 201);
 
@@ -600,102 +596,108 @@ class AuthController extends Controller
     public function show($key)
 
     {
+        try{
+            $select = [
 
-        $select = [
+                DB::raw('md5(id) as "key"'),
 
-            DB::raw('md5(id) as "key"'),
+                'name as usuario',
 
-            'name as usuario',
+                'email as correo',
 
-            'email as correo',
+                'id as tipo_usuario', //Rol
 
-            'id as tipo_usuario', //Rol
+                'oficina',
 
-            'oficina',
+                'estado',
 
-            'estado',
+                'id as permisos', //Permisos
 
-            'id as permisos', //Permisos
+                DB::raw('null as contraseña'),
 
-            DB::raw('null as contraseña'),
+                DB::raw('null as repetir_contraseña'),
 
-            DB::raw('null as repetir_contraseña'),
+                'estado',
 
-            'estado',
+                'created_at as fechaCreacion',
 
-            'created_at as fechaCreacion',
+                'updated_at as fechaActualizacion'
 
-            'updated_at as fechaActualizacion'
+            ];
 
-        ];
+            $user = User::select($select)
 
+                ->whereRaw('md5(id) like "'.$key.'"')
 
+            ->first();
 
-        $user = User::select($select)
+            if($user){
 
-            ->whereRaw('md5(id) like "'.$key.'"')
+                $permisos = [];
 
-        ->first();
+                $_user = User::select('id')->whereRaw('md5(id) like "'.$user->key.'"')->first();
 
+                /*
+                foreach ($this->getPermisos() as $key0 => $value0) {
 
+                    
 
-        if($user){
+                    $permiso = (object) $value0;
 
-            $permisos = [];
-
-            $_user = User::select('id')->whereRaw('md5(id) like "'.$user->key.'"')->first();
-
-            foreach ($this->getPermisos() as $key0 => $value0) {
-
-                
-
-                $permiso = (object) $value0;
-
-                $modulo = $permiso -> modulo;
+                    $modulo = $permiso -> modulo;
 
 
 
-                $array_permiso = [];
+                    $array_permiso = [];
 
-                foreach ($permiso -> permisos as $key1 => $value1) {                    
+                    foreach ($permiso -> permisos as $key1 => $value1) {                    
 
-                    $permisoItem = (object) $value1;
+                        $permisoItem = (object) $value1;
 
-                    array_push($array_permiso, [
+                        array_push($array_permiso, [
 
-                        "name" => $permisoItem->name,
+                            "name" => $permisoItem->name,
 
-                        "bool" => $_user->hasPermissionTo($modulo.' '.$permisoItem->name),
+                            "bool" => $_user->hasPermissionTo($modulo.' '.$permisoItem->name),
 
-                    ]);
+                        ]);
 
-                }
-
-
-
-                $array_permiso_item = [
-
-                    'modulo' => $modulo,
-
-                    'permisos' => $array_permiso
-
-                ];
+                    }
 
 
 
-                array_push($permisos, $array_permiso_item);
+                    $array_permiso_item = [
+
+                        'modulo' => $modulo,
+
+                        'permisos' => $array_permiso
+
+                    ];
+
+
+
+                    array_push($permisos, $array_permiso_item);
+
+                }*/
+
+                $user -> permisos = $permisos;
+
+                if ($_user->hasRole('Usuaria/o'))
+                    $user -> tipo_usuario = 'Usuaria/o';
+                else if ($_user->hasRole('Administrador'))
+                    $user -> tipo_usuario = 'Administrador';
+                else if($_user->hasRole('Super Administrador'))
+                    $user -> tipo_usuario = 'Super Administrador';
+                else 
+                    $user -> tipo_usuario = null;
 
             }
 
-            $user -> permisos = $permisos;
-
-            $user -> tipo_usuario = $_user->hasRole('Usuaria')?'Usuaria':($_user->hasRole('Administrador')?'Administrador':($_user->hasRole('Super Administrador')?'Super Administrador':null));
-
+            return $user;
+        }catch (\Exception $e) {
+            bitacora_errores('AuthController.php', $e);
+            return response()->json(['error' => 'Linea -> '.$e->getLine().' Error -> '.$e->getMessage()]);
         }
-
-
-
-        return $user;
 
     }
 
@@ -751,7 +753,7 @@ class AuthController extends Controller
 
             $value -> tipoUsuario =
 
-            $__user -> hasRole('Usuaria') ? 'Usuaria':(
+            $__user -> hasRole('Usuaria/o') ? 'Usuaria/o':(
 
             $__user -> hasRole('Administrador') ? 'Administrador':(
 

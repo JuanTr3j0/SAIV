@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Traits;
 
 
 
+use App\Models\Oficinas;
 use Illuminate\Support\Facades\DB;
 
 
@@ -932,14 +933,17 @@ trait TraitCasos{
     public function reporteCasos ($where, $whereIn, $tipo, $mes, $anio, $reporte){
 
         try {
+            $user_oficina = Oficinas::select('codigo')->findOrFail(auth()->user()->oficina)->codigo;
 
-            $casos_query = $this -> showCasos() -> where($where);
+            $sqlOfic = "lower(casos.denuncia) like lower('%".$user_oficina."')";
+            
+            $casos_query = $this -> showCasos() -> where($where) -> whereRaw($sqlOfic);
 
-            $victima_query = $this -> getPersonas() -> where($where) -> join('personas', 'casos.victima_fk', '=', 'personas.id');
+            $victima_query = $this -> getPersonas() -> where($where) -> join('personas', 'casos.victima_fk', '=', 'personas.id') -> whereRaw($sqlOfic);
 
-            $responsable_query = $this -> getPersonas() -> where($where) -> join('personas', 'casos.responsable_fk', '=', 'personas.id');
+            $responsable_query = $this -> getPersonas() -> where($where) -> join('personas', 'casos.responsable_fk', '=', 'personas.id') -> whereRaw($sqlOfic);
 
-            $agresores_query = $this -> showAgresores($where);
+            $agresores_query = $this -> showAgresores($where) -> whereRaw($sqlOfic);
      
 
             count($whereIn) 

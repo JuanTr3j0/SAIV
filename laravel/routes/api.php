@@ -60,12 +60,16 @@ Route::controller(AuthController::class)
 
     Route::post('iniciar/sesion', 'login')->middleware('guest');
     
-    Route::middleware(['auth:api', 'role:Super Administrador|Administrador'])->group(function() {
+    Route::middleware(['auth:api'])->group(function() {
         
         Route::post('index','index'); 
         Route::post('cambio/oficina','cambioOficina');
         Route::post('registro','signUp');
 
+        Route::middleware(['role:Super Administrador|Administrador'])->group(function() {
+
+        });
+        
         Route::get('logout', 'logout');
         Route::get('opciones', 'opciones');
         Route::get('obtener/{key}', 'show');
@@ -83,7 +87,7 @@ Route::controller(AuthController::class)
 
 Route::controller(OpcionesController::class)->prefix('/saiv/opciones')
 
-->middleware(['auth:api','role:Super Administrador|Administrador|Usuaria'])->group(function (){
+->middleware(['auth:api','role:Super Administrador|Administrador|Usuaria/o'])->group(function (){
 
     Route::get('index','index');
 
@@ -103,7 +107,7 @@ Route::controller(OpcionesController::class)->prefix('/saiv/opciones')
 
 Route::controller(ArchivosController::class)->prefix('/saiv/archivos')
 
-->middleware(['auth:api', 'role:Super Administrador|Administrador|Usuaria'])->group(function (){
+->middleware(['auth:api', 'role:Super Administrador|Administrador|Usuaria/o'])->group(function (){
 
     Route::post('cargar/caso','cargarArchivosCaso');
 
@@ -124,7 +128,7 @@ Route::controller(ArchivosController::class)->prefix('/saiv/archivos')
 // Modulo Casos
 
 Route::controller(CasosController::class)->prefix('/saiv/casos')
-->middleware(['auth:api', 'role:Super Administrador|Administrador|Usuaria'])
+->middleware(['auth:api', 'role:Super Administrador|Administrador|Usuaria/o'])
 ->group(function (){
 
     Route::post('index','index');
@@ -151,7 +155,7 @@ Route::controller(CasosController::class)->prefix('/saiv/casos')
 
 Route::controller(SeguimientoJuridicoController::class)->prefix('/saiv/seguimiento/juridico')
 
-->middleware(['auth:api', 'role:Super Administrador|Administrador|Usuaria'])->group(function (){
+->middleware(['auth:api', 'role:Super Administrador|Administrador|Usuaria/o'])->group(function (){
 
     Route::post('index','index');  
 
@@ -175,7 +179,7 @@ Route::controller(SeguimientoJuridicoController::class)->prefix('/saiv/seguimien
 
 Route::controller(LudotecaController::class)->prefix('/saiv/ludoteca')
 
-->middleware(['auth:api', 'role:Super Administrador|Administrador|Usuaria'])->group(function (){
+->middleware(['auth:api', 'role:Super Administrador|Administrador|Usuaria/o'])->group(function (){
 
     Route::post('index','index');  
 
@@ -197,7 +201,7 @@ Route::controller(LudotecaController::class)->prefix('/saiv/ludoteca')
 
 Route::controller(ProgramacionController::class)->prefix('/saiv/camara/gessell/programacion')
 
-->middleware(['auth:api', 'role:Super Administrador|Administrador|Usuaria'])->group(function (){
+->middleware(['auth:api', 'role:Super Administrador|Administrador|Usuaria/o'])->group(function (){
 
     Route::post('index','index');  
 
@@ -215,7 +219,7 @@ Route::controller(ProgramacionController::class)->prefix('/saiv/camara/gessell/p
 
 Route::controller(AtencionMenoresEdadController::class)->prefix('/saiv/camara/gessell/atencion/menores')
 
-->middleware(['auth:api', 'role:Super Administrador|Administrador|Usuaria'])->group(function (){
+->middleware(['auth:api', 'role:Super Administrador|Administrador|Usuaria/o'])->group(function (){
 
     Route::post('index','index');  
 
@@ -235,7 +239,7 @@ Route::controller(AtencionMenoresEdadController::class)->prefix('/saiv/camara/ge
 
 Route::controller(AgendaController::class)->prefix('/saiv/agenda')
 
-->middleware(['auth:api', 'role:Super Administrador|Administrador|Usuaria'])->group(function (){
+->middleware(['auth:api', 'role:Super Administrador|Administrador|Usuaria/o'])->group(function (){
 
     Route::post('guardar','store');
 
@@ -279,7 +283,7 @@ Route::controller(BitacoraErroresController::class)
 
 Route::controller(ExcelController::class)->prefix('/saiv/descargar/excel')
 
-->middleware(['auth:api','role:Super Administrador|Administrador|Usuaria'])
+->middleware(['auth:api','role:Super Administrador|Administrador|Usuaria/o'])
 
 ->group(function (){
 

@@ -6,7 +6,7 @@ if (! function_exists('query_busqueda')) {
 
     {
 
-        if($term){
+        if($term){ 
 
             $words_search = explode(" ",$term);
 
@@ -106,17 +106,27 @@ if (! function_exists('tipo_denuncia')) {
 
         // ];
 
+        if($oficina->codigo === 'ES')
+            return (object)[
 
+                "denuncia" => 'D%',
 
-        return (object)[
+                "sin_denuncia" => 'SD%',
 
-            "denuncia" => 'D'.$oficina->codigo,
+                "diligencia" => 'DIL%',
 
-            "sin_denuncia" => 'SD'.$oficina->codigo,
+            ];
+        
+        else 
+            return (object)[
 
-            "diligencia" => 'DIL'.$oficina->codigo,
+                "denuncia" => 'D'.$oficina->codigo,
 
-        ];
+                "sin_denuncia" => 'SD'.$oficina->codigo,
+
+                "diligencia" => 'DIL'.$oficina->codigo,
+
+            ];
 
     }        
 
@@ -198,4 +208,12 @@ if (! function_exists('obtener_mes')) {
 
     }        
 
+}
+
+
+if (! function_exists('sesion_codigo_oficina')) {
+
+    function sesion_codigo_oficina(){
+       return $user_oficina = \App\Models\Oficinas::select('codigo')->findOrFail(auth()->user()->oficina)->codigo; 
+    }
 }

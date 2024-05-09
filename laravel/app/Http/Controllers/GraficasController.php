@@ -47,14 +47,18 @@ class GraficasController extends Controller
             $queryAño = $periodo === 0 || $periodo === null ? "" : " and casos.anio = " . intval($request->periodo); 
             $queryMes = $mes === 0 || $mes === null ? "" : " and casos.mes = " . intval($request->mes);
 
+            $concact_denuncia = "CONCAT('Denuncia(', casos.denuncia,')')";
+            $concact_sin_denuncia = "CONCAT('Sin Denuncia (', casos.denuncia,')')";
+            $concact_diligencia = "CONCAT('Diligencia (', casos.denuncia,')')";
+
             switch ($request->estadistica) {
                 case 'Tipos de Caso':                   
                     $queryGet = DB::select(
                         "select
                         case
-                           when casos.denuncia like '".tipo_denuncia()->denuncia."' then 'Denuncia'
-                           when casos.denuncia like '".tipo_denuncia()->sin_denuncia."' then 'Sin Denuncia'
-                           when casos.denuncia like '".tipo_denuncia()->diligencia."' then 'Dilegencia'
+                            when casos.denuncia like '".tipo_denuncia()->diligencia."' then 'Diligencia'
+                            when casos.denuncia like '".tipo_denuncia()->denuncia."' then 'Denuncia'
+                            when casos.denuncia like '".tipo_denuncia()->sin_denuncia."' then 'Sin Denuncia'
                         end  as label,
                         count(1) as frecuencia
                         from casos
@@ -63,7 +67,7 @@ class GraficasController extends Controller
                             denuncia like '".tipo_denuncia()->sin_denuncia."' or
                             denuncia like '".tipo_denuncia()->diligencia."'
                         ) ".$queryAño." ".$queryMes." 
-                        group by denuncia;"
+                        group by label;"
                     );
 
                     $titulo = 'Tipos de Caso '. ($mes === 0 ? '':$this->getMes($mes)).' '.($periodo === 0 ? '':$periodo);
@@ -582,17 +586,28 @@ class GraficasController extends Controller
                         select
                             case
                                 when edad_agresor<15 then 'Menores de 14 años'
-                                when edad_agresor>15 and edad_agresor<19 then '14 - 19 años'
-                                when edad_agresor>18 and edad_agresor<31 then '19 - 30 años'
-                                when edad_agresor>30 and edad_agresor<60 then '31 - 59 años'
+                                when edad_agresor>=15
+                                and edad_agresor<19 then '14 - 19 años'
+                                when edad_agresor>18
+                                and edad_agresor<31 then '19 - 30 años'
+                                when edad_agresor>30
+                                and edad_agresor<60 then '31 - 59 años'
                                 when edad_agresor>59 then '60 años a más'
                             end label,
                             count(1) frecuencia
-                        from casos
-                        inner join agresores_casos ac on casos.id = caso_fk
-                        where casos.estado is true and (denuncia like '".tipo_denuncia()->denuncia."' or
-                        denuncia like '".tipo_denuncia()->sin_denuncia."')".$queryAño." ".$queryMes." and edad_agresor is not  null
-                        group by label order by edad_agresor asc;
+                        from
+                            casos
+                        inner join agresores_casos ac on
+                            casos.id = caso_fk
+                        where
+                            casos.estado is true
+                            and (denuncia like '".tipo_denuncia()->denuncia."' or
+                            denuncia like '".tipo_denuncia()->sin_denuncia."') 
+                            and denuncia not like 'DIL%'
+                            ".$queryAño." ".$queryMes."
+                            AND denuncia not like 'DIL%'
+                            and edad_agresor is not null
+                        group by label order by label asc;
                     ");
                     $array_edad = ['Menores de 14 años','14 - 19 años','19 - 30 años','31 - 59 años','60 años a más'];
                     $array_query = [];

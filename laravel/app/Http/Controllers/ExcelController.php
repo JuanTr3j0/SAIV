@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\TraitJuridico;
+use App\Models\Oficinas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -56,6 +57,7 @@ class ExcelController extends Controller
             $tipo ==='SEGUNDO TRIMESTRE' && $meses = [4,5,6];
             $tipo ==='TERCER TRIMESTRE' && $meses = [7,8,9];  
             $tipo ==='CUARTO TRIMESTRE' && $meses = [10,11,12]; 
+            
 
             switch ($reporte) {
                 case 'CASOS':
