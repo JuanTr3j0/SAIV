@@ -26,6 +26,20 @@
                     </template>
                     <template v-slot:tbody>
                         <tr v-for="(caso, key) in data" :key="key">
+                            <td id="acciones" style="padding:0%;" class="text-center">
+                                <AccionesTable 
+                                :json="caso"
+                                :loading="loading" 
+                                :showArchivos="true"
+                                :showEditar="true"
+                                :showBorrar="true"
+                                :showVer="true" 
+                                @handleClickVer="handleClickVer(caso)"
+                                @handleClickArchivos="handleClickArchivos(caso)"
+                                @handleClickEditar="handleClickEditar(caso)"
+                                @handleClickBorrar="handleClickBorrar(caso)"
+                                />
+                            </td>  
                             <td class="text-nowrap fw-bold">
                                 <span>{{caso.codigo}}</span>
                             </td>
@@ -53,20 +67,7 @@
                             <td class="text-nowrap">
                                 {{caso.municipio ?? '-'}}
                             </td>                          
-                            <td id="acciones" style="padding:0%;" class="text-center">
-                                <AccionesTable 
-                                :json="caso"
-                                :loading="loading" 
-                                :showArchivos="true"
-                                :showEditar="true"
-                                :showBorrar="true"
-                                :showVer="true" 
-                                @handleClickVer="handleClickVer(caso)"
-                                @handleClickArchivos="handleClickArchivos(caso)"
-                                @handleClickEditar="handleClickEditar(caso)"
-                                @handleClickBorrar="handleClickBorrar(caso)"
-                                />
-                            </td>                          
+                                            
                         </tr>
                     </template>
                 </TableVue>
@@ -120,6 +121,7 @@ import servicio         from '@/services/crud'
 import store            from '@/store'
 
 const columnas = [
+{nombre:"Acciones",                 class:"bg-primary text-white fw-bold text-center",        sort:false, sortIcon:'bx-minus', key:'acciones'},
     {nombre:"Codigo",                   class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-sort-down', key:"codigo"},
     {nombre:"Fecha Registro",           class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"fechaRegistro"},
     {nombre:"Violencia",                class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"tiposViolencia"},
@@ -129,7 +131,7 @@ const columnas = [
     {nombre:"Fecha Hecho",              class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"fechaHecho"},
     {nombre:"Departamento",             class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"departamento"},
     {nombre:"Municipio",                class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"municipio"},
-    {nombre:"Acciones",                 class:"bg-primary text-white fw-bold text-center",        sort:false, sortIcon:'bx-minus', key:'acciones'}
+    
 ]
 
 export default defineComponent({
