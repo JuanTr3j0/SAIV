@@ -38,6 +38,7 @@
                                 @handleClickArchivos="handleClickArchivos(caso)"
                                 @handleClickEditar="handleClickEditar(caso)"
                                 @handleClickBorrar="handleClickBorrar(caso)"
+                                @handleClickImprimir="handleClickImprimir(caso)"
                                 />
                             </td>  
                             <td class="text-nowrap fw-bold">
@@ -207,7 +208,8 @@ export default defineComponent({
         const handleClickVer =  (json) => {showVer.value  = true; cargarCaso(json)};
         const handleClickEditar = (json) => {showVer.value  = false; cargarCaso(json)};
         const handleClickBorrar = (json) => {advertenciaRef.value.setJson(json); modalCasoBorrarRef.value.showModal(); }
-
+        const handleClickImprimir =  (json) => {showVer.value  = true; cargarCaso(json)};;
+        
         // Cargo archivos en el modal
         const handleClickArchivos = (json) => cargarArchivos(json);
         const cargarArchivos = async(json) =>{
@@ -369,6 +371,7 @@ export default defineComponent({
             handleClickVer,
             handleClickEditar,
             handleClickBorrar,
+            handleClickImprimir,
 
             //store
             store
