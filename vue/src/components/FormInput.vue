@@ -19,7 +19,7 @@
           v-if="(showVer ?? false) !== true"
           :min="min ?? 0"
           :max="max ?? 200"
-          v-mask="getMask(titulo)"
+          v-bind="getMask(titulo) ? { 'v-mask': getMask(titulo) } : {}"
         />
       </template>       
       <label v-else class="form-control fw-bold text-primary">

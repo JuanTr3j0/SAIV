@@ -123,12 +123,24 @@
                         v-model:departamento="formulario.departamentoOcurrencia" 
                         v-model:municipio="formulario.municipioOcurrencia" 
                     ></FormDeptoMuniVue>
+
+                    <div class="col-md-6">
+                        <label class=" fw-semibold d-block" for="caso-segundo-nombre"> Tipos de violencia(multiple)</label>
+                        <div class="col-md-12">
+                            <LabelShowVer :value="formulario.tipoViolencia" v-if="showVer"/>
+                            <v-select multiple placeholder="Seleccione" :style="vue_style_select" class="style-chooser" 
+                                :disabled="showVer ?? false" v-if="!showVer"
+                                v-model="formulario.tiposViolencia" :options="opciones===null?[]:opciones.tiposViolencia"/>
+                        </div>
+                    </div>
+
                     <FormSelectOpcionVue
                         :id="'caso-tipos-violencia-hecho'" :nombre="'Tipos de Violencia'"
                         :opciones="opciones === null ? []:opciones.tiposViolencia"
                         :clases="['col-md-6']" :loading="loading" :showVer="showVer ?? false"
                         v-model:opcion="formulario.tiposViolencia"
                     ></FormSelectOpcionVue> 
+
                     <FormSelectOpcionVue
                         :id="'caso-modalidad-violencia-hecho'" :nombre="'Modalidad de Violencia'"
                         :opciones="opciones === null ? []:opciones.modalidadViolencia"
@@ -514,7 +526,12 @@
                     </div>
                     <div class="col-md-12 mt-3" v-if="mensajeArchivos!==null">
                         <h6 class="text-primary"><i class="bx bx-spin bx-loader"></i> {{mensajeArchivos}}...</h6>
-                    </div>                      
+                    </div>  
+
+                <div>
+                    <label for="" class="fw-semibold d-block">Observaciones: </label>
+                    <textarea type="text" class="form-control"></textarea>
+                </div>                    
                 </div>
                 <ButtonsFormCasosVue
                     :showVer="showVer ?? false"

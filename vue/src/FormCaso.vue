@@ -45,7 +45,7 @@
                         <div class="col-md-6">
                             <label class=" fw-semibold d-block" for="caso-tipos-violencia-hecho"> Tipos de Violencia</label>
                             <div class="col-md-">
-                                <select v-model="formulario.tiposViolencia"  
+                                <select  v-model="formulario.tiposViolencia"  
                                     class="form-select" id="caso-tipo-violencia-hecho" aria-label="Default select example">
                                     <option :value="null" selected>Seleccione</option>
                                     <template v-for="(item, _key) in opciones === null ?[]:opciones.tiposViolencia" :key="_key">
@@ -461,13 +461,13 @@
                                     <div class="col-md-9 mt-0 px-2">
                                         <label class=" fw-semibold d-block" for="caso-tipos-violencia-hecho"> Tipos de Violencia</label>
                                         <div class="col-md-">
-                                            <select v-model="formulario.tiposViolencia"  
+                                            <v-select multiple v-model="formulario.tiposViolencia"  
                                                 class="form-select" id="caso-tipo-violencia-hecho" aria-label="Default select example">
                                                 <option :value="null" selected>Seleccione</option>
                                                 <template v-for="(item, _key) in opciones === null ?[]:opciones.tiposViolencia" :key="_key">
                                                     <option :value="item">{{item}}</option>
                                                 </template>
-                                            </select>
+                                            </v-select>
                                         </div>
                                     </div>
                                     <div class="col-md-12 mb-2">
