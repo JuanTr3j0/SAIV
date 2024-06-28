@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CasosTiposViolencia;
 use App\Models\Oficinas;
+use App\Models\TipoViolencia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -385,7 +387,7 @@ class CasosController extends Controller
             $caso->anio                         = intval($request->anio);
             $caso->fecha_hecho                  = $request->fechaHecho;
             $caso->hora_hecho                   = $request->horaHecho;
-            $caso->tipos_violencia              = $request->tiposViolencia;
+            #$caso->tipos_violencia              = $request->tiposViolencia; // FUE CAMBIADO A DE SINGLE A MULTIPLE
             $caso->modalidad_violencia          = $request->modalidadViolencia;
             $caso->delito_codigo_penal          = $request->delitoCodigoPenal;
             $caso->delito_codigo_penal_otro     = $request->delitoCodigoPenalOtro;
@@ -405,6 +407,7 @@ class CasosController extends Controller
                 $this->actualizarCrearInstitucionSeRemite($caso, $request->institucionSeRemite);
                 $this->actualizarCrearAgresores($caso, $request->agresores);
                 $this->actualizarCrearTipoAsistencia($caso, $request->tipoAsistencia);
+                $this->actualizarCrearTipoViolencia($caso, $request->tiposViolencia);
 
                 DelitosLeiv::where('caso_fk', $caso->id)->delete();
                 foreach($request->delitoLeivs as $key => $value) {
@@ -442,6 +445,8 @@ class CasosController extends Controller
         try {
             if($this->isNullPersona($_persona))
                 return null;
+
+            $persona = null;
             //$persona = Persona::whereRaw('dui = "'.$_persona->dui.'"')->first();
             $persona ??= Persona::whereRaw('md5(id) = "'.$_persona->key.'"')->first();
             $persona ??= new Persona;
@@ -613,6 +618,33 @@ class CasosController extends Controller
             foreach ($institucionSeRemite as $key => $value) {
                 InstitucionSeRemitira::updateOrCreate(["caso_fk" => $caso->id,"institucion" => $value]);
             }
+        } catch (\Exception $e) {
+            bitacora_errores('CasosController.php', $e);
+        }
+    }
+
+    public function actualizarCrearTipoViolencia($caso, $tiposViolencia){
+        try{
+
+            DB::statement("DELETE FROM casos_tipos_violencias where casos_fk = $caso->id");
+
+            $arreglo = array();
+            
+            foreach ($tiposViolencia as $value) {
+                array_push($arreglo, $value);
+                
+            }
+
+            $arreglo = "('" . (count($arreglo) === 1 ? $arreglo[0]:implode("', '", $arreglo)). "')";
+
+            DB::statement("
+                INSERT INTO 
+                    casos_tipos_violencias
+                ( 
+                    select $caso->id, t.id, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()  
+                    from tipo_violencias t where t.tipo_violencia in $arreglo
+                )
+            ");
         } catch (\Exception $e) {
             bitacora_errores('CasosController.php', $e);
         }

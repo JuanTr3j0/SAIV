@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Traits;
 
 
 
+use App\Models\CasosTiposViolencia;
 use App\Models\Oficinas;
 use Illuminate\Support\Facades\DB;
 
@@ -68,7 +69,6 @@ trait TraitCasos{
                 'fecha_hecho                    as  fechaHecho',
                 DB::raw('DATE_FORMAT(hora_hecho,  "%H:%i")  as  horaHecho'),
                 'casos.id                       as  agresores',
-                'tipos_violencia                as  tiposViolencia',
                 'modalidad_violencia            as  modalidadViolencia',
                 'delito_codigo_penal            as  delitoCodigoPenal',
                 'delito_codigo_penal_otro       as  delitoCodigoPenalOtro',
@@ -80,6 +80,7 @@ trait TraitCasos{
                 "casos.id                       as  tipoAsistencia",
                 "casos.id                       as  archivosCasos",
                 "casos.id                       as  delitoLeivs",
+                "casos.id                       as  tiposViolencia",
             ];
 
 
@@ -127,6 +128,8 @@ trait TraitCasos{
             $caso -> tipoAsistencia = $this->getipoAsistencia($caso->tipoAsistencia);
 
             $caso -> institucionSeRemite = $this->getInstitucionSeRemite($caso->institucionSeRemite);
+            
+            $caso -> tiposViolencia = $this->getTipoViolencias($caso->tiposViolencia);
 
 
 
@@ -491,6 +494,26 @@ trait TraitCasos{
             $_institucion_se_remite = InstitucionSeRemitira::where('caso_fk',$_caso)->select('institucion')->get();
 
             return $_institucion_se_remite->map(function($value){ return $value->institucion; });
+
+        }catch (\Exception $e) {
+
+            bitacora_errores('TraitCasos.php', $e);
+
+        }
+
+    }
+
+
+    
+    public function getTipoViolencias($_caso){
+
+        try{
+            if(!CasosTiposViolencia::where('casos_fk', $_caso)->exists())
+                return array();
+
+            $_tipoViolencias = CasosTiposViolencia::where('casos_fk', $_caso)->join('tipo_violencias', 'tipo_violencias.id','=','tipos_violencia_fk' )->select('tipo_violencia')->get();
+
+            return $_tipoViolencias->map(function($value){ return $value->tipo_violencia; });
 
         }catch (\Exception $e) {
 
@@ -977,8 +1000,6 @@ trait TraitCasos{
                 $caso -> tipoAsistencia         = $this -> getipoAsistencia($caso->tipoAsistencia);
 
                 $caso -> institucionSeRemite    = $this -> getInstitucionSeRemite($caso->institucionSeRemite);
-
-
 
                 return $caso;
 
