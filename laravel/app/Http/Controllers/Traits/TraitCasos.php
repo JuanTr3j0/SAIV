@@ -156,8 +156,8 @@ trait TraitCasos{
     public function getPersona ($_id){
 
         try{
-
-            if( $_id === null){
+            //Validamos si existe el registro de la persona en la BD 
+            if(!Persona::where('id', $_id)->exists()){
 
                 return[
 
@@ -242,7 +242,6 @@ trait TraitCasos{
             }
 
 
-
             $select = [
 
                 DB::raw('md5(personas.id) as `key`'),
@@ -322,7 +321,6 @@ trait TraitCasos{
                 'propietario_residencia_otro as propietarioResidenciaOtro',
 
             ];
-
 
 
             $persona = Persona::select($select)

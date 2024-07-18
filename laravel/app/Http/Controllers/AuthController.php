@@ -224,7 +224,7 @@ class AuthController extends Controller
 
         /* Este es el código que crea las credenciales. */
 
-        $credentials = array("email"=>$request->correo, 'password'=>$request->contrasena, 'estado'=>true);
+        $credentials = array("email"=>strval($request->correo), 'password'=>strval($request->contrasena), 'estado'=>true);
 
         
 

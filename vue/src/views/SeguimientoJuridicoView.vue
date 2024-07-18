@@ -45,14 +45,14 @@
                             </td>                                                             
                             <td id="acciones" style="padding:0%;" class="text-center">
                                 <AccionesTable 
-                                :json="seguimiento"
-                                :loading="loading" 
-                                :showEditar="true"
-                                :showBorrar="true"
-                                :showVer="true" 
-                                @handleClickVer="handleClickVer(seguimiento)"
-                                @handleClickEditar="handleClickEditar(seguimiento)"
-                                @handleClickBorrar="handleClickBorrar(seguimiento)"
+                                    :json="seguimiento"
+                                    :loading="loading" 
+                                    :showEditar="true"
+                                    :showBorrar="true"
+                                    :showVer="true" 
+                                    @handleClickVer="handleClickVer(seguimiento)"
+                                    @handleClickEditar="handleClickEditar(seguimiento)"
+                                    @handleClickBorrar="handleClickBorrar(seguimiento)"
                                 />
                             </td>                          
                         </tr>
@@ -79,21 +79,21 @@
                                 </label>
                                 <div class="col-md">
                                     <vSelectPaginationVue
-                                    :loading="loadingSelect"
-                                    :data="dataSelect"
-                                    :url="'saiv/casos/indexSelect'"
-                                    :links="linksSelect"
-                                    :registros="registrosSelect"
-                                    :disabled="existKey()"
-                                    v-if="!showVer && !existKey()"
-                                    v-model="codigoCaso"
-                                    @setUrlSelect="setUrlSelect"
-                                    @changeVariablesBusqueda="changeVariablesBusqueda"
-                                    @resetUrlSelect="resetUrlSelect"
-                                    />
-                                    <label v-else class="form-control text-primary fw-bold">
-                                        {{codigoCaso === null || typeof codigoCaso === 'undefined'? "No ingresado": codigoCaso.label}}
-                                    </label>
+                                        :loading="loadingSelect"
+                                        :data="dataSelect"
+                                        :url="'saiv/casos/indexSelect'"
+                                        :links="linksSelect"
+                                        :registros="registrosSelect"
+                                        :disabled="existKey()"
+                                        v-if="!showVer && !existKey()"
+                                        v-model="codigoCaso"
+                                        @setUrlSelect="setUrlSelect"
+                                        @changeVariablesBusqueda="changeVariablesBusqueda"
+                                        @resetUrlSelect="resetUrlSelect"
+                                        />
+                                        <label v-else class="form-control text-primary fw-bold">
+                                            {{codigoCaso === null || typeof codigoCaso === 'undefined'? "No ingresado": codigoCaso.label}}
+                                        </label>
                                 </div>                                
                             </div>
                         </template>
@@ -289,10 +289,12 @@ export default defineComponent({
         const handleChangeCodigoCaso = _codigoCaso => {
             formSeguimientoJuridicoRef.value.handleChangeCodigoCaso(_codigoCaso);
         };
+
         onMounted(() => {
             formCasoRef.value.handledocultarCodigo(false);
             fetchSelect();
         });
+
         const cargarCaso = async (json) => {
             if(typeof json.key !== 'undefined'){
                 formCasoRef.value.resetForm();
@@ -316,9 +318,12 @@ export default defineComponent({
                 formSeguimientoJuridicoRef.value.handleChangeDelitosCodPenal(_caso.delitoCodigoPenal); 
             }
         };
-        const resetFormCaso = () => formCasoRef.value.resetForm();
+
+        //Metodos de acciones del formulario
         const cargando = _loading => loading.value = _loading;
+        const resetFormCaso = () => formCasoRef.value.resetForm();
         const cargandoForm = _loading => formLoading.value = _loading;
+
         //Metodos Agenda
         const cargarAgenda = async() =>{
             try {
@@ -336,11 +341,12 @@ export default defineComponent({
                 console.log(error);
             }
         }
+
         const ocultarAgenda = () => {
             modalAgendaRef.value.hideModal();
         }
 
-        const nuevaActividad = () =>{
+        const nuevaActividad = () => {
             modalAgendaRef.value.hideModal();
             ActividadCalendarRef.value.resetForm();
             ActividadCalendarRef.value.showModal();
@@ -354,8 +360,8 @@ export default defineComponent({
         const handleClickAgendaItem = _json =>{
             modalAgendaRef.value.hideModal();
             ActividadCalendarRef.value.resetForm();
+            ActividadCalendarRef.value.showModal();
             ActividadCalendarRef.value.editForm(_json);
-            ActividadCalendarRef.value.showModal()
         }
 
         // Paginacion Select Variables
@@ -381,14 +387,16 @@ export default defineComponent({
             loadingSelect.value   = result.cargando;
         }       
 
-        // Metodos que se utilizan en el Select Paginacion
+        // Metodos que se utilizan en el select pagination
         const changeVariablesBusqueda = busqueda => {   
             busquedaSelect.value = busqueda ??  busquedaSelect.value;      
             fetchSelect(); 
         }
+
         const resetUrlSelect = () => {
             urlSelect.value = store.state.URL_SERVER + 'saiv/casos/indexSelect';
         }
+
         const setUrlSelect = url => {
             urlSelect.value = url;
             fetchSelect(); 
@@ -400,12 +408,13 @@ export default defineComponent({
             showVer.value = true; 
             cargarRegistro(json)
         };
+
         const handleClickEditar = json => {
             intercambiarForm.value = true; 
             showVer.value = false; 
             cargarRegistro(json);
-            
         };
+
         const cargarRegistro = async (json) => {
             try {
                 if(typeof json.key === 'undefined')
@@ -429,6 +438,7 @@ export default defineComponent({
                 console.log('Error -> '+ error);
             }
         }
+
         const handleClickBorrar = (json) => {advertenciaRef.value.setJson(json); modalBorrarRef.value.showModal(); }
 
         const borrarSeguimientoJuridico = async _key => {
@@ -439,6 +449,7 @@ export default defineComponent({
                 cargando(false)
             }
         }
+        
         return {
             // Variables
             intercambiarForm,

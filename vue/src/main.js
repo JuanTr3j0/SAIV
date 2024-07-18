@@ -22,13 +22,16 @@ import store from './store'
 //     faMagnifyingGlass, faEye,
 //     faTrashCan, 
 // )
+
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css';
 import { autoAnimatePlugin } from '@formkit/auto-animate/vue'
 
 
 createApp(App)
-    .use(store).use(router).use(autoAnimatePlugin)
+    .use(store)
+    .use(router)
+    .use(autoAnimatePlugin)
     .component('v-select', vSelect)/*.component('font-awesome-icon', FontAwesomeIcon)*/
 .mount('#app')
 

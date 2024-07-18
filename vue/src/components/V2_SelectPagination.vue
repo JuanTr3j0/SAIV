@@ -7,7 +7,7 @@
         :filterable = "false"
         @search = "onSearch"
         @input = "e => inputValue(e)"
-        placeholder="Seleccione"
+        placeholder="Seleccione o Digité"
     >
         <template v-slot:list-footer>
             <li class="pagination">

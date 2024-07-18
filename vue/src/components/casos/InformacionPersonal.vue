@@ -11,7 +11,7 @@
             :type="'date'"
             :clases="'col-md-2'"
             :showVer="showVer"
-            :loading = "loading" 
+            :loading = "loadingSelect|loading" 
             :value="persona.fechaNacimiento"
             @update:value="(value) => updateCampoValue(value, 'fechaNacimiento')"
         />
@@ -20,16 +20,39 @@
             <label class="form-control fw-bold text-primary">{{getEdadString(persona.fechaNacimiento)??'N/A'}}</label>
         </div>
         <FormInputVue
-            :titulo="'Dui'"
-            :id="id+'-dui'"
-            :clases="'col-md-2'"
-            :showVer="showVer"
-            :loading = "loading" 
+            :titulo = "'Dui'"
+            :id = "id+'-dui'"
+            :clases = "'col-md-2'"
+            :showVer ="showVer"
+            :loading = "loadingSelect|loading" 
             :value="persona.dui"
             @update:value="(value) => updateCampoValue(value, 'dui')"
-       
             @blur="verificarCasosRelacionados"
-        />        
+        />   
+        <div class="col-md-6">
+            <label class=" fw-semibold d-block" for="caso-tipo-hecho">
+                {{!showVer && !existKey() ? 'Dui': 'Código del Caso'}}
+                <i class="bx bx-search bx-sm" v-if="!showVer && !existKey()"/>
+            </label>
+            <div class="col-md">
+                <vSelectPaginationVue
+                    :loading="loadingSelect"
+                    :data="dataSelect"
+                    :url="urlPersonaDui"
+                    :links="linksSelect"
+                    :registros="registrosSelect"
+                    :disabled="existKey()"
+                    v-if="!showVer && !existKey()"
+                    v-model="persona.dui"
+                    @setUrlSelect="setUrlSelect"
+                    @changeVariablesBusqueda="changeVariablesBusqueda"
+                    @resetUrlSelect="resetUrlSelect"
+                />
+                    <label v-else class="form-control text-primary fw-bold">
+                        {{codigoCaso === null || typeof codigoCaso === 'undefined'? "No ingresado": codigoCaso.label}}
+                    </label>
+            </div>                                
+        </div>  
         <FormDeptoMuniVue
             :showVer="showVer ?? false"
             :persona="'Residencia'"
@@ -55,7 +78,7 @@
             v-show="id!=='victima'"
             :id="id+'-relacion-victima'" :nombre="'Relación con Víctima'"
             :opciones="opciones === null ? []:opciones.relacionVictima"
-            :clases="[persona.relacionVictima === 'Otra'?'col-md-6':'col-md-3']" :loading="loading" :showVer="showVer ?? false"
+            :clases="[persona.relacionVictima === 'Otra'?'col-md-6':'col-md-3']" :loading="loadingSelect|loading" :showVer="showVer ?? false"
             :opcion="persona.relacionVictima"
             @update:opcion="value=>updateCampoValue(value, 'relacionVictima')"
         ></FormSelectOpcionVue>
@@ -65,7 +88,7 @@
             :id="id+'-relacion-victima-otra'"
             :clases="'col-md-3'"
             :showVer="showVer"
-            :loading = "loading" 
+            :loading = "loadingSelect|loading" 
             :value="persona.relacionVictimaOtra"
             :disabled="persona.relacionVictima !== 'Otra'"
             @update:value="(value) => updateCampoValue(value, 'relacionVictimaOtra')"
@@ -74,7 +97,7 @@
         <FormSelectOpcionVue
             :id="id+'-sexo'" :nombre="'Sexo'"
             :opciones="opciones === null ? []:opciones.sexo"
-            :clases="['col-md-3']" :loading="loading" 
+            :clases="['col-md-3']" :loading="loadingSelect|loading" 
             :showVer="showVer ?? false"
             :opcion="persona.sexo"
             @change="()=>{persona.embarazada = (persona.sexo === 'Femenino' ? persona.embarazada:null);}"
@@ -83,28 +106,28 @@
         <FormSelectOpcionVue
             :id="id+'-genero'" :nombre="'Género'"
             :opciones="opciones === null ? []:opciones.genero"
-            :clases="['col-md-3']" :loading="loading" :showVer="showVer ?? false"
+            :clases="['col-md-3']" :loading="loadingSelect|loading" :showVer="showVer ?? false"
             :opcion="persona.genero"
             @update:opcion="value=>updateCampoValue(value, 'genero')"
         ></FormSelectOpcionVue>               
         <FormSelectOpcionVue
             :id="id+'-estado-familiar'" :nombre="'Estado Familiar'"
             :opciones="opciones === null ? []:opciones.estado_familiar"
-            :clases="['col-md-3']" :loading="loading" :showVer="showVer ?? false"
+            :clases="['col-md-3']" :loading="loadingSelect|loading" :showVer="showVer ?? false"
             :opcion="persona.estadoFamiliar"
             @update:opcion="value=>updateCampoValue(value, 'estadoFamiliar')"
         ></FormSelectOpcionVue>               
         <FormSelectOpcionVue
             :id="id+'-sabe-leer-escribir'" :nombre="'¿Sabe Leer y Escribir?'"
             :opciones="opciones === null ? []:opciones.sabe_escribir_leer"
-            :clases="['col-md-3']" :loading="loading" :showVer="showVer ?? false"
+            :clases="['col-md-3']" :loading="loadingSelect|loading" :showVer="showVer ?? false"
             :opcion="persona.sabeEscribirLeer"
             @update:opcion="value=>updateCampoValue(value, 'sabeEscribirLeer')"
         ></FormSelectOpcionVue>               
         <FormSelectOpcionVue
             :id="id+'-nacionalidad'" :nombre="'Nacionalidad'"
             :opciones="opciones === null ? []:opciones.nacionalidad"
-            :clases="[persona.nacionalidad === 'Otra'?'col-md-2':'col-md-3']" :loading="loading" :showVer="showVer ?? false"
+            :clases="[persona.nacionalidad === 'Otra'?'col-md-2':'col-md-3']" :loading="loadingSelect|loading" :showVer="showVer ?? false"
             :opcion="persona.nacionalidad"
             @change="persona.nacionalidadOtra = persona.nacionalidad === 'Otra'?null:persona.nacionalidadOtra"
             @update:opcion="value=>updateCampoValue(value, 'nacionalidad')"
@@ -115,7 +138,7 @@
                 :id="id+'-nacionalidad-otra'"
                 :clases="'col-md-4'"
                 :showVer="showVer"
-                :loading = "loading" 
+                :loading = "loadingSelect|loading" 
                 :value="persona.nacionalidadOtra"
                 :disabled="persona.nacionalidad !== 'Otra'"
                 @update:value="(value) => updateCampoValue(value, 'nacionalidadOtra')"
@@ -125,7 +148,7 @@
             <FormSelectOpcionVue v-show="persona.sexo==='Femenino'"
                 :id="id+'-embarazada'" :nombre="'Embarazada'"
                 :opciones="opciones === null ? []:opciones.embarazada"
-                :clases="['col-md-3']" :loading="loading" :showVer="showVer ?? false"
+                :clases="['col-md-3']" :loading="loadingSelect|loading" :showVer="showVer ?? false"
                 :opcion="persona.embarazada" :disabled="persona.sexo!=='Femenino'"
                 @update:opcion="value=>updateCampoValue(value, 'embarazada')"
             ></FormSelectOpcionVue> 
@@ -133,21 +156,21 @@
         <FormSelectOpcionVue
             :id="id+'-nivel-educacion'" :nombre="'Nivel de Educación'"
             :opciones="opciones === null ? []:opciones.nivel_educacion"
-            :clases="['col-md-3']" :loading="loading" :showVer="showVer ?? false"
+            :clases="['col-md-3']" :loading="loadingSelect|loading" :showVer="showVer ?? false"
             :opcion="persona.nivelEducacion"
             @update:opcion="value=>updateCampoValue(value, 'nivelEducacion')"
         ></FormSelectOpcionVue> 
         <FormSelectOpcionVue
             :id="id+'-discapacidad'" :nombre="'Discapacidad'"
             :opciones="opciones === null ? []:opciones.discapacidad"
-            :clases="['col-md-6']" :loading="loading" :showVer="showVer ?? false"
+            :clases="['col-md-6']" :loading="loadingSelect|loading" :showVer="showVer ?? false"
             :opcion="persona.discapacidad"
             @update:opcion="value=>updateCampoValue(value, 'discapacidad')"
         ></FormSelectOpcionVue>                   
         <FormSelectOpcionVue
             :id="id+'-ocupacion'" :nombre="'Ocupación'"
             :opciones="opciones === null ?[]:opciones.ocupacion"
-            :clases="['col-md-6']" :loading="loading" :showVer="showVer ?? false"
+            :clases="['col-md-6']" :loading="loadingSelect|loading" :showVer="showVer ?? false"
             :opcion="persona.ocupacion"
             @update:opcion="value=>updateCampoValue(value, 'ocupacion')"
             @change="handleChangedReset('ocupacion', 'ocupacionOtra')"
@@ -158,7 +181,7 @@
                 :id="id+'-ocupacion-otra'"
                 :clases="'col-md-6'"
                 :showVer="showVer"
-                :loading = "loading" 
+                :loading = "loadingSelect|loading" 
                 :value="persona.ocupacionOtra"
                 :disabled="persona.ocupacion !== 'Otra'"
                 @update:value="(value) => updateCampoValue(value, 'ocupacionOtra')"
@@ -167,7 +190,7 @@
         <FormSelectOpcionVue
             :id="id+'-lugar-residencia-victima'" :nombre="'Propietario/a Lugar de Residencia Víctima'"
             :opciones="opciones === null ?[]:opciones.propietario_residencia"
-            :clases="['col-md-6']" :loading="loading" :showVer="showVer ?? false"
+            :clases="['col-md-6']" :loading="loadingSelect|loading" :showVer="showVer ?? false"
             :opcion="persona.propietarioResidencia"
             @update:opcion="value=>updateCampoValue(value, 'propietarioResidencia')"
             @change="handleChangedReset('propietarioResidencia', 'propietarioResidenciaOtro')"
@@ -178,7 +201,7 @@
                 :id="id+'-lugar-residencia-otra'"
                 :clases="'col-md-6'"
                 :showVer="showVer"
-                :loading = "loading" 
+                :loading = "loadingSelect|loading" 
                 :value="persona.propietarioResidenciaOtro"
                 :disabled="persona.propietarioResidencia !== 'Otro'"
                 @update:value="(value) => updateCampoValue(value, 'propietarioResidenciaOtro')"
@@ -200,7 +223,7 @@
                 :id="id+'-fuente-ingreso-otra'"
                 :clases="'col-md-6'"
                 :showVer="showVer"
-                :loading = "loading" 
+                :loading = "loadingSelect|loading" 
                 :disabled="!persona.fuenteIngresos.includes('Otra')"
                 :value="persona.fuenteIngresosOtro"
                 @input="(event) => updateCampo(event, 'fuenteIngresosOtro')"
@@ -211,14 +234,14 @@
             :id="id+'-direccion'"
             :clases="'col-md-4'"
             :showVer="showVer"
-            :loading = "loading" 
+            :loading = "loadingSelect|loading" 
             :value="persona.direccion" 
             @input="(event) => updateCampo(event, 'direccion')"
         /> 
         <FormSelectOpcionVue
             :id="id+'-zona-residencial'" :nombre="'Zona Residencial'"
             :opciones="opciones === null ? []:opciones.zona_residencial"
-            :clases="['col-md-2']" :loading="loading" :showVer="showVer ?? false"
+            :clases="['col-md-2']" :loading="loadingSelect|loading" :showVer="showVer ?? false"
             :opcion="persona.zonaResidencial"
             @update:opcion="value=>updateCampoValue(value, 'zonaResidencial')"
         ></FormSelectOpcionVue>  
@@ -227,14 +250,14 @@
             :id="id+'-telefono-movil'"
             :clases="'col-md-2'"
             :showVer="showVer"
-            :loading = "loading" 
+            :loading = "loadingSelect|loading" 
             :value="persona.telefonoMovil"
             @input="(event) => updateCampo(event, 'telefonoMovil')"
         />  
         <FormSelectOpcionVue
             :id="id+'-tel-empresa-movil'" :nombre="'Empresa Tel. Móvil'"
             :opciones="opciones === null ? []:opciones.empresa_movil"
-            :clases="['col-md-2']" :loading="loading" :showVer="showVer ?? false"
+            :clases="['col-md-2']" :loading="loadingSelect|loading" :showVer="showVer ?? false"
             :opcion="persona.empresa"
             @update:opcion="value=>updateCampoValue(value, 'empresa')"
         ></FormSelectOpcionVue>  
@@ -243,7 +266,7 @@
             :id="id+'-tel-casa'"
             :clases="'col-md-2'"
             :showVer="showVer"
-            :loading = "loading" 
+            :loading = "loadingSelect|loading" 
             :value="persona.telefonoCasa"
             @input="(event) => updateCampo(event, 'telefonoCasa')"
         />          
@@ -252,7 +275,7 @@
             :id="id+'-lugar-trabajo'"
             :clases="'col-md-6'"
             :showVer="showVer"
-            :loading = "loading" 
+            :loading = "loadingSelect|loading" 
             :value="persona.lugarTrabajo"
             @update:value="(value) => updateCampoValue(value, 'lugarTrabajo')"
         />
@@ -261,7 +284,7 @@
             :id="id+'-direccion-trabajo'"
             :clases="'col-md-6'"
             :showVer="showVer"
-            :loading = "loading" 
+            :loading = "loadingSelect|loading" 
             :value="persona.direccionTrabajo"
             @update:value="(value) => updateCampoValue(value, 'direccionTrabajo')"
         />
@@ -279,16 +302,20 @@
     </div>
 </template>
 <script>
-import servicios                from '@/services/crud';
+// Conexion service
+import servicios_otros          from '@/services/otros'
+import servicios                from '@/services/crud'
+import store                    from '@/store/index'
 
 // Component
-import FormNombreApellidoVue    from '@/components/FormNombreApellido.vue';
-import FormSelectOpcionVue      from '@/components/FormSelectOpcion.vue';
-import FormDeptoMuniVue         from '@/components/FormDeptoMuni.vue';
-import FormInputVue             from '@/components/FormInput.vue';
-import LabelShowVer             from '@/components/labelShowVer.vue';
+import FormNombreApellidoVue    from '@/components/FormNombreApellido.vue'
+import vSelectPaginationVue     from '@/components/V2_SelectPagination.vue'
+import FormSelectOpcionVue      from '@/components/FormSelectOpcion.vue'
+import FormDeptoMuniVue         from '@/components/FormDeptoMuni.vue'
+import LabelShowVer             from '@/components/labelShowVer.vue'
+import FormInputVue             from '@/components/FormInput.vue'
 
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, toRefs } from 'vue'
 export default defineComponent({
     props:[
         'persona',
@@ -364,16 +391,75 @@ export default defineComponent({
             let _persona = this.persona;
             _persona.fuenteIngresosOtro = null;
             this.$emit('update:persona', _persona);
+        },
+        loading(nuevo){
+            this.handleChangedLoadingVueSelect(nuevo)
         }
     },
     components:{
         FormNombreApellidoVue,
+        vSelectPaginationVue,
         FormSelectOpcionVue,
         FormDeptoMuniVue,
         LabelShowVer,
         FormInputVue,
     },
-    setup() {
+    setup(props) {
+        //Invocacion de los props recibidos
+        const { persona } = toRefs(props);
+
+        // Paginacion Select Variables
+        const registrosSelect   = ref(null)    
+        const busquedaSelect    = ref(null)
+        const loadingSelect     = ref(false)
+        const linksSelect       = ref([])
+        const dataSelect        = ref([])
+        const showVer           = ref(false)
+        
+        const urlPersonaDui     = ref(store.state.URL_SERVER + 'saiv/persona/dui/index')
+        const urlSelect         = ref(urlPersonaDui.value)
+
+        // Peticion al servidor Select Paginacion
+        const fetchSelect = async() => {
+
+            loadingSelect.value = true;
+            const result = await servicios_otros.datosTabla({
+                busqueda:busquedaSelect.value, 
+                porPagina: 10,
+            }, urlSelect.value);
+
+            dataSelect.value      = result.data;
+            linksSelect.value     = result.links;
+            registrosSelect.value = result.current_page+'/'+result.last_page;
+            loadingSelect.value   = result.cargando;
+        }       
+
+        // Metodos que se utilizan en el select paginacion
+        const changeVariablesBusqueda = busqueda => {  
+            //Obtenemos el valor a buscar en la base datos
+            busquedaSelect.value = busqueda ??  busquedaSelect.value;              
+            fetchSelect();
+        }
+
+        //Metodo de busqueda 
+        const handleChangedLoadingVueSelect = (loading) => {
+            loadingSelect.value = loading
+        } 
+
+        const resetUrlSelect = () => {
+            urlSelect.value = urlPersonaDui.value;
+        }
+
+        const setUrlSelect = url => {
+            urlSelect.value = url;
+            fetchSelect(); 
+        }
+
+        const existKey = () => {
+            return persona.value.id === null; 
+        }
+        
+        //Metodos del formulario para la informacion personal
         const casosRelacionados = ref([]);
 
         const reset = () =>{
@@ -381,20 +467,39 @@ export default defineComponent({
         }
 
         return {
+
+            //Metodos usados en select vue
+            handleChangedLoadingVueSelect,
+
+            //Variables usadas en el select paginate
+            registrosSelect,
+            busquedaSelect,
+            urlPersonaDui,
+            loadingSelect,
+            linksSelect,
+            dataSelect,
+            urlSelect,
+            existKey,
+            showVer,
+
+            //Variables usadas en el formulario
+            changeVariablesBusqueda,
             casosRelacionados,
+            resetUrlSelect,
+            setUrlSelect,
             reset,
         }
     }
 })
 </script>
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity 1.2s ease;
-}
+    <style scoped>
+    .fade-enter-active,
+    .fade-leave-active {
+        transition: opacity 1.2s ease;
+    }
 
-.fade-enter-from,
-.fade-leave-to {
-    opacity: 0;
-}
+    .fade-enter-from,
+    .fade-leave-to {
+        opacity: 0;
+    }
 </style>

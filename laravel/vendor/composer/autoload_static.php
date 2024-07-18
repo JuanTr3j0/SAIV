@@ -37,6 +37,7 @@ class ComposerStaticInit9fdccd7a2cdbf766a1afbba7eb5a8fd2
         'ec07570ca5a812141189b1fa81503674' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert/Functions.php',
         '320163ac6b93aebe3dc25b60a0533d56' => __DIR__ . '/..' . '/spatie/laravel-ignition/src/helpers.php',
         '377b22b161c09ed6e5152de788ca020a' => __DIR__ . '/..' . '/spatie/laravel-permission/src/helpers.php',
+        '4348fae691d67dd97e1b76b09002e77d' => __DIR__ . '/../..' . '/config/helpers.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -677,6 +678,7 @@ class ComposerStaticInit9fdccd7a2cdbf766a1afbba7eb5a8fd2
         'App\\Http\\Controllers\\BitacoraController' => __DIR__ . '/../..' . '/app/Http/Controllers/BitacoraController.php',
         'App\\Http\\Controllers\\BitacoraErroresController' => __DIR__ . '/../..' . '/app/Http/Controllers/BitacoraErroresController.php',
         'App\\Http\\Controllers\\CasosController' => __DIR__ . '/../..' . '/app/Http/Controllers/CasosController.php',
+        'App\\Http\\Controllers\\CasosTiposViolenciaController' => __DIR__ . '/../..' . '/app/Http/Controllers/CasosTiposViolenciaController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\DelitosLeivController' => __DIR__ . '/../..' . '/app/Http/Controllers/DelitosLeivController.php',
         'App\\Http\\Controllers\\DepartamentosController' => __DIR__ . '/../..' . '/app/Http/Controllers/DepartamentosController.php',
@@ -756,6 +758,7 @@ class ComposerStaticInit9fdccd7a2cdbf766a1afbba7eb5a8fd2
         'App\\Models\\Bitacora' => __DIR__ . '/../..' . '/app/Models/Bitacora.php',
         'App\\Models\\BitacoraErrores' => __DIR__ . '/../..' . '/app/Models/BitacoraErrores.php',
         'App\\Models\\Casos' => __DIR__ . '/../..' . '/app/Models/Casos.php',
+        'App\\Models\\CasosTiposViolencia' => __DIR__ . '/../..' . '/app/Models/CasosTiposViolencia.php',
         'App\\Models\\DelitosLeiv' => __DIR__ . '/../..' . '/app/Models/DelitosLeiv.php',
         'App\\Models\\Departamentos' => __DIR__ . '/../..' . '/app/Models/Departamentos.php',
         'App\\Models\\Ingresos' => __DIR__ . '/../..' . '/app/Models/Ingresos.php',
@@ -769,9 +772,8 @@ class ComposerStaticInit9fdccd7a2cdbf766a1afbba7eb5a8fd2
         'App\\Models\\Programacion' => __DIR__ . '/../..' . '/app/Models/Programacion.php',
         'App\\Models\\SeguimientoJuridico' => __DIR__ . '/../..' . '/app/Models/SeguimientoJuridico.php',
         'App\\Models\\TipoAsistencia' => __DIR__ . '/../..' . '/app/Models/TipoAsistencia.php',
+        'App\\Models\\TipoViolencia' => __DIR__ . '/../..' . '/app/Models/TipoViolencia.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
-        'App\\Models\\casos_tipos_violencia' => __DIR__ . '/../..' . '/app/Models/casos_tipos_violencia.php',
-        'App\\Models\\tipo_violencia' => __DIR__ . '/../..' . '/app/Models/tipo_violencia.php',
         'App\\Policies\\AgendaPolicy' => __DIR__ . '/../..' . '/app/Policies/AgendaPolicy.php',
         'App\\Policies\\AtencionBrindadaPolicy' => __DIR__ . '/../..' . '/app/Policies/AtencionBrindadaPolicy.php',
         'App\\Policies\\AtencionMenoresEdadPolicy' => __DIR__ . '/../..' . '/app/Policies/AtencionMenoresEdadPolicy.php',
