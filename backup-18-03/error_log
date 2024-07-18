@@ -1,0 +1,51 @@
+[16-Nov-2022 15:14:27 America/Boise] PHP Warning:  require(/home3/lapagin1/public_html/saiv/../vendor/autoload.php): Failed to open stream: No such file or directory in /home3/lapagin1/public_html/saiv/index.php on line 34
+[16-Nov-2022 15:14:27 America/Boise] PHP Fatal error:  Uncaught Error: Failed opening required '/home3/lapagin1/public_html/saiv/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php80/root/usr/share/pear') in /home3/lapagin1/public_html/saiv/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home3/lapagin1/public_html/saiv/index.php on line 34
+[16-Nov-2022 15:14:37 America/Boise] PHP Warning:  require(/home3/lapagin1/public_html/saiv/../vendor/autoload.php): Failed to open stream: No such file or directory in /home3/lapagin1/public_html/saiv/index.php on line 34
+[16-Nov-2022 15:14:37 America/Boise] PHP Fatal error:  Uncaught Error: Failed opening required '/home3/lapagin1/public_html/saiv/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php80/root/usr/share/pear') in /home3/lapagin1/public_html/saiv/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home3/lapagin1/public_html/saiv/index.php on line 34
+[16-Nov-2022 15:15:24 America/Boise] PHP Warning:  require(/home3/lapagin1/public_html/saiv/../vendor/autoload.php): Failed to open stream: No such file or directory in /home3/lapagin1/public_html/saiv/index.php on line 34
+[16-Nov-2022 15:15:24 America/Boise] PHP Fatal error:  Uncaught Error: Failed opening required '/home3/lapagin1/public_html/saiv/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php80/root/usr/share/pear') in /home3/lapagin1/public_html/saiv/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home3/lapagin1/public_html/saiv/index.php on line 34
+[16-Nov-2022 15:15:39 America/Boise] PHP Warning:  require(/home3/lapagin1/public_html/saiv/../vendor/autoload.php): Failed to open stream: No such file or directory in /home3/lapagin1/public_html/saiv/index.php on line 34
+[16-Nov-2022 15:15:39 America/Boise] PHP Fatal error:  Uncaught Error: Failed opening required '/home3/lapagin1/public_html/saiv/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php80/root/usr/share/pear') in /home3/lapagin1/public_html/saiv/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home3/lapagin1/public_html/saiv/index.php on line 34
+[16-Nov-2022 15:18:16 America/Boise] PHP Warning:  require(/home3/lapagin1/public_html/saiv/../vendor/autoload.php): Failed to open stream: No such file or directory in /home3/lapagin1/public_html/saiv/index.php on line 34
+[16-Nov-2022 15:18:16 America/Boise] PHP Fatal error:  Uncaught Error: Failed opening required '/home3/lapagin1/public_html/saiv/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php80/root/usr/share/pear') in /home3/lapagin1/public_html/saiv/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home3/lapagin1/public_html/saiv/index.php on line 34
+[16-Nov-2022 15:18:19 America/Boise] PHP Warning:  require(/home3/lapagin1/public_html/saiv/../vendor/autoload.php): Failed to open stream: No such file or directory in /home3/lapagin1/public_html/saiv/index.php on line 34
+[16-Nov-2022 15:18:19 America/Boise] PHP Fatal error:  Uncaught Error: Failed opening required '/home3/lapagin1/public_html/saiv/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php80/root/usr/share/pear') in /home3/lapagin1/public_html/saiv/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home3/lapagin1/public_html/saiv/index.php on line 34
+[16-Nov-2022 15:18:20 America/Boise] PHP Warning:  require(/home3/lapagin1/public_html/saiv/../vendor/autoload.php): Failed to open stream: No such file or directory in /home3/lapagin1/public_html/saiv/index.php on line 34
+[16-Nov-2022 15:18:20 America/Boise] PHP Fatal error:  Uncaught Error: Failed opening required '/home3/lapagin1/public_html/saiv/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php80/root/usr/share/pear') in /home3/lapagin1/public_html/saiv/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home3/lapagin1/public_html/saiv/index.php on line 34
+[16-Nov-2022 15:20:16 America/Boise] PHP Warning:  require(/home3/lapagin1/public_html/saiv/../vendor/autoload.php): Failed to open stream: No such file or directory in /home3/lapagin1/public_html/saiv/index.php on line 34
+[16-Nov-2022 15:20:16 America/Boise] PHP Fatal error:  Uncaught Error: Failed opening required '/home3/lapagin1/public_html/saiv/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php80/root/usr/share/pear') in /home3/lapagin1/public_html/saiv/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home3/lapagin1/public_html/saiv/index.php on line 34
+[16-Nov-2022 15:27:52 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 8.0.17. in /home3/lapagin1/public_html/saivApi/vendor/composer/platform_check.php on line 24
+[16-Nov-2022 15:30:57 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 8.0.17. in /home3/lapagin1/public_html/saivApi/vendor/composer/platform_check.php on line 24
+[16-Nov-2022 15:30:59 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 8.0.17. in /home3/lapagin1/public_html/saivApi/vendor/composer/platform_check.php on line 24
+[16-Nov-2022 15:33:24 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 8.0.17. in /home3/lapagin1/public_html/saivApi/vendor/composer/platform_check.php on line 24
+[16-Nov-2022 15:33:27 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 8.0.17. in /home3/lapagin1/public_html/saivApi/vendor/composer/platform_check.php on line 24
+[16-Nov-2022 15:38:35 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 8.0.17. in /home3/lapagin1/public_html/saivApi/vendor/composer/platform_check.php on line 24
+[16-Nov-2022 15:38:41 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 8.0.17. in /home3/lapagin1/public_html/saivApi/vendor/composer/platform_check.php on line 24
+[16-Nov-2022 15:38:43 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 8.0.17. in /home3/lapagin1/public_html/saivApi/vendor/composer/platform_check.php on line 24
+[16-Nov-2022 15:38:46 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 8.0.17. in /home3/lapagin1/public_html/saivApi/vendor/composer/platform_check.php on line 24
+[16-Nov-2022 15:38:48 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 8.0.17. in /home3/lapagin1/public_html/saivApi/vendor/composer/platform_check.php on line 24
+[16-Nov-2022 15:42:04 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 8.0.17. in /home3/lapagin1/saivApi/vendor/composer/platform_check.php on line 24
