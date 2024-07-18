@@ -13,6 +13,8 @@
                     :periodos = "periodos"
                     :titleFiltro = "'Tipo de Denuncia'"
                     :arrayFiltro = "['Todos', 'Denuncia', 'Sin Denuncia', 'Diligencia']"
+                    :titleOficinas = "'Oficinas'"
+                    :arrayOficinas = "opcionesOficinas ?? []"
                     @handleChangedLoading="handleChangedLoading"
                     @handleChangedData="handleChangedData"
                 >
@@ -24,6 +26,21 @@
                     </template>
                     <template v-slot:tbody>
                         <tr v-for="(caso, key) in data" :key="key">
+                            <td id="acciones" style="padding:0%;" class="text-center">
+                                <AccionesTable 
+                                :json="caso"
+                                :loading="loading" 
+                                :showArchivos="true"
+                                :showEditar="true"
+                                :showBorrar="true"
+                                :showVer="true" 
+                                @handleClickVer="handleClickVer(caso)"
+                                @handleClickArchivos="handleClickArchivos(caso)"
+                                @handleClickEditar="handleClickEditar(caso)"
+                                @handleClickBorrar="handleClickBorrar(caso)"
+                                @handleClickImprimir="handleClickImprimir(caso)"
+                                />
+                            </td>  
                             <td class="text-nowrap fw-bold">
                                 <span>{{caso.codigo}}</span>
                             </td>
@@ -51,20 +68,7 @@
                             <td class="text-nowrap">
                                 {{caso.municipio ?? '-'}}
                             </td>                          
-                            <td id="acciones" style="padding:0%;" class="text-center">
-                                <AccionesTable 
-                                :json="caso"
-                                :loading="loading" 
-                                :showArchivos="true"
-                                :showEditar="true"
-                                :showBorrar="true"
-                                :showVer="true" 
-                                @handleClickVer="handleClickVer(caso)"
-                                @handleClickArchivos="handleClickArchivos(caso)"
-                                @handleClickEditar="handleClickEditar(caso)"
-                                @handleClickBorrar="handleClickBorrar(caso)"
-                                />
-                            </td>                          
+                                            
                         </tr>
                     </template>
                 </TableVue>
@@ -118,16 +122,17 @@ import servicio         from '@/services/crud'
 import store            from '@/store'
 
 const columnas = [
+{nombre:"Acciones",                 class:"bg-primary text-white fw-bold text-center",        sort:false, sortIcon:'bx-minus', key:'acciones'},
     {nombre:"Codigo",                   class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-sort-down', key:"codigo"},
     {nombre:"Fecha Registro",           class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"fechaRegistro"},
     {nombre:"Violencia",                class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"tiposViolencia"},
     {nombre:"Mod. Violencia",           class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"modalidadViolencia"},
     {nombre:"Instit. Que Remite",       class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"institucionRemitente"},
-    {nombre:"Instit. Dónde se Remite",  class:"text-center bg-label-primary text-white fw-bold",  sort:false,  sortIcon:'bx-minus', key:"institucionDondeSeRemite"},
+    {nombre:"Instit. Dónde se Remite",  class:"text-center bg-label-primary text-white fw-bold",  sort:false, sortIcon:'bx-minus', key:"institucionDondeSeRemite"},
     {nombre:"Fecha Hecho",              class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"fechaHecho"},
     {nombre:"Departamento",             class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"departamento"},
     {nombre:"Municipio",                class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"municipio"},
-    {nombre:"Acciones",                 class:"bg-primary text-white fw-bold text-center",        sort:false, sortIcon:'bx-minus', key:'acciones'}
+    
 ]
 
 export default defineComponent({
@@ -156,11 +161,13 @@ export default defineComponent({
         const modalCasoArchivosRef = ref(null);
         const modalArchivosCasosRef = ref(null);
         const periodos = ref([]);
+        const opcionesOficinas = ref(null);
 
         onMounted(async () => {
             loading.value = true;
             await cargarPeriodos();
-            loading.value = false;
+            loading.value = false; 
+            opcionesOficinas.value = await servicio.obtener('auth/opciones');
         });
 
         const cargarPeriodos = async() => {
@@ -183,7 +190,7 @@ export default defineComponent({
         };
 
         const handleClickNuevo = () => {
-            showVer.value = null;
+            showVer.value = false;
             formCasoRef.value.resetForm();
             modalCasoRef.value.showModal();
         };
@@ -199,9 +206,10 @@ export default defineComponent({
         
         //Acciones de la Tabla
         const handleClickVer =  (json) => {showVer.value  = true; cargarCaso(json)};
-        const handleClickEditar = (json) => {showVer.value  = null; cargarCaso(json)};
+        const handleClickEditar = (json) => {showVer.value  = false; cargarCaso(json)};
         const handleClickBorrar = (json) => {advertenciaRef.value.setJson(json); modalCasoBorrarRef.value.showModal(); }
-
+        const handleClickImprimir =  (json) => {showVer.value  = true; cargarCaso(json)};;
+        
         // Cargo archivos en el modal
         const handleClickArchivos = (json) => cargarArchivos(json);
         const cargarArchivos = async(json) =>{
@@ -345,6 +353,7 @@ export default defineComponent({
             tipoCaso,
             urlTabla:'saiv/casos/index',
             periodos,
+            opcionesOficinas,
 
             // Metodos
             borrarCaso,
@@ -362,6 +371,7 @@ export default defineComponent({
             handleClickVer,
             handleClickEditar,
             handleClickBorrar,
+            handleClickImprimir,
 
             //store
             store

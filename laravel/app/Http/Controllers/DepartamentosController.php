@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Departamentos;
-use App\Http\Requests\StoreDepartamentosRequest;
+use App\Http\Requests\StoreDepartamentosRequest;
 use App\Http\Requests\UpdateDepartamentosRequest;
 
 class DepartamentosController extends Controller

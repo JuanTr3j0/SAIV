@@ -38,11 +38,11 @@
                                     {{usuario.tipoUsuario ?? 'Desconocido'}}
                                 </span>
                             </td>
-                            <td class="">
+                            <!--td class="">
                                 <span class="badge bg-label-primary me-1 " v-for="permisos in todosPermisos(usuario.permisos)" :key="permisos">
-                                    {{ usuario.tipoUsuario=== 'Super Administrador' || usuario.tipoUsuario=== 'Administrador'?'Todos los permisos':permisos }}
+                                    {{ #usuario.tipoUsuario=== 'Super Administrador' || usuario.tipoUsuario=== 'Administrador'?'Todos los permisos':permisos }}
                                 </span>
-                            </td>
+                            </td-->
                             <td class="text-center">
                                 <span class="badge me-1" :class="usuario.estado==='Activo'?'bg-success':'bg-danger'">
                                     {{usuario.estado}}
@@ -68,7 +68,7 @@
         </div>
         <Modal ref="modalUsuarioRef" @handleActualizarDatosTabla="handleActualizarDatos">
             <template v-slot:cardBody>
-                <FormUsuario ref="formUsuarioRef" :showVer="showVer"/>
+                <FormUsuario ref="formUsuarioRef" :showVer="showVer" @handleActualizarDatosTabla="handleActualizarDatos"/>
             </template>
         </Modal>
         <Modal ref="modalAdvertenciaRef" :clases="'modal-centered'">
@@ -96,7 +96,7 @@ const columnas = [
     {nombre:"Correo",   class:"text-center bg-label-primary text-white fw-bold text-center",    style:"",   key:'correo'},
     {nombre:"Oficina",  class:"text-center bg-label-primary text-white fw-bold text-center",    style:"",   key:'oficina'},
     {nombre:"Tipo Usuario", class:"text-center bg-label-primary text-white fw-bold text-center",    style:"",   key:'estado'},
-    {nombre:"Permisos", class:"text-center bg-label-primary text-white fw-bold text-center",    style:"",   key:'estado'},
+    //{nombre:"Permisos", class:"text-center bg-label-primary text-white fw-bold text-center",    style:"",   key:'estado'},
     {nombre:"Estado",   class:"text-center bg-label-primary text-white fw-bold text-center",    style:"",   key:'estado'},
     {nombre:"Acciones", class:"text-center bg-label-primary text-white fw-bold text-center",    style:"",   key:'acciones'},
 ]

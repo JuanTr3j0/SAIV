@@ -110,6 +110,7 @@
                         :showVer="showVer"
                         :clases="['col-md-3']"
                         v-model:value="formulario.responsable.dui"
+                     
                     />
                     <div class="row mt-2">
                         <FormSelectOpcionVue

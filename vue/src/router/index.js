@@ -53,6 +53,14 @@ const routes = [
         name: 'perfil',
         component: () => import('../views/Perfil.vue'),
       },{
+        path: '/saiv/oficina',
+        name: 'oficina',
+        component: () => import('../views/SeleccionarOficina.vue'),
+      },{
+        path: '/saiv/reportes',
+        name: 'reportes',
+        component: () => import('../views/Reportes.vue'),
+      },{
         path: '/saiv/estadisticas',
         name: 'estadisticas',
         component: () => import('../views/EstadisticasView.vue'),

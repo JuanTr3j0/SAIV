@@ -23,7 +23,20 @@
                 <select id="select-periodos" class="form-select" v-model="periodo" @change="graficasHandleChange()">
                     <option :value="item" v-for="item in periodos" :key="item">{{ item }}</option>
                 </select>
-            </div>                
+            </div>  
+
+            <div class="col-sm-12 col-md-12 m-1 col-lg-3" v-if="(arrayOficinas ?? false) && (titleOficinas ?? false) ">
+                <div class="input-group border-primary flex justify-content-end">
+                    <span class="input-group-text border-primary bg-primary text-white text-center border-white" for="tipo-oficina">{{titleOficinas}}<i class=' bx bxs-label' ></i></span>
+                    <select class="form-select bg-primary text-white" id="tipo-oficina" v-model="tipoOficina" @change="handleChangeOficina(tipoOficina)" >                                     
+                        <option class="bg-primary text-white">Todas</option>
+                        <template v-for="item in arrayOficinas === null || typeof arrayOficinas === 'undefined' ? [] : arrayOficinas.oficinas" :key="item.key" >
+                            <option class="bg-primary text-white" :value="item.key">{{item.opcion}}</option>
+                        </template>
+                    </select>
+                </div>   
+            </div>  
+
           </div>
           <div class="row border border-primary  m-4 border-3 rounded">
             <div class="col-md-8 py-3 col-sm-12 text-center" v-auto-animate="{ duration: 250 }">
@@ -72,6 +85,7 @@ import { Bar } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
 import servicios  from '@/services/crud'
 import store      from '@/store'
+import ref from "vue"
 
  ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
  
@@ -121,10 +135,11 @@ import store      from '@/store'
         // ESTADISTICAS DE AGRESORES CASOS
         'Casos por Conocimiento o No del Agresor',
         'Casos por Relación Víctima con Agresor',
-        'Número de Agresores por Caso',
+        //'Número de Agresores por Caso',
         'Casos por Edad del Agresor',
         'Agresores por Municipio de Residencia',
-        'Número de Agresores por Caso (NO FUNCIONA)',
+        //Arreglar despues, no furula
+       // 'Número de Agresores por Caso (NO FUNCIONA)',
         'Agresores por Relacion con la Víctima',
         'Ocupación Agresores',
         'Agresores con Formación Militar',
@@ -156,6 +171,7 @@ import store      from '@/store'
       }
     }
    },
+   
    async mounted() {
     this.loading = true;
     try{
@@ -205,8 +221,10 @@ import store      from '@/store'
           console.log(error)
         }
       }
-   }
+   },
+   
  }
+
  </script>
  <style scoped>
  table {

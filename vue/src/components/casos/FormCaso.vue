@@ -123,12 +123,24 @@
                         v-model:departamento="formulario.departamentoOcurrencia" 
                         v-model:municipio="formulario.municipioOcurrencia" 
                     ></FormDeptoMuniVue>
+
+                    <div class="col-md-6">
+                        <label class=" fw-semibold d-block" for="caso-segundo-nombre"> Tipos de violencia(multiple)</label>
+                        <div class="col-md-12">
+                            <LabelShowVer :value="formulario.tipoViolencia" v-if="showVer"/>
+                            <v-select multiple placeholder="Seleccione" :style="vue_style_select" class="style-chooser" 
+                                :disabled="showVer ?? false" v-if="!showVer"
+                                v-model="formulario.tiposViolencia" :options="opciones===null?[]:opciones.tiposViolencia"/>
+                        </div>
+                    </div>
+
                     <FormSelectOpcionVue
                         :id="'caso-tipos-violencia-hecho'" :nombre="'Tipos de Violencia'"
                         :opciones="opciones === null ? []:opciones.tiposViolencia"
                         :clases="['col-md-6']" :loading="loading" :showVer="showVer ?? false"
                         v-model:opcion="formulario.tiposViolencia"
                     ></FormSelectOpcionVue> 
+
                     <FormSelectOpcionVue
                         :id="'caso-modalidad-violencia-hecho'" :nombre="'Modalidad de Violencia'"
                         :opciones="opciones === null ? []:opciones.modalidadViolencia"
@@ -514,7 +526,12 @@
                     </div>
                     <div class="col-md-12 mt-3" v-if="mensajeArchivos!==null">
                         <h6 class="text-primary"><i class="bx bx-spin bx-loader"></i> {{mensajeArchivos}}...</h6>
-                    </div>                      
+                    </div>  
+
+                <div>
+                    <label for="" class="fw-semibold d-block">Observaciones: </label>
+                    <textarea type="text" class="form-control"></textarea>
+                </div>                    
                 </div>
                 <ButtonsFormCasosVue
                     :showVer="showVer ?? false"
@@ -709,12 +726,6 @@ export default {
                 selected:false, 
                 visible:true
             },{
-                nombre:'Info. Responsable', 
-                icon:' bx bx-user bx-sm', 
-                tag:'responsable', 
-                selected:false, 
-                visible:false
-            },{
                 nombre:'Info. Agresor', 
                 icon:'bx bxs-group bx-sm', 
                 tag:'agresores', 
@@ -865,6 +876,10 @@ export default {
             visibleTab('agresores', false);
             visibleTab('responsables', false);
         };
+        const isvisibleTab = (_tag) => {
+            const tab = tabs.value.find((item) => item.tag===_tag);
+            return tab.visible;
+        };
 
         const visibleTab = (tag, _visible) => {
             tabs.value = tabs.value.map((item) => { if(item.tag===tag) item.visible=_visible; return item; });           
@@ -874,6 +889,7 @@ export default {
         };
         const tabIsSelected = (_tag) => {
             const tab = tabs.value.find((item) => item.tag===_tag);
+            console.log(tab.nombre)
             return tab.selected;
         };
         const siguiente = (_tag) => {
@@ -881,26 +897,25 @@ export default {
             const edadVictima_bool = variablesSiguienteAnterior().edadVictima_bool;
             const longitudAgresores_bool = variablesSiguienteAnterior().longitudAgresores > 0;
           
+            
             if(tabIsSelected('victima')){
                 selectedTab('hecho-violento');
             }else if(tabIsSelected('hecho-violento')){
-                if(edadVictima_bool){
-                    selectedTab('responsable');
-                }else{ 
-                    if(longitudAgresores_bool){
-                        selectedTab('agresores');
-                    } else 
-                        selectedTab('archivos');
-                }
-            }else if(tabIsSelected('responsable')){
-                if(longitudAgresores_bool){
+                if(isvisibleTab('agresores')){
                     selectedTab('agresores');
-                } else 
+                    return;
+                }
+                if(isvisibleTab('archivos')){
                     selectedTab('archivos');
+                    return;
+                }
+               
+            
             }else if(tabIsSelected('agresores')){
                 selectedTab('archivos'); 
             }           
         }
+        
         
         const variablesSiguienteAnterior = () => {
             const edadVictima = getEdadInt(formulario.victima.fechaNacimiento);
@@ -913,21 +928,20 @@ export default {
             const edadVictima_bool = variablesSiguienteAnterior().edadVictima_bool;
             const longitudAgresores = variablesSiguienteAnterior().longitudAgresores;
 
-            selectedTab(_tag);
+            //selectedTab(_tag);
              if(tabIsSelected('hecho-violento')){
                 selectedTab('victima');        
-            }else if(tabIsSelected('responsable')){
-                selectedTab('hecho-violento');
             }else if(tabIsSelected('agresores')){
-                if(edadVictima_bool)
-                    selectedTab('responsable')
-                else 
-                    selectedTab('hecho-violento')    
-            }else if(tabIsSelected('archivos')){                    
+                
+                if(!edadVictima_bool)
+                selectedTab('hecho-violento')    
+                    //selectedTab('responsable')
+                // else 
+                //     selectedTab('hecho-violento')    
+            }else if(tabIsSelected('archivos')){
+                //selectedTab('agresores')                    
                 if(longitudAgresores>0)
                     selectedTab('agresores')
-                else if(edadVictima_bool)
-                    selectedTab('responsable')
                 else selectedTab('hecho-violento')   
             }        
         }

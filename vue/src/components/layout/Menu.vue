@@ -48,6 +48,8 @@ export default defineComponent({
         const nivel_0 = ['Super Administrador'];
         const nivel_2 = ['Administrador','Super Administrador'];
         const nivel_3 = ['Usuaria/o','Super Administrador', 'Administrador'];
+        //const nivel_3 = ['Super Administrador'];
+        const nivel_4 = ['Super Administradora'];
         return{
             menu:[
                 { 
@@ -61,7 +63,14 @@ export default defineComponent({
                     url:"/saiv/perfil", 
                     icono:"bx bx-user bx-sm  bx-burst-hover mx-2", 
                     acceso:nivel_3
-                },                
+                }, 
+                { 
+                    tipo:"item",          
+                    text:"Seleccionar Oficina",          
+                    url:"/saiv/oficina", 
+                    icono:"bx bxs-building-house bx-sm mx-2 bx-burst-hover",
+                    acceso:nivel_0
+                },              
                 { 
                     tipo:"encabezado",    
                     text:"SIAV"+store.state.USUARIO.oficina,
@@ -74,6 +83,7 @@ export default defineComponent({
                     icono:"bx bxs-box bx-sm  bx-burst-hover mx-2",
                     acceso:nivel_3
                 },
+                
                 {   
                     tipo:"item",          
                     text:"Seguimiento Jurídico",    
@@ -90,51 +100,31 @@ export default defineComponent({
                 },
                 {
                     tipo:"item",
-                    text:"Camára Gessell",
+                    text:"Cámara Gesell",
                     url:"/saiv/camara/gessell",
                     icono:"bx bxs-food-menu bx-sm  bx-burst-hover mx-2",
                     acceso:nivel_3
+                },
+               
+                { 
+                    tipo:"encabezado",    
+                    text:"Administración",      
+                    acceso:nivel_0 
                 },
                 { 
                     tipo:"item",
                     text:"Estadisticas",
                     url:"/saiv/estadisticas",
                     icono:"bx bxs-bar-chart-alt-2 bx-sm bx-burst-hover mx-2",
-                    acceso:nivel_3
+                    acceso:nivel_2
                 },
-                /*{ 
-                    tipo:"item",
-                    text:"Programación Camára Gessell",
-                    url:"/saiv/camara/gessell/programacion",
-                    icono:"bx bxs-food-menu bx-sm  bx-burst-hover mx-2",
-                    acceso:nivel_3
-                },
-                { 
-                    tipo:"item",
-                    text:"Menores de Edad Camára Gessell",
-                    url:"/saiv/camara/gessell/menores/edad",
-                    icono:"bx bxs-food-menu bx-sm  bx-burst-hover mx-2",
-                    acceso:nivel_3
-                },
-                
-                { 
-                    tipo:"item",
-                    text:"Observatorio de Violencia",
-                    url:"#",
-                    icono:'bx bx-line-chart bx-sm mx-2',
-                    acceso:nivel_3
-                },
-                { 
+        
+            { 
                     tipo:"item",          
                     text:"Reportes",       
-                    url:"#",
+                    url:"/saiv/reportes",
                     icono:'bx bxs-report bx-sm mx-2',
-                    acceso:nivel_3
-                },*/
-                { 
-                    tipo:"encabezado",    
-                    text:"Administración",      
-                    acceso:nivel_2 
+                    acceso:nivel_2
                 },
                 { 
                     tipo:"item",          
@@ -148,7 +138,7 @@ export default defineComponent({
                     text:"Bitácora Errores",                
                     url:"/bitacora/errores",
                     icono:'bx bxs-bug bx-sm mx-2  bx-burst-hover', 
-                    acceso:nivel_2
+                    acceso:nivel_0
                 },
             ],
             store

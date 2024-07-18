@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CasosTiposViolencia;
+use App\Models\Oficinas;
+use App\Models\TipoViolencia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -15,10 +18,14 @@ use App\Models\TipoAsistencia;
 use App\Models\ArchivosCasos;
 use App\Models\Ingresos;
 use App\Models\DelitosLeiv;
-use \App\Models\OtrasPersonas;
+use App\Models\OtrasPersonas;
+
+use App\Http\Controllers\Traits\TraitCasos;
 
 class CasosController extends Controller
 {
+    use TraitCasos;
+
     public function index(Request $request){
         try {
             $por_pagina = $request->porPagina;
@@ -92,14 +99,35 @@ class CasosController extends Controller
                 ->leftJoin('departamentos', 'departamentos.id',"=","municipios.departamento_fk")
                 ->leftJoin('personas as p1', 'p1.id', "=", "casos.victima_fk")
                 ->leftJoin('personas as p2', 'p2.id', "=", "casos.responsable_fk")
-            ->where('casos.estado', true)
-            ->where( function ($query)
+            ->where('casos.estado', true);
+
+           $user_oficina = Oficinas::select('codigo')->findOrFail(auth()->user()->oficina)->codigo;
+          
+            if($user_oficina === 'ES'){ //aqui esta filtrando por oficina esto debo poner en el trait xD
+                $codigo = trim($request->oficina) == 'Todas' || $request->oficina === null ? null : Oficinas::select('codigo')->findOrFail($request->oficina)->codigo;
+                $filtro  = $request->filtro == 'Todos' || $request->filtro === null ? null : $request->filtro;
+
+                $tipo_caso = null;
+                if($filtro === 'Denuncia')
+                    $tipo_caso = 'D';
+                if($filtro === 'Sin Denuncia')
+                    $tipo_caso = 'SD';
+                if($filtro === 'Diligencia')
+                    $tipo_caso = 'DIL';
+
+                $tipo_caso = $tipo_caso === null ? '': trim($tipo_caso);
+                $codigo = $codigo === null ? '' : trim($codigo);
+                $tipo_caso === '' && $codigo !== '' && $paginado = $paginado->whereRaw("casos.denuncia like '%".$codigo."'");
+                $tipo_caso !== '' && $codigo === '' && $paginado = $paginado->whereRaw("casos.denuncia like '".$tipo_caso."%'");
+                $tipo_caso !== '' && $codigo !== '' && $paginado = $paginado->whereRaw("casos.denuncia like '".$tipo_caso.$codigo."'"); 
+            }else 
+                $paginado = $paginado->where( function ($query)
                 {
+                    //esta parte de aquí está filtrando por oficinas
                     $query->where('denuncia','like', tipo_denuncia()->denuncia)
                     ->orWhere('denuncia','like', tipo_denuncia()->sin_denuncia)
                     ->orWhere('denuncia','like', tipo_denuncia()->diligencia);
-                }
-            );
+                });
 
             foreach ($ordenColumnas as $key => $value) {
                 $columna = (object) $value;
@@ -128,15 +156,18 @@ class CasosController extends Controller
                 else if($columna->columna  === "Municipio")
                     $paginado->orderBy('municipios.municipio', $columna->order);
             }
-
-            if($request->filtro !== 'Todos' && $request->filtro!== null){
+            
+            
+            
+            if($request->filtro !== 'Todos' && $request->filtro!== null && $user_oficina !== 'ES'){
                 $tipo_caso = $request->filtro === 'Denuncia' ? tipo_denuncia()->denuncia:($request->filtro === 'Sin Denuncia' ? tipo_denuncia()->sin_denuncia : ($request->filtro === 'Diligencia' ? tipo_denuncia()->diligencia: null));
                 $paginado->whereRaw('casos.denuncia like "'.$tipo_caso.'"');
             }
+          
 
             if($periodo !== 'Todos')
                 $paginado->where('casos.anio', intval($periodo));
-
+            #return $paginado->toSql();
             $paginado = $paginado->paginate($por_pagina);
 
             $paginado->getCollection()->transform( function($value){
@@ -149,7 +180,7 @@ class CasosController extends Controller
                 return $value;
             });
 
-            return $paginado;
+            return  $paginado;
             
         }catch (\Exception $e) {
             bitacora_errores('CasosController.php', $e);
@@ -231,11 +262,13 @@ class CasosController extends Controller
         }
     }
 
-    public function reglasCodigo(){
+    // REGLAS DE VALIDACION PARA EL REQUEST DE CASOS REGISTRO/UPDATE
+    public function reglasCaso(){
         return  [
             'denuncia' => 'required|string',
             'mes' => 'required',
-            'anio' => 'required'
+            'anio' => 'required',
+            'fechaRegistro' =>['required', 'regex:/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/u']
         ];
     }
 
@@ -263,6 +296,7 @@ class CasosController extends Controller
         ];
     }
 
+     // MENSAJES DE VALIDACION PARA EL REQUEST DE CASOS REGISTRO/UPDATE
     private function mensajesVictima(){
         return [
             //Campos de Victima
@@ -276,8 +310,6 @@ class CasosController extends Controller
             'victima.segundoApellido.regex'     => 'El campo segundo apellido de víctima debe contener solo letras.',
         ];
     }
-
-    
 
     private function mensajesReponsable(){
         return [
@@ -293,17 +325,20 @@ class CasosController extends Controller
         ];
     }
 
+    private function mjsCasos(){
+        return [
+            /*'mes.min' => 'El campo mes debe ser mayor a 1.',
+            'mes.max' => 'El campo mes debe ser menor o igual a 12.',*/ 
+            'denuncia.required' => 'Tipo de caso es obligatorio',
+            'fechaRegistro.required' => 'Fecha de registro es obligatorio',
+            'fechaRegistro.regex'   =>  'Formato fecha registro incorrecto (Ejemplo de forma: 30/12/1990 22:00)'
+        ];
+    }
+
     public function store(Request $request)
     {
         //Validacion de Codigo
-        $validator = Validator::make($request->all(), $this->reglasCodigo(),
-            [
-                /*'mes.min' => 'El campo mes debe ser mayor a 1.',
-                'mes.max' => 'El campo mes debe ser menor o igual a 12.',*/ 
-                'denuncia.required' => 'El campo tipo de caso es obligatorio'
-            ]
-        );
-
+        $validator = Validator::make($request->all(), $this->reglasCaso(), $this->mjsCasos());
         if($validator->fails()) { return response()->json(['error'=>$validator->errors()->all()]); }
 
         $__victima = (object)$request->victima;
@@ -352,7 +387,7 @@ class CasosController extends Controller
             $caso->anio                         = intval($request->anio);
             $caso->fecha_hecho                  = $request->fechaHecho;
             $caso->hora_hecho                   = $request->horaHecho;
-            $caso->tipos_violencia              = $request->tiposViolencia;
+            #$caso->tipos_violencia              = $request->tiposViolencia; // FUE CAMBIADO A DE SINGLE A MULTIPLE
             $caso->modalidad_violencia          = $request->modalidadViolencia;
             $caso->delito_codigo_penal          = $request->delitoCodigoPenal;
             $caso->delito_codigo_penal_otro     = $request->delitoCodigoPenalOtro;
@@ -372,6 +407,7 @@ class CasosController extends Controller
                 $this->actualizarCrearInstitucionSeRemite($caso, $request->institucionSeRemite);
                 $this->actualizarCrearAgresores($caso, $request->agresores);
                 $this->actualizarCrearTipoAsistencia($caso, $request->tipoAsistencia);
+                $this->actualizarCrearTipoViolencia($caso, $request->tiposViolencia);
 
                 DelitosLeiv::where('caso_fk', $caso->id)->delete();
                 foreach($request->delitoLeivs as $key => $value) {
@@ -409,6 +445,8 @@ class CasosController extends Controller
         try {
             if($this->isNullPersona($_persona))
                 return null;
+
+            $persona = null;
             //$persona = Persona::whereRaw('dui = "'.$_persona->dui.'"')->first();
             $persona ??= Persona::whereRaw('md5(id) = "'.$_persona->key.'"')->first();
             $persona ??= new Persona;
@@ -574,58 +612,39 @@ class CasosController extends Controller
         }
     }
 
-    private function getAgresores($_caso){
-        try{
-            $select = [
-                DB::raw('md5(`agresores_casos`.`id`) as `key`'),
-                'primer_nombre              as primerNombre',
-                'segundo_nombre             as segundoNombre',
-                'primer_apellido            as primerApellido',
-                'segundo_apellido           as segundoApellido',
-                'direccion                  as direccion',
-                'edad_agresor               as edad',
-                'edad_desconocida           as edadDesconocida',
-                'ocupacion_agresor          as ocupacion',
-                'relacion_victima_agresor   as relacionVictimaAgresor',
-                'ocupacion_agresor_otro     as ocupacionOtro',
-                'municipio_fk               as municipio',
-                'departamentos.id           as departamento',
-                'nombre_desconocido         as nombreDesconocido',
-                'agresores_casos.id         as selected',
-                'lugar_trabajo              as lugarTrabajo',
-                'direccion_trabajo             as direccionTrabajo',
-                'posee_arma                    as poseeArma',
-                'tipo_arma                     as tipoArma',
-                'formacion_militar_policial    as formacionMilitarPolicial',
-                'zona_residencial              as zonaResidencial',
-                'tipo_arma_otra                as tipoArmaOtro',
-                'relacion_victima_agresor_otra as otraRelacionVictima',
-            ];
-
-            $_agresores = AgresoresCasos::where('caso_fk', $_caso)
-                ->select($select)
-                ->leftJoin('municipios', 'municipios.id', '=', 'agresores_casos.municipio_fk')
-                ->leftJoin('departamentos', 'departamentos.id', '=','municipios.departamento_fk')
-            ->get();
-
-            if(count($_agresores)>0)
-                $_agresores->each( function( $val, $key ) {
-                    (object)$val->selected = intval($key)  === 0;
-                });
-
-            return  $_agresores;
-        } catch (\Exception $e) {
-            bitacora_errores('CasosController.php', $e);
-            return response()->json(['error' => 'Linea -> '.$e->getLine().' Error -> '.$e->getMessage()]);
-        }
-    }
-
     public function actualizarCrearInstitucionSeRemite($caso, $institucionSeRemite){
         try{
             InstitucionSeRemitira::where('caso_fk', $caso->id)->delete();
             foreach ($institucionSeRemite as $key => $value) {
                 InstitucionSeRemitira::updateOrCreate(["caso_fk" => $caso->id,"institucion" => $value]);
             }
+        } catch (\Exception $e) {
+            bitacora_errores('CasosController.php', $e);
+        }
+    }
+
+    public function actualizarCrearTipoViolencia($caso, $tiposViolencia){
+        try{
+
+            DB::statement("DELETE FROM casos_tipos_violencias where casos_fk = $caso->id");
+
+            $arreglo = array();
+            
+            foreach ($tiposViolencia as $value) {
+                array_push($arreglo, $value);
+                
+            }
+
+            $arreglo = "('" . (count($arreglo) === 1 ? $arreglo[0]:implode("', '", $arreglo)). "')";
+
+            DB::statement("
+                INSERT INTO 
+                    casos_tipos_violencias
+                ( 
+                    select $caso->id, t.id, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()  
+                    from tipo_violencias t where t.tipo_violencia in $arreglo
+                )
+            ");
         } catch (\Exception $e) {
             bitacora_errores('CasosController.php', $e);
         }
@@ -639,247 +658,9 @@ class CasosController extends Controller
         } catch (\Exception $e) {
             bitacora_errores('CasosController.php', $e);
         }
-    }
+    } 
 
-    public function showCaso($key)
-    {
-        try{
-            $whereIdCaso = 'md5(casos.id)="'.$key.'"';
-
-            if(!Casos::whereRaw($whereIdCaso)->where('estado', true)->exists())
-                return response()->json([],204);
-
-            $select = [
-                DB::raw('md5(`casos`.`id`) as `key`'),
-                DB::raw('case when `casos`.`fecha_registro` is NULL
-                    then
-                        DATE_FORMAT(`casos`.`created_at`, "%Y-%m-%d %H:%i")
-                    else
-                        DATE_FORMAT(`casos`.`fecha_registro`, "%Y-%m-%d %H:%i")
-                    end as "fechaRegistro"'),
-                'denuncia                       as denuncia',
-                'mes                            as mes',
-                'correlativo',
-                'anio                           as  anio',
-                'circunstancia_del_hecho        as  circunstanciaDelHecho',
-                'victima_fk                     as  victima',
-                'responsable_fk                 as  responsable',
-                'fecha_hecho                    as  fechaHecho',
-                'hora_hecho                     as  horaHecho',
-                'casos.id                       as  agresores',
-                'tipos_violencia                as  tiposViolencia',
-                'modalidad_violencia            as  modalidadViolencia',
-                'delito_codigo_penal            as  delitoCodigoPenal',
-                'delito_codigo_penal_otro       as  delitoCodigoPenalOtro',
-                'departamentos.id               as  departamentoOcurrencia',
-                'municipio_ocurrencia_fk        as  municipioOcurrencia',
-                'institucion_remitente          as  institucionRemitente',
-                'institucion_remitente_otra     as  institucionRemitenteOtra',
-                "casos.id                       as  institucionSeRemite",
-                "casos.id                       as  tipoAsistencia",
-                "casos.id                       as  archivosCasos",
-                "casos.id                       as  delitoLeivs",
-            ];
-
-            $caso = Casos::select($select)
-            ->leftJoin('municipios', 'municipios.id', '=', 'casos.municipio_ocurrencia_fk')
-            ->leftJoin('departamentos', 'departamentos.id', '=','municipios.departamento_fk')
-            ->whereRaw($whereIdCaso)->where('casos.estado', true)->first();
-
-            // Obtener Archivos
-            $caso->archivosCasos = ArchivosCasos::select([DB::raw('md5(`archivos`.`id`) as `key`'), 'archivos.nombre_original'])
-            ->where('archivos_casos.caso_fk', '=', $caso->archivosCasos)
-            ->join('archivos', 'archivos.id', '=', 'archivos_casos.archivo_fk')
-            ->get();
-
-            // Obtener Personas Victima y Responsable
-            $caso -> victima = $this->getPersona($caso->victima);
-            $caso -> responsable = $this->getPersona($caso->responsable);
-
-            // Obtener Agresores
-            $caso -> agresores = $this->getAgresores($caso->agresores);
-
-            // Obtener Opciones multiples
-            $caso -> delitoLeivs = $this->getipoDelitosLeiv($caso->delitoLeivs);
-            $caso -> tipoAsistencia = $this->getipoAsistencia($caso->tipoAsistencia);
-            $caso -> institucionSeRemite = $this->getInstitucionSeRemite($caso->institucionSeRemite);
-
-            $caso -> fechaRegistro = str_replace(' ', 'T',$caso  -> fechaRegistro); //No funciona aun
-
-            return $caso;
-
-        }catch (\Exception $e) {
-            bitacora_errores('CasosController.php', $e);
-            return response()->json(['error' => 'Linea -> '.$e->getLine().' Error -> '.$e->getMessage()]);
-        }
-
-    }
-
-    private function getPersona ($_id){
-        try{
-            if( $_id === null){
-                return[
-                    'key'=>null,
-                    'dui'=>null,
-                    'primerNombre'=>null,
-                    'segundoNombre'=>null,
-                    'primerApellido'=>null,
-                    'segundoApellido'=>null,
-                    'departamento'=>null,
-                    'municipio'=>null,
-                    'direccion'=>null,
-                    'telefonoMovil'=>null,
-                    'telefonoCasa'=>null,
-                    'fechaNacimiento'=>null,
-                    'empresa'=>null,
-                    'lugarTrabajo'=>null,
-                    'direccionTrabajo'=>null,
-                    'otraNacionalidad'=>null,
-                    'ocupacion'=>null,
-                    'ocupacionOtra'=>null,
-                    'zonaResidencial'=>null,
-                    'sexo'=>null,
-                    'genero'=>null,
-                    'sabeEscribirLeer'=>null,
-                    'nivelEducacion'=>null,
-                    'estadoFamiliar'=>null,
-                    'nacionalidad'=>null,
-                    'nacionalidadOtra'=>null,
-                    'embarazada'=>null,
-                    'propietarioResidencia'=>null,
-                    'propietarioResidenciaOtro'=>null,
-                    'discapacidad'=>'Ninguna',
-                    'hijos'=>[],
-                    'otrasPersonas'=>[],
-                    'fuenteIngresos'=>[],
-                    'fuenteIngresosOtro'=>null,
-                    'relacionVictima'=>null,
-                    'relacionVictimaOtra'=>null,
-                    'hijosVivos'=>'No',
-                    'otrasPersonasConvivientes'=>'No',
-                ];
-            }
-
-            $select = [
-                DB::raw('md5(personas.id) as `key`'),
-                'dui               as dui',
-                'primer_nombre     as primerNombre',
-                'segundo_nombre    as segundoNombre',
-                'primer_apellido   as primerApellido',
-                'segundo_apellido  as segundoApellido',
-                'departamentos.id  as departamento',
-                'municipio_fk      as municipio',
-                'direccion         as direccion',
-                'telefono_movil    as telefonoMovil',
-                'telefono_casa     as telefonoCasa',
-                'fecha_nacimiento  as fechaNacimiento',
-                'empresa',
-                'discapacidad',
-                'lugar_trabajo      as lugarTrabajo',
-                'direccion_trabajo  as direccionTrabajo',
-                'otra_nacionalidad  as otraNacionalidad',
-                'ocupacion          as ocupacion',
-                'ocupacion_otra     as ocupacionOtra',
-                'zona_residencial   as zonaResidencial',
-                'sexo               as sexo',
-                'genero             as genero',
-                'sabe_escribir_leer as sabeEscribirLeer',
-                'nivel_educacion    as nivelEducacion',
-                'estado_familiar    as estadoFamiliar',
-                'nacionalidad       as nacionalidad',
-                'otra_nacionalidad  as nacionalidadOtra',
-                'embarazada         as embarazada',
-                "personas.id        as hijos",
-                "personas.id        as otrasPersonas",
-                "personas.id        as fuenteIngresos",
-                'hijos_vivos        as hijosVivos',
-                'otras_personas_convivientes as otrasPersonasConvivientes',
-                'relacion_victima        as relacionVictima',
-                'relacion_victima_otro   as relacionVictimaOtra',
-                'fuente_ingresos_otro as fuenteIngresosOtro',
-                'propietario_residencia as propietarioResidencia',
-                'propietario_residencia_otro as propietarioResidenciaOtro',
-            ];
-
-            $persona = Persona::select($select)
-            ->leftJoin('municipios', 'municipios.id', '=', 'personas.municipio_fk')
-            ->leftJoin('departamentos', 'departamentos.id', '=','municipios.departamento_fk')
-            ->where(['personas.id' => $_id])->first();
-
-            // Obtener Hijos y Otras Personas
-            $persona -> hijos = $this->getOtrasPersonas($persona -> hijos, 'hijo');
-            $persona -> otrasPersonas = $this->getOtrasPersonas($persona -> otrasPersonas, 'otra');
-
-            // Obtener Fuentes de Ingresos
-            $persona -> fuenteIngresos = Ingresos::select('fuente_ingreso')
-                ->whereRaw('md5(persona_fk) like "'.$persona -> key.'"')
-            ->get()->map(function($value){ return $value->fuente_ingreso; });
-
-            return $persona;
-        }catch (\Exception $e) {
-            bitacora_errores('CasosController.php', $e);
-            return response()->json(['error' => 'Linea -> '.$e->getLine().' Error -> '.$e->getMessage()]);
-        }
-    }
-
-    private function getOtrasPersonas($id, $tipo){
-        try{
-            $select = [];
-            $where = ['persona_fk' => $id, 'tipo' => $tipo];
-
-            if($tipo === 'hijo'){
-                $select = [
-                    'nombres        as nombres',
-                    'sexo           as sexo',
-                    'edad           as edad',
-                    'grado_escolar  as gradoEscolar',
-                    'vive_con_ella  as viveConElla',
-                    'discapacidad   as discapacidad',
-                ];
-            }
-
-            if($tipo === 'otra'){
-                $select = [
-                    'nombres            as nombres',
-                    'sexo               as sexo',
-                    'edad               as edad',
-                    'relacion_victima   as relacionVictima',
-                ];
-            }
-
-            return OtrasPersonas::where($where)->select($select)->get();
-        }catch (\Exception $e) {
-            bitacora_errores('CasosController.php', $e);
-            return response()->json(['error' => 'Linea -> '.$e->getLine().' Error -> '.$e->getMessage()]);
-        }
-    }
-
-    private function getInstitucionSeRemite($_caso){
-        try{
-            $_institucion_se_remite = InstitucionSeRemitira::where('caso_fk',$_caso)->select('institucion')->get();
-            return $_institucion_se_remite->map(function($value){ return $value->institucion; });
-        }catch (\Exception $e) {
-            bitacora_errores('CasosController.php', $e);
-        }
-    }
-
-    private function getipoAsistencia($_caso){
-        try{
-            $_tipo_asistencia = TipoAsistencia::where('caso_fk', $_caso)->select('asistencia')->get();
-            return  $_tipo_asistencia->map(function($value){ return $value->asistencia; });
-        }catch (\Exception $e) {
-            bitacora_errores('CasosController.php', $e);
-        }
-    }
-
-    private function getipoDelitosLeiv($_caso){
-        try{
-            $_delitos_leiv = DelitosLeiv::where('caso_fk', $_caso)->select('delito')->get();
-            return  $_delitos_leiv->map(function($value){ return $value->delito; });
-        }catch (\Exception $e) {
-            bitacora_errores('CasosController.php', $e);
-        }
-    }
+   
 
     public function destroy(Request $request)
     {

@@ -67,6 +67,15 @@ export default defineComponent({
                     metodo:'handleClickEstado',
                     style: this.style
                 },
+              
+                { 
+                    nombre:'Imprimir', 
+                   
+                    icon:'bx bxs-file-pdf', 
+                    show:this.showBorrar ?? false, 
+                    metodo:'handleClickImprimir',
+                    style: this.style
+                },
                 { 
                     nombre:'Borrar', 
                     icon:'bx-trash', 

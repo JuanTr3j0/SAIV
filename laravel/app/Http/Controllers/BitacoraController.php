@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bitacora;
-use App\Http\Requests\StoreBitacoraRequest;
+use App\Http\Requests\StoreBitacoraRequest;
 use App\Http\Requests\UpdateBitacoraRequest;
 
 class BitacoraController extends Controller

@@ -77,14 +77,14 @@
                         @handleClickAgendaVer="handleClickAgendaVer"
                         @handleClickAgendaItem="handleClickAgendaItem"
                         ref="fullcalendarRef"
-                        :title="'Cámara Gessell / Atención a Menores'"
+                        :title="'Cámara Gesell / Atención a Menores'"
                     />
                 </div>
             </template>
         </ModalVue>
         <ActividadCalendarVue
             ref="ActividadCalendarRef" 
-            :modulo="'Cámara Gessell Atencion de Menores'"    
+            :modulo="'Cámara Gesell Atencion de Menores'"    
         >
             <template v-slot:nuevo-button>
                 <button class="btn btn-dark m-1 justify-items-start" 

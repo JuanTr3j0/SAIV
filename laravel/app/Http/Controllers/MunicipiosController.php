@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Municipios;
-use App\Http\Requests\StoreMunicipiosRequest;
+use App\Http\Requests\StoreMunicipiosRequest;
 use App\Http\Requests\UpdateMunicipiosRequest;
 
 class MunicipiosController extends Controller

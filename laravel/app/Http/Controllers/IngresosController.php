@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ingresos;
-use App\Http\Requests\StoreIngresosRequest;
+use App\Http\Requests\StoreIngresosRequest;
 use App\Http\Requests\UpdateIngresosRequest;
 
 class IngresosController extends Controller

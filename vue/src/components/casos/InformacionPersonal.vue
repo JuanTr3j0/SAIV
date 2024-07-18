@@ -27,6 +27,7 @@
             :loading = "loading" 
             :value="persona.dui"
             @update:value="(value) => updateCampoValue(value, 'dui')"
+       
             @blur="verificarCasosRelacionados"
         />        
         <FormDeptoMuniVue
