@@ -128,6 +128,13 @@ export default defineComponent({
                 },
                 { 
                     tipo:"item",          
+                    text:"PruebaPDF",       
+                    url:"/test/pdf",
+                    icono:'bx bxs-report bx-sm mx-2',
+                    acceso:nivel_2
+                },
+                { 
+                    tipo:"item",          
                     text:"Usuarias/os",                
                     url:"/saiv/usuarios", 
                     icono:"bx bx-group bx-sm  bx-burst-hover mx-2",

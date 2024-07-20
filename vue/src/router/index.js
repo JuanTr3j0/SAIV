@@ -69,6 +69,11 @@ const routes = [
         name: 'bitacoraErrores',
         component: () => import('../views/BitacoraErrores.vue'),
       },
+      {
+        path: '/test/pdf',
+        name: 'reportePDF',
+        component: () => import('../views/PruebaPDF.vue'),
+      },
     ]
   }
 ]
