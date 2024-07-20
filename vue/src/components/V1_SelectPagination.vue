@@ -68,6 +68,7 @@ export default defineComponent({
             links.value = result.links;
             loading.value = result.cargando;
             registros.value = result.current_page+'/'+result.last_page;
+            console.log(result.current_page+'/'+result.last_page)
             ///emit('handleChangedLoading',loading.value)
         }
 
@@ -108,17 +109,15 @@ export default defineComponent({
         }
 
         return {
-            //---------------//
             HandleClick,
             inputValue,
             linkLabel,
             onSearch,
-            //---------------//
+            
             data,
             links,
             loading,
             registros,
-            //---------------//
         }
 
     },

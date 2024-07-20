@@ -29,7 +29,7 @@ use App\Http\Controllers\BitacoraErroresController;
 use App\Http\Controllers\SeguimientoJuridicoController;
 
 use App\Http\Controllers\AtencionMenoresEdadController;
-
+use App\Http\Controllers\PersonaController;
 
 
 /*
@@ -53,23 +53,25 @@ use App\Http\Controllers\AtencionMenoresEdadController;
 */
 
 
-
+/**
+ * Login    URL:/auth/iniciar/sesion
+ */
 Route::controller(AuthController::class)
 
 ->prefix('/auth')->group(function () {
 
     Route::post('iniciar/sesion', 'login')->middleware('guest');
-    
+
     Route::middleware(['auth:api'])->group(function() {
-        
-        Route::post('index','index'); 
+
+        Route::post('index','index');
         Route::post('cambio/oficina','cambioOficina');
         Route::post('registro','signUp');
 
         Route::middleware(['role:Super Administrador|Administrador'])->group(function() {
 
         });
-        
+
         Route::get('logout', 'logout');
         Route::get('opciones', 'opciones');
         Route::get('obtener/{key}', 'show');
@@ -79,7 +81,7 @@ Route::controller(AuthController::class)
         Route::delete('estado/{key}','destroy');
 
     });
-    
+
 
 });
 
@@ -137,39 +139,50 @@ Route::controller(CasosController::class)->prefix('/saiv/casos')
     Route::get('obtener/{key}','showCaso');
     Route::get('periodos','showPeriodos');
     Route::get('cantidad/{key}/{dui}','obtenerCasosPersonas');
-    Route::delete('borrar','destroy'); 
-
-    
+    Route::delete('borrar','destroy');
 
     Route::middleware('auth:api')->group(function(){
 
         Route::post('indexSelect','indexSelect');
 
-    });          
+    });
+
+});
+
+// Modulo Personas
+/*
+    indexPersona  URL: /saiv/persona/index/dui/index
+    show          URL: /saiv/persona/index/dui/persona/show
+*/
+
+
+Route::controller(PersonaController::class)->prefix('/saiv/persona')
+->middleware(['auth:api', 'role:Super Administrador|Administrador|Usuaria/o'])
+->group(function (){
+
+    Route::post('/dui/index','indexPersonaDui');
+    Route::post('show', 'show');
 
 });
 
 
-
 // Modulo Seguimiento Jurídico
-
 Route::controller(SeguimientoJuridicoController::class)->prefix('/saiv/seguimiento/juridico')
-
 ->middleware(['auth:api', 'role:Super Administrador|Administrador|Usuaria/o'])->group(function (){
 
-    Route::post('index','index');  
+    Route::post('index','index');
 
     Route::post('guardar','store');
 
     Route::get('obtener/{key}','show');
 
-    Route::get('codigos','getCodigosCasos'); 
+    Route::get('codigos','getCodigosCasos');
 
-    Route::get('fullcalendar/evenst', 'fullCalendarEvents'); 
+    Route::get('fullcalendar/evenst', 'fullCalendarEvents');
 
-    Route::post('OpcionesCasos','cambiarOpcionesCaso');  
+    Route::post('OpcionesCasos','cambiarOpcionesCaso');
 
-    Route::delete('borrar','destroy'); 
+    Route::delete('borrar','destroy');
 
 });
 
@@ -181,17 +194,17 @@ Route::controller(LudotecaController::class)->prefix('/saiv/ludoteca')
 
 ->middleware(['auth:api', 'role:Super Administrador|Administrador|Usuaria/o'])->group(function (){
 
-    Route::post('index','index');  
+    Route::post('index','index');
 
-    Route::post('historico/index','indexHistorico');  
+    Route::post('historico/index','indexHistorico');
 
     Route::post('guardar','store');
 
     Route::get('obtener/{key}','show');
 
-    Route::delete('borrar','destroy'); 
+    Route::delete('borrar','destroy');
 
-    
+
 
 });
 
@@ -203,13 +216,13 @@ Route::controller(ProgramacionController::class)->prefix('/saiv/camara/gessell/p
 
 ->middleware(['auth:api', 'role:Super Administrador|Administrador|Usuaria/o'])->group(function (){
 
-    Route::post('index','index');  
+    Route::post('index','index');
 
     Route::post('guardar','store');
 
     Route::get('obtener/{key}','show');
 
-    Route::delete('borrar','destroy'); 
+    Route::delete('borrar','destroy');
 
     Route::get('fullcalendar/evenst', 'fullCalendarEvents');
 
@@ -221,13 +234,13 @@ Route::controller(AtencionMenoresEdadController::class)->prefix('/saiv/camara/ge
 
 ->middleware(['auth:api', 'role:Super Administrador|Administrador|Usuaria/o'])->group(function (){
 
-    Route::post('index','index');  
+    Route::post('index','index');
 
     Route::post('guardar','store');
 
     Route::get('obtener/{key}','show');
 
-    Route::delete('borrar','destroy'); 
+    Route::delete('borrar','destroy');
 
     Route::get('fullcalendar/evenst', 'fullCalendarEvents');
 
@@ -245,7 +258,7 @@ Route::controller(AgendaController::class)->prefix('/saiv/agenda')
 
     Route::get('obtener/{key}','show');
 
-    Route::delete('borrar','destroy'); 
+    Route::delete('borrar','destroy');
 
     Route::get('ludoteca/fullcalendar/evenst', 'fullCalendarEventsLudoteca');
 
@@ -253,15 +266,15 @@ Route::controller(AgendaController::class)->prefix('/saiv/agenda')
 
 
 
-//Estadisticas 
+//Estadisticas
 
 Route::controller(GraficasController::class)->prefix('saiv/estadisticas/')
 
 ->middleware('auth:api')->group(function (){
 
-    Route::post('graficas','getGrafica');  
+    Route::post('graficas','getGrafica');
 
-    Route::get('periodos','getPeriodos');  
+    Route::get('periodos','getPeriodos');
 
 });
 
@@ -275,7 +288,7 @@ Route::controller(BitacoraErroresController::class)
 
 ->prefix('/saiv/bitacora/errores/controller/')->group(function (){
 
-    Route::post('index','index');  
+    Route::post('index','index');
 
 });
 
@@ -291,4 +304,4 @@ Route::controller(ExcelController::class)->prefix('/saiv/descargar/excel')
 
     Route::get('reporte/{reporte}/{tipo}/{mes}/{anio}', 'casos');
 
-}); 
+});

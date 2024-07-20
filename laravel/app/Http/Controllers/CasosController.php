@@ -157,14 +157,11 @@ class CasosController extends Controller
                     $paginado->orderBy('municipios.municipio', $columna->order);
             }
             
-            
-            
             if($request->filtro !== 'Todos' && $request->filtro!== null && $user_oficina !== 'ES'){
                 $tipo_caso = $request->filtro === 'Denuncia' ? tipo_denuncia()->denuncia:($request->filtro === 'Sin Denuncia' ? tipo_denuncia()->sin_denuncia : ($request->filtro === 'Diligencia' ? tipo_denuncia()->diligencia: null));
                 $paginado->whereRaw('casos.denuncia like "'.$tipo_caso.'"');
             }
           
-
             if($periodo !== 'Todos')
                 $paginado->where('casos.anio', intval($periodo));
             #return $paginado->toSql();
