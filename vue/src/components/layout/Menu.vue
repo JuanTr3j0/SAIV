@@ -5,7 +5,7 @@
             <a href="javascript:void(0);" class="app-brand-link border border-2 my-3  border-primary rounded py-2 px-4 mx-auto">
                 <span class="app-brand-logo demo">
                 <img
-                    src="https://www.csj.gob.sv/wp-content/uploads/2021/06/cropped-logocsj-1-180x180.png"
+                    src="/assets/img/logo-csj.png"
                     alt="user-avatar"
                     class="d-block rounded-3 mx-auto"
                     height="60"
@@ -126,13 +126,7 @@ export default defineComponent({
                     icono:'bx bxs-report bx-sm mx-2',
                     acceso:nivel_2
                 },
-                { 
-                    tipo:"item",          
-                    text:"PruebaPDF",       
-                    url:"/test/pdf",
-                    icono:'bx bxs-report bx-sm mx-2',
-                    acceso:nivel_2
-                },
+            
                 { 
                     tipo:"item",          
                     text:"Usuarias/os",                

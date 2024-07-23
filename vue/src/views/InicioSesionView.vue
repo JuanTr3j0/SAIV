@@ -8,7 +8,7 @@
             <div class="card-body">              
               <div class="container-fluid mb-3">
                 <img
-                  src="https://www.csj.gob.sv/wp-content/uploads/2021/06/cropped-logocsj-1-180x180.png"
+                  src="/assets/img/logo-csj.png"
                   alt="user-avatar"
                   class="d-block rounded-3 mx-auto"
                   height="150"

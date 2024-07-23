@@ -116,7 +116,7 @@ import modalArchivos        from '@/components/ModalArchivos.vue'
 import AdvertenciaVue       from '@/components/layout/Advertencia.vue'
 import AccionesTable        from '@/components/layout/AccionesTable.vue'
 import FormSelectOpcionVue  from '@/components/FormSelectOpcion.vue';
-
+import otros from '@/services/otros';
 import otros_servicio   from '@/services/otros'
 import servicio         from '@/services/crud'
 import store            from '@/store'
@@ -208,7 +208,7 @@ export default defineComponent({
         const handleClickVer =  (json) => {showVer.value  = true; cargarCaso(json)};
         const handleClickEditar = (json) => {showVer.value  = false; cargarCaso(json)};
         const handleClickBorrar = (json) => {advertenciaRef.value.setJson(json); modalCasoBorrarRef.value.showModal(); }
-        const handleClickImprimir =  (json) => {showVer.value  = true; cargarCaso(json)};;
+        const handleClickImprimir =  (json) => {showVer.value  = true; descargarCaso(json)};;
         
         // Cargo archivos en el modal
         const handleClickArchivos = (json) => cargarArchivos(json);
@@ -270,6 +270,23 @@ export default defineComponent({
                 formCasoRef.value.visibleTab('agresores', _caso.agresores.length > 0);
                 formCasoRef.value.visibleTab('responsables', _caso.responsable.key!== null);
                 modalCasoRef.value.showModal();
+                cargando(false)
+            }
+        }
+
+        const descargarCaso = async (json) => {
+            if(typeof json.key !== 'undefined'){
+                cargando(true)
+              //  window.open(store.state.URL_SERVER + 'saiv/archivosPDF/caso/'+json.key)
+             
+                try {
+                await otros.descargarArchivo('saiv/archivosPDF/caso/'+json.key, json.codigo+".pdf")
+                loading.value = false
+            } catch (error) {
+                console.log(error)
+            } finally {
+                loading.value = false
+            }
                 cargando(false)
             }
         }

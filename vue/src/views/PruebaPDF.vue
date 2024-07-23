@@ -6,14 +6,14 @@
       <div id="content" ref="content" style="background-color: white;">
         <div class="d-flex justify-content-between align-items-center ">
           <div>
-            <img src="../../public/assets/img/logo-csj.png" alt="" width="100" srcset="">
+            
           </div>
           <div class="text-center">
             <p style="font-size: x-large;">Sección de Atención Integral a Victimas Chalatenango</p>
             <p style="font-size: large;">Expediente de usuaria</p>
           </div>
           <div>
-            <img src="../../public/assets/img/logo-csj.png" alt="" width="100" srcset="">
+          
           </div>
         </div>
       </div>
