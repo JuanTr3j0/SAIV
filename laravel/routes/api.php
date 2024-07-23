@@ -2,6 +2,7 @@
 
 
 
+use App\Http\Controllers\PdfController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -147,6 +148,11 @@ Route::controller(CasosController::class)->prefix('/saiv/casos')
 
     });
 
+});
+
+Route::controller(PdfController::class)->prefix('/saiv/archivosPDF')
+->group(function (){
+    Route::get('caso/{key}','reporteCaso');
 });
 
 // Modulo Personas

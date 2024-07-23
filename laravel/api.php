@@ -2,6 +2,7 @@
 
 
 
+use App\Http\Controllers\PdfController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -145,7 +146,13 @@ Route::controller(CasosController::class)->prefix('/saiv/casos')
 
 });
 
-
+// api/saiv/archivosPDF/caso/key
+//reportes en pdf de expedientes
+Route::controller(PdfController::class)->prefix('/saiv/archivosPDF')
+->middleware(['auth:api', 'role:Super Administrador|Administrador|Usuaria'])
+->group(function (){
+    Route::get('caso/{key}','reporteCaso');
+});
 
 // Modulo Seguimiento Jurídico
 
