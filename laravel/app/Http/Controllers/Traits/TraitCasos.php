@@ -347,11 +347,17 @@ trait TraitCasos{
 
             $persona -> fuenteIngresos = Ingresos::select('fuente_ingreso')
 
-                ->whereRaw('md5(persona_fk) like "'.$persona -> key.'"')
+            ->whereRaw('md5(persona_fk) like "'.$persona -> key.'"')
 
-                ->get()->map(function($value){ return $value->fuente_ingreso; });
+            ->get()->map(function($value){ return $value->fuente_ingreso; });
 
+            // Obtener dui
 
+            if ($persona->dui !== null) {
+                $query = "SELECT ? AS value, ? AS label";
+                $bindings = [$persona->key, $persona->dui];
+                $persona->dui = DB::select($query, $bindings)[0];
+            }
 
             return $persona;
 

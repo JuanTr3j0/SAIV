@@ -345,8 +345,8 @@ class CasosController extends Controller
         $validator = Validator::make($request->all(), $this->reglasVictima($edadVictima), $this->mensajesVictima());
         if($validator->fails()) { return response()->json(['error'=>$validator->errors()->all()]); }
 
-        $__responsable = (object)$request->responsable;
-        $edadResponsable= edad($__responsable->fechaNacimiento);
+        //$__responsable = (object)$request->responsable;
+        //$edadResponsable= edad($__responsable->fechaNacimiento);
 
         $validator = Validator::make($request->all(), $this->reglasReponsable(), $this->mensajesReponsable());
         if($validator->fails()) { return response()->json(['error'=>$validator->errors()->all()]); }
@@ -397,6 +397,7 @@ class CasosController extends Controller
             // Llaves Foreaneas
             if($_victima!==null) $caso->victima_fk = $_victima->id;
             if($_responsable!==null) $caso->responsable_fk = $_responsable->id;
+            
             // Crear o actualizar el caso en la base de datos
             $caso_guardado = $caso->save();
 
@@ -445,9 +446,14 @@ class CasosController extends Controller
 
             $persona = null;
             //$persona = Persona::whereRaw('dui = "'.$_persona->dui.'"')->first();
-            $persona ??= Persona::whereRaw('md5(id) = "'.$_persona->key.'"')->first();
+            $persona = Persona::whereRaw('md5(id) = "'.$_persona->key.'"')->first();
             $persona ??= new Persona;
-            $persona->dui                           =  trim($_persona->dui);
+            
+
+            $dui = (object)$_persona->dui;
+            $dui !== null && $persona -> dui = $dui -> value=== 'N/A'? null : trim($_persona->dui);
+            
+
             $persona->fecha_nacimiento              =  $_persona->fechaNacimiento;
             $persona->primer_nombre                 =  ucfirst($_persona->primerNombre);
             $persona->segundo_nombre                =  ucfirst($_persona->segundoNombre);
@@ -487,17 +493,17 @@ class CasosController extends Controller
 
             // Ingreso registros nuevos Otras Personas (Hijos y OtrasPersonas)
             $hijos = $_persona->hijos ?? [];
-            foreach ($hijos as $key => $value) {
+            foreach ($hijos as $value) {
                 $this->updateCreateOtraPersona($persona->id, 'hijo', (object)$value);
             }
 
             $otras_personas = $_persona->otrasPersonas ?? [];
-            foreach ($otras_personas as $key => $value) {
+            foreach ($otras_personas as $value) {
                 $this->updateCreateOtraPersona($persona->id, 'otra', (object)$value);
             }
 
             // Ingreso registros de opciones multiples Fuente de Ingreso
-            foreach ($_persona->fuenteIngresos as $key => $value) {
+            foreach ($_persona->fuenteIngresos as $value) {
                 Ingresos::updateOrCreate(
                     [
                         'fuente_ingreso'=> $value,
@@ -575,7 +581,7 @@ class CasosController extends Controller
 
             AgresoresCasos::where('caso_fk', $caso->id)->delete();
 
-            foreach ($_agresores as $key => $value) {
+            foreach ($_agresores as $value) {
                 $_agresor = (object)$value;
 
                 AgresoresCasos::updateOrCreate([
@@ -612,7 +618,7 @@ class CasosController extends Controller
     public function actualizarCrearInstitucionSeRemite($caso, $institucionSeRemite){
         try{
             InstitucionSeRemitira::where('caso_fk', $caso->id)->delete();
-            foreach ($institucionSeRemite as $key => $value) {
+            foreach ($institucionSeRemite as $value) {
                 InstitucionSeRemitira::updateOrCreate(["caso_fk" => $caso->id,"institucion" => $value]);
             }
         } catch (\Exception $e) {
@@ -649,7 +655,7 @@ class CasosController extends Controller
 
     public function actualizarCrearTipoAsistencia($caso, $tipoAsistencia){
         try{
-            foreach ($tipoAsistencia as $key => $value) {
+            foreach ($tipoAsistencia as $value) {
                 TipoAsistencia::updateOrCreate(["caso_fk" => $caso->id, "asistencia" => $value,]);
             }
         } catch (\Exception $e) {

@@ -158,7 +158,7 @@ Route::controller(PdfController::class)->prefix('/saiv/archivosPDF')
 // Modulo Personas
 /*
     indexPersona  URL: /saiv/persona/index/dui/index
-    show          URL: /saiv/persona/index/dui/persona/show
+    show          URL: /saiv/persona/persona/show
 */
 
 
