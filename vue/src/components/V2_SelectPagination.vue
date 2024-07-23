@@ -7,14 +7,14 @@
         :filterable = "false"
         @search = "onSearch"
         @input = "e => inputValue(e)"
-        placeholder="Seleccione o Digité"
+        placeholder="Ingrese"
     >
         <template v-slot:list-footer>
             <li class="pagination">
                 <template v-for="(link, key) in links" :key="key">
                     <button @click="HandleClick(link)" type="button"
                         :class="[link.active&&!loading?'active':null, link.url&&!loading?'':'disabled']"
-                        class="btn btn-primary mx-2" 
+                        class="btn btn-primary mx-2 btn-sm" 
                         v-if="linkLabel(link)==='Siguiente' || linkLabel(link)==='Anterior'">
                             <strong>
                                 <i class="tf-icon bx" :class="{'bx-chevrons-right' : linkLabel(link)==='Siguiente', 'bx-chevrons-left':linkLabel(link)==='Anterior'}"></i>
@@ -22,7 +22,7 @@
                     </button>
                     <button @click="HandleClick(link)" type="button"
                         :class="['disabled']"
-                        class="btn btn-outline-primary mx-2 " 
+                        class="btn btn-outline-primary mx-2 btn-sm" 
                         v-if="linkLabel(link)==='1'">
                         <strong>
                             {{registros}}
@@ -47,7 +47,6 @@ export default defineComponent({
         'disabled'
     ],
     setup(props, {emit}) { 
-        const url = ref(props.url)
         const linkLabel = (link) => {
             if(link.label.includes('ext'))
                 return "Siguiente"

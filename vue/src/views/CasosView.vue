@@ -122,16 +122,16 @@ import servicio         from '@/services/crud'
 import store            from '@/store'
 
 const columnas = [
-{nombre:"Acciones",                 class:"bg-primary text-white fw-bold text-center",        sort:false, sortIcon:'bx-minus', key:'acciones'},
-    {nombre:"Codigo",                   class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-sort-down', key:"codigo"},
-    {nombre:"Fecha Registro",           class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"fechaRegistro"},
-    {nombre:"Violencia",                class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"tiposViolencia"},
-    {nombre:"Mod. Violencia",           class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"modalidadViolencia"},
-    {nombre:"Instit. Que Remite",       class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"institucionRemitente"},
-    {nombre:"Instit. Dónde se Remite",  class:"text-center bg-label-primary text-white fw-bold",  sort:false, sortIcon:'bx-minus', key:"institucionDondeSeRemite"},
-    {nombre:"Fecha Hecho",              class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"fechaHecho"},
-    {nombre:"Departamento",             class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"departamento"},
-    {nombre:"Municipio",                class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"municipio"},
+    {nombre:"Acciones",                 class:"bg-primary text-white fw-bold text-center",        sort:false, sortIcon:'bx-minus',      key:'acciones'},
+    {nombre:"Codigo",                   class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-sort-down',  key:"codigo"},
+    {nombre:"Fecha Registro",           class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus',      key:"fechaRegistro"},
+    {nombre:"Violencia",                class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus',      key:"tiposViolencia"},
+    {nombre:"Mod. Violencia",           class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus',      key:"modalidadViolencia"},
+    {nombre:"Instit. Que Remite",       class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus',      key:"institucionRemitente"},
+    {nombre:"Instit. Dónde se Remite",  class:"text-center bg-label-primary text-white fw-bold",  sort:false, sortIcon:'bx-minus',      key:"institucionDondeSeRemite"},
+    {nombre:"Fecha Hecho",              class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus',      key:"fechaHecho"},
+    {nombre:"Departamento",             class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus',      key:"departamento"},
+    {nombre:"Municipio",                class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus',      key:"municipio"},
     
 ]
 

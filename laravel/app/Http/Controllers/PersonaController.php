@@ -54,7 +54,7 @@ class PersonaController extends Controller
     public function show(Request $request)
     {   
         try {
-            $persona = Persona::select("id")->whereRaw("md5(id) = '".$request->id."'");
+            $persona = Persona::select("id")->whereRaw("md5(id) = '".$request->key."'");
         
             if (!$persona->exists()) {
                 // Si no se encuentra ninguna persona con ese ID hash, se genera una respuesta de personas vacía o nula.

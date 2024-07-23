@@ -152,7 +152,7 @@ Route::controller(CasosController::class)->prefix('/saiv/casos')
 // Modulo Personas
 /*
     indexPersona  URL: /saiv/persona/index/dui/index
-    show          URL: /saiv/persona/index/dui/persona/show
+    show          URL: /saiv/persona/persona/show
 */
 
 
