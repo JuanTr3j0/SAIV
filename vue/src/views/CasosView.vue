@@ -48,7 +48,7 @@
                                 <span>{{caso.fechaRegistro}}</span>
                             </td>
                             <td class="text-nowrap">
-                                {{caso.tiposViolencia ?? '-'}}
+                                {{getValueLabel(caso.tiposViolencia) ?? '-'}}
                             </td> 
                             <td class="text-nowrap">
                                 {{caso.modalidadViolencia ?? '-'}}
@@ -93,6 +93,7 @@
                     :loading="loading"
                     :showVer="showVer ?? false"
                 />
+             
             </template>
         </Modal>
         <Modal ref="modalCasoBorrarRef">

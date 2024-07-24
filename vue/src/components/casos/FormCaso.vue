@@ -125,21 +125,16 @@
                     ></FormDeptoMuniVue>
 
                     <div class="col-md-6">
-                        <label class=" fw-semibold d-block" for="caso-segundo-nombre"> Tipos de violencia(multiple)</label>
+                        <label class=" fw-semibold d-block" for="caso-segundo-nombre"> Tipos de violencia</label>
                         <div class="col-md-12">
-                            <LabelShowVer :value="formulario.tipoViolencia" v-if="showVer"/>
+                            <LabelShowVer :value="formulario.tiposViolencia" v-if="showVer"/>
                             <v-select multiple placeholder="Seleccione" :style="vue_style_select" class="style-chooser" 
                                 :disabled="showVer ?? false" v-if="!showVer"
                                 v-model="formulario.tiposViolencia" :options="opciones===null?[]:opciones.tiposViolencia"/>
                         </div>
                     </div>
 
-                    <FormSelectOpcionVue
-                        :id="'caso-tipos-violencia-hecho'" :nombre="'Tipos de Violencia'"
-                        :opciones="opciones === null ? []:opciones.tiposViolencia"
-                        :clases="['col-md-6']" :loading="loading" :showVer="showVer ?? false"
-                        v-model:opcion="formulario.tiposViolencia"
-                    ></FormSelectOpcionVue> 
+              
 
                     <FormSelectOpcionVue
                         :id="'caso-modalidad-violencia-hecho'" :nombre="'Modalidad de Violencia'"
@@ -530,7 +525,7 @@
 
                 <div>
                     <label for="" class="fw-semibold d-block">Observaciones: </label>
-                    <textarea type="text" class="form-control"></textarea>
+                    <textarea type="text" class="form-control" v-model="formulario.observaciones" >{{formulario.observaciones}}</textarea>
                 </div>                    
                 </div>
                 <ButtonsFormCasosVue
@@ -599,6 +594,7 @@ export default {
             mes:null,
             correlativo:null,
             anio:null,
+            observaciones:null,
             victima:{
                 key:null,
                 dui:null,
@@ -758,6 +754,7 @@ export default {
         function editForm(_form) {
             Object.assign(formulario, JSON.parse(JSON.stringify(_form)));
             resetTabs();
+            victimaFormRef.value.setDui(formulario.victima.dui, formulario.responsable.dui);
         };
 
         const getEdad = (setFechaNacimiento) => {
@@ -779,6 +776,7 @@ export default {
         };
 
         onMounted(() => {
+            console.log("holaaaaaaaaaaaaaaaaaaa")
             loading.value=true;
             cargarOpciones ();
             let date = new Date();

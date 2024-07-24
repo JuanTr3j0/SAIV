@@ -1,6 +1,7 @@
 <template>    
     <TabsVue :tabs="tabs" @selectedTab="selectedTab">
-        <template v-slot:informacion-victima>            
+        <template v-slot:informacion-victima>  
+                  
             <InformacionPersonalVue
                 :id="'victima'" 
                 ref="victimaRef"
@@ -111,6 +112,11 @@ export default defineComponent({
             responsableRef.value.reset();
         };
 
+        const setDui = (duiResponsable, duiVictima) => {
+            victimaRef.value.setDui(duiResponsable);
+            responsableRef.value.setDui(duiVictima);
+        }
+
         const selectedTab = (tag) => {
             tabs.value = tabs.value.map((item) => { item.selected = item.tag===tag; return item; });
         };
@@ -125,6 +131,7 @@ export default defineComponent({
             tabs,
             // Metodos
             reset,
+            setDui,
             selectedTab,
             updateValue        
         }
