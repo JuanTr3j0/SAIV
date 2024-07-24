@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Departamentos;
 use App\Models\Municipios;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Traits\TraitCasos;
 
@@ -42,6 +43,8 @@ class PdfController extends Controller
 
         $caso['oficina'] = $this -> getOficina($caso['denuncia']);
 
+        $caso['fechaRegistro'] = Carbon::parse( $caso['fechaRegistro'] ) ->format('m/d/Y H:i');;
+        
         foreach( $caso['agresores'] as &$agresor){
             $agresor['departamento'] = $this->getDepartamento($agresor['departamento']);
             $agresor['municipio'] = $this->getMunicipio($agresor['municipio']);
@@ -49,7 +52,7 @@ class PdfController extends Controller
 
      //   $caso['agresoes']['departamento'] = $this->getDepartamento($caso['victima']['departamento']);
         // $caso['agresores']['municipio'] = $this->getMunicipio($caso['victima']['municipio']);
-
+//return response()->json($caso);
         return view('exports.expediente.casoPDF', $caso);
     }
     public function reporteCaso($key)

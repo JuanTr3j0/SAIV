@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>{{ $denuncia . '-' . $mes . '-' . $correlativo}}</title>
+    <title>{{ $denuncia . '-' . $mes . '-' . $correlativo . '-' . $anio}}</title>
 
 </head>
 <style>
@@ -18,10 +18,8 @@
         /* Clearfix para contener los elementos flotados */
     }
 
-   .logo-container{
+    .logo-container {}
 
-
-   }
     .logo-left {
         float: left;
         /* Alinear a la izquierda */
@@ -29,7 +27,7 @@
         /* Ancho de los logos */
         height: 110px;
         object-fit: contain;
-       
+
     }
 
     .logo-right {
@@ -94,21 +92,23 @@
 " alt="Logo izquierdo">
             </div>
             <div class="logo-container">
-                <img class="logo-right" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAj8AAAJACAYAAABi2AcjAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAmnSURBVHhe7dYBAQAACMMg+5e+QQYpuAEAhMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAh2wN3GPcOj0yL5QAAAABJRU5ErkJggg==" alt="Logo derecho">
+                <img class="logo-right"
+                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAj8AAAJACAYAAABi2AcjAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAmnSURBVHhe7dYBAQAACMMg+5e+QQYpuAEAhMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAp8gMApMgPAJAiPwBAivwAACnyAwCkyA8AkCI/AECK/AAAKfIDAKTIDwCQIj8AQIr8AAAh2wN3GPcOj0yL5QAAAABJRU5ErkJggg=="
+                    alt="Logo derecho">
             </div>
 
             <div class="center-text">
                 <h1>Sección de Atención Integral a Victimas </h1>
                 <h4>SAIV <span style="font-weight: bold">{{$oficina}}</span></h4>
 
-                <div style="margin-top:15px;">
-                    <p style="font-size: large;">Expediente de usuaria {{ $victima['dui'] }}</p>
-                    <p><strong>Fecha de Registro:</strong> {{ $fechaRegistro }}</p>
-                    <p><strong>Codigo de expediente: </strong>{{ $denuncia . '-' . $mes . '-' . $correlativo}}</p>
-                </div>
+        
             </div>
 
-
+            <div style="margin-top:15px;" class='center-text's>
+                    <p style="font-size: large;">Expediente de usuaria {{ $victima['primerNombre'] . ' ' . $victima['segundoNombre'] . ' ' . $victima['primerApellido'] . ' ' . $victima['segundoApellido']  }}</p>
+                    <p><strong>Fecha de Registro:</strong> {{ $fechaRegistro }}</p>
+                    <p><strong>Codigo de expediente: </strong>{{ $denuncia . '-' . $mes . '-' . $correlativo . '-' . $anio}}</p>
+                </div>
 
         </div>
 
@@ -164,7 +164,7 @@
 
                     <tr>
                         <th scope="row">Dui</th>
-                        <td>{{$victima['dui'] }}</td>
+                        <td>{{$victima['dui']['label'] }}</td>
                     </tr>
                     <tr>
                         <th scope="row">Estado familiar</th>
@@ -304,89 +304,97 @@
             <h2>III. Información Responsable de Menores</h2>
         </div>
         <div class="section-content">
+
             <table class="table table-bordered">
-                <tbody>
-                    <tr>
-                        <th scope="row">Nombre</th>
-                        <td>{{ $responsable['primerNombre'] . ' ' . $responsable['segundoNombre'] . ' ' . $responsable['primerApellido'] . ' ' . $responsable['segundoApellido']  }}
-                        </td>
-                    </tr>
+                @if ($responsable['key'] != null)
+                    <tbody>
+                        <tr>
+                            <th scope="row">Nombre</th>
+                            <td>{{ $responsable['primerNombre'] . ' ' . $responsable['segundoNombre'] . ' ' . $responsable['primerApellido'] . ' ' . $responsable['segundoApellido']  }}
+                            </td>
+                        </tr>
 
-                    <tr>
-                        <th scope="row">Dui</th>
-                        <td>{{$responsable['dui'] }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Estado familiar</th>
-                        <td>{{$responsable['estadoFamiliar'] }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Nivel Educativo</th>
-                        <td>{{$responsable['nivelEducacion'] }}</td>
-                    </tr>
-                    <!-- PONER LOS NOMBRES DE LOS MUNICIPIOS Y DEPARTAMENTOS EN VEZ DE EL CODIGO -->
-                    <tr>
-                        <th scope="row">Municipio de residencia</th>
-                        <td>{{$responsable['municipio'] }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Departamento de residencia</th>
-                        <td>{{$responsable['departamento'] }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Dirección</th>
-                        <td>{{$responsable['direccion'] }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Zona residencial</th>
-                        <td>{{$responsable['zonaResidencial'] }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Teléfono móvil:</th>
-                        <td>{{$responsable['telefonoMovil'] }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Teléfono casa:</th>
-                        <td>{{$victima['telefonoCasa'] }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Fecha de Nacimiento</th>
-                        <td>{{$responsable['fechaNacimiento'] }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Nacionalidad</th>
-                        <td>{{$responsable['nacionalidad'] }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Sexo</th>
-                        <td>{{$responsable['sexo'] }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Género</th>
-                        <td>{{$responsable['genero'] }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Discapacidad</th>
-                        <td>{{$responsable['discapacidad'] }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Sabe escribir</th>
-                        <td>{{$responsable['sabeEscribirLeer'] }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Ocupación</th>
-                        <td>{{$responsable['ocupacion'] }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Lugar de Trabajo</th>
-                        <td>{{$responsable['lugarTrabajo'] }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Empresa en la que trabaja</th>
-                        <td>{{$responsable['empresa'] }}</td>
-                    </tr>
+                        <tr>
+                        
+                            <th scope="row">Dui</th>
+                            <td>{{$responsable['dui']['label'] }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Estado familiar</th>
+                            <td>{{$responsable['estadoFamiliar'] }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Nivel Educativo</th>
+                            <td>{{$responsable['nivelEducacion'] }}</td>
+                        </tr>
+                        <!-- PONER LOS NOMBRES DE LOS MUNICIPIOS Y DEPARTAMENTOS EN VEZ DE EL CODIGO -->
+                        <tr>
+                            <th scope="row">Municipio de residencia</th>
+                            <td>{{$responsable['municipio'] }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Departamento de residencia</th>
+                            <td>{{$responsable['departamento'] }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Dirección</th>
+                            <td>{{$responsable['direccion'] }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Zona residencial</th>
+                            <td>{{$responsable['zonaResidencial'] }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Teléfono móvil:</th>
+                            <td>{{$responsable['telefonoMovil'] }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Teléfono casa:</th>
+                            <td>{{$victima['telefonoCasa'] }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Fecha de Nacimiento</th>
+                            <td>{{$responsable['fechaNacimiento'] }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Nacionalidad</th>
+                            <td>{{$responsable['nacionalidad'] }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Sexo</th>
+                            <td>{{$responsable['sexo'] }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Género</th>
+                            <td>{{$responsable['genero'] }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Discapacidad</th>
+                            <td>{{$responsable['discapacidad'] }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Sabe escribir</th>
+                            <td>{{$responsable['sabeEscribirLeer'] }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Ocupación</th>
+                            <td>{{$responsable['ocupacion'] }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Lugar de Trabajo</th>
+                            <td>{{$responsable['lugarTrabajo'] }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Empresa en la que trabaja</th>
+                            <td>{{$responsable['empresa'] }}</td>
+                        </tr>
 
-                </tbody>
+                    </tbody>
+                
+@else
+                <tr>
+                    <td scope="row">No hay Información del responsable</td>
+                </tr>@endif
             </table>
         </div>
 

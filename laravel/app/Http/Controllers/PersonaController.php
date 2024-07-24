@@ -111,7 +111,7 @@ class PersonaController extends Controller
      *
      * @param Request $request La solicitud HTTP que contiene los parámetros de búsqueda y paginación.
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator Una colección paginada de resultados de la búsqueda.
-     */
+    */
     public function indexPersonaDui(Request $request)
     {
         try {

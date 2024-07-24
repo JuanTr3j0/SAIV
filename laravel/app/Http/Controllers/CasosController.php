@@ -44,7 +44,7 @@ class CasosController extends Controller
                     end as "fechaRegistro"'
                 ),
                 DB::raw("concat(`casos`.`denuncia`,' ', LPAD(`casos`.`correlativo`,3,'0'), '-',LPAD( `casos`.`mes`,2,'0'), '-', `casos`.`anio`) as codigo"),
-                'tipos_violencia            as tiposViolencia',
+                'casos.id            as tiposViolencia', //se paso a multiple
                 'modalidad_violencia        as modalidadViolencia',
                 DB::raw(" date_format(casos.fecha_hecho, \"%d/%m/%Y\") as fechaHecho"),
                 'departamentos.departamento as departamento',
@@ -164,9 +164,9 @@ class CasosController extends Controller
           
             if($periodo !== 'Todos')
                 $paginado->where('casos.anio', intval($periodo));
-            #return $paginado->toSql();
+        
             $paginado = $paginado->paginate($por_pagina);
-
+            #return $paginado->toSql();
             $paginado->getCollection()->transform( function($value){
 
                 $value -> institucionDondeSeRemite = InstitucionSeRemitira::where('caso_fk', $value -> institucionDondeSeRemite)
@@ -176,13 +176,28 @@ class CasosController extends Controller
 
                 return $value;
             });
+            
+            $paginado->getCollection()->transform( function($value){
 
+                $value -> tiposViolencia = CasosTiposViolencia::
+                where('casos_tipos_violencias.casos_fk', $value -> tiposViolencia)
+                ->select('tipo_violencia')
+                ->join('tipo_violencias','tipos_violencia_fk','=','tipo_violencias.id')
+                    // ->whereRaw('md5(casos_tipos_violencias.casos_fk) = ?',[$value->key])
+                    ->get()
+                ->map(function($value){ return $value->tipo_violencia; });
+
+                return $value;
+            });
+
+          
             return  $paginado;
             
         }catch (\Exception $e) {
             bitacora_errores('CasosController.php', $e);
             return response()->json(['error' => 'Linea -> '.$e->getLine().' Error -> '.$e->getMessage()]);
         }
+
     }
 
     public function indexSelect(Request $request){
@@ -372,7 +387,7 @@ class CasosController extends Controller
         try {
             $caso = Casos::whereRaw('md5(`casos`.`id`)="'.trim($request->key).'"')->where('estado', true)->first();
             $caso ??= new Casos;
-
+return $request->victima;
             $_victima = $this->actualizarCrearPersona((object)$request->victima);
             $_responsable = $this->actualizarCrearPersona((object)$request->responsable);
 
@@ -384,6 +399,7 @@ class CasosController extends Controller
             $caso->anio                         = intval($request->anio);
             $caso->fecha_hecho                  = $request->fechaHecho;
             $caso->hora_hecho                   = $request->horaHecho;
+            $caso->observaciones                = $request->observaciones;
             #$caso->tipos_violencia              = $request->tiposViolencia; // FUE CAMBIADO A DE SINGLE A MULTIPLE
             $caso->modalidad_violencia          = $request->modalidadViolencia;
             $caso->delito_codigo_penal          = $request->delitoCodigoPenal;
@@ -449,10 +465,12 @@ class CasosController extends Controller
             $persona = Persona::whereRaw('md5(id) = "'.$_persona->key.'"')->first();
             $persona ??= new Persona;
             
-
-            $dui = (object)$_persona->dui;
-            $dui !== null && $persona -> dui = $dui -> value=== 'N/A'? null : trim($_persona->dui);
-            
+            return $_persona;
+            if($_persona->dui !== null){
+                $dui = (object)$_persona->dui;
+                $_persona -> dui = $dui -> label === 'N/A'? null : trim($dui->label);
+            }
+           $persona->id = $_persona->dui;
 
             $persona->fecha_nacimiento              =  $_persona->fechaNacimiento;
             $persona->primer_nombre                 =  ucfirst($_persona->primerNombre);
