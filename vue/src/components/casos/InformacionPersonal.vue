@@ -14,7 +14,6 @@
                 }}</label>
         </div>
 
-
         <div class="col-md-3">
             <label class=" fw-semibold d-block" for="caso-tipo-hecho">
                 Dui
@@ -276,19 +275,37 @@ export default defineComponent({
                 this.loadingSelect = true;
                 let key_nuevo = (nuevo !== null && nuevo.key !== null) ? nuevo.key : null;
                 let key_anterior = (anterior !== null && anterior.key !== null) ? anterior.key : null;
-                if (key_anterior === key_nuevo) {
-                    this.loadingSelect = false; return;
-                }
-                if (key_nuevo === null || typeof key_nuevo === 'undefined') {
-                    let __persona = this.persona; __persona.dui = null; this.$emit('update:persona', __persona);
+
+                if (key_nuevo === null || key_anterior === key_nuevo || typeof key_nuevo === 'undefined') {
+
+                    let __persona = this.persona; 
+                    __persona.dui = null;
+
+                    if(typeof nuevo === 'object'){
+
+                        if(anterior !==null && nuevo.key === anterior.key && anterior.label === nuevo.label) return;
+
+                        __persona.dui = this.duiSelect
+                               
+                    }
+
+                    this.$emit('update:persona', __persona);
                     this.loadingSelect = false;
                     return;
                 }
+
                 let data = await this.servicios.actualizarCrear({ key: key_nuevo }, 'saiv/persona/show');
-                if (!data.ok) {
-                    this.loadingSelect = false; console.log('Error en realizar el REQUEST POST')
+
+                if (data === null || !data.ok) {
+                    this.loadingSelect = false; 
+                    console.log('Error en realizar el REQUEST POST')
                     return;
-                } let _persona = data.json; this.$emit('update:persona', _persona); this.loadingSelect = false;
+                } 
+
+                let _persona = data.json; 
+                this.$emit('update:persona', _persona); 
+                this.loadingSelect = false;
+
             } catch (error) { console.log(error); }
         },
         loadingSelect(nuevo) {
