@@ -54,7 +54,7 @@ class PersonaController extends Controller
     public function show(Request $request)
     {   
         try {
-            $persona = Persona::select("id")->whereRaw("md5(id) = '".$request->key."'");
+            $persona = Persona::select("id")->whereRaw("SHA1(id) = '".$request->key."'");
         
             if (!$persona->exists()) {
                 // Si no se encuentra ninguna persona con ese ID hash, se genera una respuesta de personas vacía o nula.
@@ -122,7 +122,7 @@ class PersonaController extends Controller
             // Definición de las columnas a seleccionar en la consulta principal
             $select = [
                 DB::raw("dui as label"),  // Selecciona el campo 'dui' como 'label'
-                DB::raw("md5(MAX(id)) as `key`")  // Selecciona el hash MD5 del valor máximo del campo 'id' como 'key'
+                DB::raw("SHA1(MAX(id)) as `key`")  // Selecciona el hash MD5 del valor máximo del campo 'id' como 'key'
             ];
 
             // Realiza la consulta de búsqueda utilizando una función externa 'query_busqueda'

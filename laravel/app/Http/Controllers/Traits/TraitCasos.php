@@ -354,7 +354,7 @@ trait TraitCasos{
             // Obtener dui
 
             if ($persona->dui !== null) {
-                $query = "SELECT ? AS value, ? AS label";
+                $query = "SELECT ? AS 'key', ? AS 'label'";
                 $bindings = [$persona->key, $persona->dui];
                 $persona->dui = DB::select($query, $bindings)[0];
             }

@@ -112,9 +112,9 @@ export default defineComponent({
             responsableRef.value.reset();
         };
 
-        const setDui = (duiResponsable, duiVictima) => {
-            victimaRef.value.setDui(duiResponsable);
-            responsableRef.value.setDui(duiVictima);
+        const setDui = (duiVictima, duiResponsable) => {
+            victimaRef.value.setDui(duiVictima);
+            responsableRef.value.setDui(duiResponsable);
         }
 
         const selectedTab = (tag) => {
