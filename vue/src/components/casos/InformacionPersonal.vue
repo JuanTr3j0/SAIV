@@ -13,8 +13,6 @@
             <label class="form-control fw-bold text-primary">{{ getEdadString(persona.fechaNacimiento) ?? 'N/A'
                 }}</label>
         </div>
-
-
         <div class="col-md-3">
             <label class=" fw-semibold d-block" for="caso-tipo-hecho">
                 Dui
@@ -22,12 +20,12 @@
             </label>
             <div class="col-md">
                 <vSelectPaginationVue v-if="!showVer" :data="dataSelect" :url="urlPersonaDui" :links="linksSelect"
-                    :registros="registrosSelect" :loading="loadingSelect || loading" v-model="duiSelect"
+                    :registros="registrosSelect" :loading="loadingSelect || loading" v-model="persona.dui"
                     @setUrlSelect="setUrlSelect" @resetUrlSelect="resetUrlSelect"
                     @changeVariablesBusqueda="changeVariablesBusqueda" />
                 <label v-else class="form-control text-primary fw-bold">
-                    {{ duiSelect === null || typeof duiSelect === 'undefined' ? "No ingresado" : duiSelect.label ??
-                    duiSelect }}
+                    {{ persona.dui === null || typeof persona.dui === 'undefined' ? "No ingresado" : persona.dui.label ??
+                    persona.dui }}
                 </label>
             </div>
         </div>
@@ -271,8 +269,9 @@ export default defineComponent({
             _persona.fuenteIngresosOtro = null;
             this.$emit('update:persona', _persona);
         },
-        async duiSelect(nuevo, anterior) {
+        async 'persona.dui'(nuevo, anterior) {
             try { 
+                let __persona = this.persona; 
 
                 this.loadingSelect = true; 
                 let key_nuevo = (nuevo !== null && nuevo.key !== null) ? nuevo.key : null; 
@@ -280,27 +279,34 @@ export default defineComponent({
 
                 if (key_nuevo === null || key_anterior === key_nuevo || typeof key_nuevo === 'undefined') 
                 { 
-                    let __persona = this.persona; 
-                    //__persona.dui = null; 
+                   
+                     
                     if (typeof nuevo === 'object') 
                     { 
-                        if (anterior !== null && nuevo.key === anterior.key && anterior.label === nuevo.label) 
+                        if (nuevo!== null && anterior !== null && nuevo.key === anterior.key && anterior.label === nuevo.label) {
+                            this.loadingSelect = false; 
                             return; 
-                        __persona.dui = this.duiSelect 
+                        }
+                        __persona.dui = nuevo
                     } 
+                    
+
                     this.$emit('update:persona', __persona); 
-                    this.loadingSelect = false; return; 
+                    this.loadingSelect = false; 
+                    return; 
                 } 
                 let data = await this.servicios.actualizarCrear({ key: key_nuevo }, 'saiv/persona/show'); 
                 if (data === null || !data.ok) { 
-                    this.loadingSelect = false; console.log('Error en realizar el REQUEST POST')                    
+                    this.loadingSelect = false; 
+                    console.log('Error en realizar el REQUEST POST')                    
                     return; 
                 } 
                 let _persona = data.json; 
                 this.$emit('update:persona', _persona); 
                 this.loadingSelect = false; 
-            } catch (error) 
-            { console.log(error); }
+            } catch (error) { 
+                console.log(error); 
+            }
         },
         loadingSelect(nuevo) {
             this.handleChangedLoadingVueSelect(nuevo)
@@ -323,7 +329,6 @@ export default defineComponent({
         const loadingSelect = ref(false)
         const linksSelect = ref([])
         const dataSelect = ref([])
-        const duiSelect = ref(null)
 
 
         // Url para select de persona
@@ -357,10 +362,6 @@ export default defineComponent({
             loadingSelect.value = loading
         }
 
-        const setDui = (dui) => {
-            duiSelect.value = dui;
-        }
-
         onMounted(async () => {
             handleChangedLoadingVueSelect(true);
             fetchSelect();
@@ -381,7 +382,6 @@ export default defineComponent({
 
         const reset = () => {
             casosRelacionados.value = [];
-            duiSelect.value = null;
         }
 
         return {
@@ -396,9 +396,7 @@ export default defineComponent({
             loadingSelect,
             linksSelect,
             dataSelect,
-            duiSelect,
             urlSelect,
-            setDui,
 
             //Variables usadas en el formulario
             changeVariablesBusqueda,

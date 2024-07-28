@@ -112,11 +112,6 @@ export default defineComponent({
             responsableRef.value.reset();
         };
 
-        const setDui = (duiVictima, duiResponsable) => {
-            victimaRef.value.setDui(duiVictima);
-            responsableRef.value.setDui(duiResponsable);
-        }
-
         const selectedTab = (tag) => {
             tabs.value = tabs.value.map((item) => { item.selected = item.tag===tag; return item; });
         };
@@ -131,7 +126,6 @@ export default defineComponent({
             tabs,
             // Metodos
             reset,
-            setDui,
             selectedTab,
             updateValue        
         }

@@ -754,14 +754,8 @@ export default {
         function editForm(_form) {
             resetTabs();
             Object.assign(formulario, JSON.parse(JSON.stringify(_form)));
-            console.log('---1-----')
-            console.log(_form.victima.dui)
-            console.log('----------')
-            console.log(formulario.victima.dui)
-            console.log('----------')
             let dui = _form.victima.dui;
             formulario.victima.dui = dui;
-            victimaFormRef.value.setDui(formulario.victima.dui, formulario.responsable.dui);
         };
 
         const getEdad = (setFechaNacimiento) => {
