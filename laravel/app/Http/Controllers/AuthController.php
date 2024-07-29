@@ -60,9 +60,9 @@ class AuthController extends Controller
 
     {
 
-        //Obtener usuario mediante su key md5 si existe
+        //Obtener usuario mediante su key SHA1 si existe
 
-        $_usuario  = User::select('id')->whereRaw("md5(id) like '".$request->key."'")->first();
+        $_usuario  = User::select('id')->whereRaw("SHA1(id) like '".$request->key."'")->first();
 
         $_id_usuario = is_null($_usuario)? null : $_usuario->id; 
 
@@ -182,7 +182,7 @@ class AuthController extends Controller
 
         return response()->json([
 
-            'key' => DB::select(DB::raw("select md5(".$user->id.") as 'key';"))[0]->key,
+            'key' => DB::select(DB::raw("select SHA1(".$user->id.") as 'key';"))[0]->key,
 
             'mensaje' => 'Registro Guardado',
 
@@ -599,7 +599,7 @@ class AuthController extends Controller
         try{
             $select = [
 
-                DB::raw('md5(id) as "key"'),
+                DB::raw('SHA1(id) as "key"'),
 
                 'name as usuario',
 
@@ -627,7 +627,7 @@ class AuthController extends Controller
 
             $user = User::select($select)
 
-                ->whereRaw('md5(id) like "'.$key.'"')
+                ->whereRaw('SHA1(id) like "'.$key.'"')
 
             ->first();
 
@@ -635,7 +635,7 @@ class AuthController extends Controller
 
                 $permisos = [];
 
-                $_user = User::select('id')->whereRaw('md5(id) like "'.$user->key.'"')->first();
+                $_user = User::select('id')->whereRaw('SHA1(id) like "'.$user->key.'"')->first();
 
                 /*
                 foreach ($this->getPermisos() as $key0 => $value0) {
@@ -713,7 +713,7 @@ class AuthController extends Controller
 
 
 
-        $selectRaw = "md5(users.id) as 'key', 
+        $selectRaw = "SHA1(users.id) as 'key', 
 
             CASE WHEN estado THEN \"Activo\" ELSE \"Inactivo\" END as estado, 
 
@@ -779,7 +779,7 @@ class AuthController extends Controller
 
     public function destroy($key){
 
-        $user = User::whereRaw('md5(id) like "'.$key.'"')->first();
+        $user = User::whereRaw('SHA1(id) like "'.$key.'"')->first();
 
         $user -> estado = !boolval($user->estado);
 

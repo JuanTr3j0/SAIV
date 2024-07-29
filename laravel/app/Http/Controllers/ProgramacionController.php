@@ -1,34 +1,17 @@
 <?php
 
-
-
 namespace App\Http\Controllers;
 
-
-
 use App\Http\Requests\StoreProgramacionRequest;
-
-use App\Http\Requests\UpdateProgramacionRequest;
-
-
-
 use App\Models\Oficinas;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\DB;
-
-use Illuminate\Support\Facades\Validator;
-
-
+use Carbon\Carbon;
 
 // Models
-
 use App\Models\Programacion;
-
 use App\Models\Casos;
-
 use App\Models\Agenda;
-
 
 
 class ProgramacionController extends Controller
@@ -62,8 +45,10 @@ class ProgramacionController extends Controller
             $user_oficina = Oficinas::select('id')->findOrFail(auth()->user()->oficina)->id;
 
             $select = [
+                DB::raw("concat(oficinas.codigo,' ', LPAD(programacions.correlativo,3,'0'),'-', 
+                LPAD(MONTH (programacions.fecha) ,2,'0'),'-', LPAD(YEAR (programacions.fecha) ,4,'0')) as codigo"),
 
-                DB::raw('md5(programacions.id) as "key"'),
+                DB::raw('SHA1(programacions.id) as "key"'),
 
                 DB::raw('LPAD(`programacions`.`correlativo`,4,"0") as correlativo'),
 
@@ -180,7 +165,9 @@ class ProgramacionController extends Controller
                 ->orderBy('casos.mes','Desc')
 
                 //para que filtre por oficina
-                ->where('programacions.oficina', $user_oficina);
+                -> where('programacions.oficina', $user_oficina)
+                
+                -> join('oficinas', 'oficinas.id', '=', 'programacions.oficina');
             /**
 
              * Correlativo 
@@ -223,6 +210,10 @@ class ProgramacionController extends Controller
 
                     $paginado->orderBy('programacions.fecha', $columna->order);
 
+                else if($columna->columna === "Codigo")
+
+                $paginado->orderBy('codigo', $columna->order);
+
                 else if($columna->columna === "Hora")
 
                     $paginado->orderBy('programacions.hora', $columna->order);
@@ -253,11 +244,9 @@ class ProgramacionController extends Controller
 
                 $tipo_caso = $request->filtro === 'Denuncia' ? tipo_denuncia()->denuncia:($request->filtro === 'Sin Denuncia' ? tipo_denuncia()->sin_denuncia : null);
 
-                $paginado->whereRaw('casos.denuncia like "'.$tipo_caso.'"');
+                $paginado->whereRaw('casos.denuncia like "?"',[$tipo_caso]);
 
             }
-
-//return $paginado->toSql();
 
             return $paginado->paginate($por_pagina);
 
@@ -291,106 +280,82 @@ class ProgramacionController extends Controller
 
     {
 
-        try{            
+        try {
 
-            // Valido que no exista duplicidad de correlativos
-
-            if($request -> correlativo !== null){
-
-                $correlativoExist = Programacion::whereRaw('md5(id) not like "'.$request->key.'"')
-
-                    ->where('correlativo', $request->correlativo)
-
-                    ->where('oficina', auth()->user()->oficina)
-
-                    ->where('estado', true)
-
-                    ->exists();
-
-                if($correlativoExist )
-
-                    return response()->json(['error' => ['El correlativo '.$request->correlativo.' ya fue utilizado.']]);
-
-                else if(intval($request->correlativo) <= 0)
-
-                    return response()->json(['error' => ['El correlativo debe ser mayor que cero.']]);
-
-                else Programacion::whereRaw('md5(id) like "'.$request->key.'"')->where('estado', true)->update(['correlativo' => intval($request->correlativo)]);
-
+            if ($request->fecha === null) {
+                return response()->json(['error' => ['El campo fecha no debe estar vacío']]);
             }
 
-            
-
-            $programacion = Programacion::whereRaw('md5(id)  like "'.$request->key.'"')->first();
-
-            $programacion ??= new Programacion();
-
-            $programacion->correlativo      = $request->correlativo;
-
-            $programacion->fecha            = $request->fecha;
-
-            $programacion->hora             = $request->hora;
-
-            $programacion->solicitado_por   = ucfirst($request->solicitadoPor);
-
-            $programacion->nombres          = ucfirst($request->nombres);
-
-            $programacion->apellidos        = ucfirst($request->apellidos);
-
-            $programacion->caso_saiv        = boolval($request->casoSaiv ?? false);
-
-            $programacion->oficina          = auth()->user()->oficina;
-
-            
-
-            if(boolval($request->casoSaiv ?? false) && ($request->codigoCaso ?? null) !== null)
-
-                $programacion->caso_fk = Casos::whereRaw('md5(id) = "'.((object) $request -> codigoCaso) -> key.'"')->first()->id;
-
-            else 
-
+            // Validación inicial
+            if ($request->correlativo !== null) {
+        
+                $correlativoExist = Programacion::where(DB::raw('SHA1(id)'), $request->key)
+                    ->where('oficina', auth()->user()->oficina)
+                    ->where('correlativo','<>', $request->correlativo)
+                    ->where('estado', true)
+                    ->whereRaw('YEAR(fecha) = YEAR(?)', [$request->fecha])
+                    ->exists();
+                
+                if ($correlativoExist) {
+                    return response()->json(['error' => ['El correlativo '.$request->correlativo.' ya fue utilizado.']]);
+                } else if (intval($request->correlativo) <= 0) {
+                    return response()->json(['error' => ['El correlativo debe ser mayor que cero.']]);
+                } else {
+                    Programacion::whereRaw('SHA1(id) = ?', [$request->key])
+                        ->where('estado', true)
+                        ->update(['correlativo' => intval($request->correlativo)]);
+                }
+            }
+            $programacion = Programacion::where(DB::raw('SHA1(id)'), $request->key)->first();
+            $programacion = $programacion ?? new Programacion();
+        
+            $programacion->correlativo = $request->correlativo;
+            $programacion->fecha = $request->fecha;
+            $programacion->hora = $request->hora;
+            $programacion->solicitado_por = ucfirst($request->solicitadoPor);
+            $programacion->nombres = ucfirst($request->nombres);
+            $programacion->apellidos = ucfirst($request->apellidos);
+            $programacion->caso_saiv = boolval($request->casoSaiv ?? false);
+            $programacion->oficina = auth()->user()->oficina;
+        
+            if (boolval($request->casoSaiv ?? false) && ($request->codigoCaso ?? null) !== null) {
+                $programacion->caso_fk = Casos::where(DB::raw('SHA1(id)'), ((object) $request->codigoCaso)->key)->first()->id;
+            } else {
                 $programacion->caso_fk = null;
-
-            
-
-            $programacion->realizada   = boolval($request -> realizada);
-
+            }
+        
+            $programacion->realizada = boolval($request->realizada);
             $programacion->save();
+        
+            if ($programacion->correlativo === null) {
 
+                // Obtén el próximo valor de correlativo
+                $nextCorrelativo = Programacion::whereRaw('YEAR(fecha) = YEAR(?)', [$programacion->fecha])
+                    ->where('estado', true)
+                    ->where('oficina', auth()->user()->oficina)
+                    ->max('correlativo');
+                    
+                // Si no se encuentra ningún correlativo, empieza con 1
+                $nextCorrelativo = $nextCorrelativo ? $nextCorrelativo + 1 : 1;
 
-
-             // Creacion y asignacion de correlativo
-
-             $correlativo = null;
-
-             if($programacion -> correlativo === null){
-
-                $correlativo  = DB::select(DB::raw('select asignar_correlativo_programacion('.$programacion->id.','.auth()->user()->oficina.') as "correlativo";'))[0]->correlativo;
-
-             }
-
-             $correlativo ??= $programacion->correlativo;
-
-
-
+                // Actualiza el registro específico
+                $programacion->correlativo = $nextCorrelativo;
+                $programacion->save();
+    
+            }
+        
             return response()->json([
-
-                "key"           => DB::select(DB::raw("select md5(".$programacion->id.") as 'key';"))[0]->key,
-
-                "correlativo"   => $correlativo,
-
-                "mensaje"       => 'Exito, se guardo el registro.', 
-
+                "key" => DB::table(DB::raw('programacions'))
+                    ->select(DB::raw('SHA1(id) as `key`'))
+                    ->where('id', '=', $programacion->id)
+                    ->pluck('key')
+                    ->first(),
+                "correlativo" => $programacion->correlativo,
+                "mensaje" => 'Éxito, se guardó el registro.',
             ]);
-
-
-
         } catch (\Exception $e) {
-
             bitacora_errores('ProgramacionController.php', $e);
-
-            return response()->json(['error' => 'Linea -> '.$e->getLine().' Error -> '.$e->getMessage()]);
-
+            return response()->json(['error' => 'Línea -> '.$e->getLine().' Error -> '.$e->getMessage()]);
         }
 
     }
@@ -417,7 +382,7 @@ class ProgramacionController extends Controller
 
             $select = [
 
-                DB::raw('md5(id) as "key"'),
+                DB::raw('SHA1(id) as "key"'),
 
                 'correlativo',
 
@@ -441,11 +406,11 @@ class ProgramacionController extends Controller
 
 
 
-            $programacion = Programacion::select($select)->whereRaw('md5(id) like "'.$key.'"')->first();
+            $programacion = Programacion::select($select)->where(DB::raw('SHA1(id)'),$key)->first();
 
             $programacion -> codigoCaso = Casos::select([
 
-                DB::raw('md5(id) as "key"'), 
+                DB::raw('SHA1(id) as "key"'), 
 
                 DB::raw("CONCAT(`casos`.`denuncia`, ' ', LPAD(`casos`.`correlativo`, 3, '0'), '-', LPAD(casos.mes, 2, '0'), '-', casos.anio) as 'label'")]
 
@@ -473,7 +438,7 @@ class ProgramacionController extends Controller
 
             $select = [
 
-                DB::raw('md5(id) as "key"'),
+                DB::raw('SHA1(id) as "key"'),
 
                 DB::raw("concat(' Programación ',' solicitado por ', programacions.solicitado_por) as title"),
 
@@ -489,7 +454,7 @@ class ProgramacionController extends Controller
 
             $selectAgenda = [
 
-                DB::raw('md5(id) as "key"'),
+                DB::raw('SHA1(id) as "key"'),
 
                 DB::raw('concat(title, " (Click Ver Detalles)") as "title"'),
 
@@ -559,7 +524,7 @@ class ProgramacionController extends Controller
 
         try{
 
-            return Programacion::whereRaw('md5(id) like "'.($request->key ?? null).'"')->update(['estado' => false]);
+            return Programacion::where(DB::raw('SHA1(id)'),$request->key)->update(['estado' => false]);
 
         } catch (\Exception $e) {
 

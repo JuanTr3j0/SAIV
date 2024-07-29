@@ -23,7 +23,7 @@
                 <template v-slot:tbody>
                     <tr v-for="(programacion, key) in data" :key="key">
                         <td class="text-nowrap fw-bold text-center">
-                            <span>{{programacion.correlativo ?? 'No Ingresado'}}</span>
+                            <span>{{programacion.codigo ?? 'No Ingresado'}}</span>
                         </td>  
                         <td class="text-nowrap fw-bold text-center">
                             <span>{{programacion.fecha ?? 'No Ingresado'}}</span>
@@ -133,7 +133,7 @@ import ActividadCalendarVue from '@/components/ActividadCalendar.vue'
 
 const columnas = [
     {
-        nombre:"Correlativo", 
+        nombre:"Codigo", 
         class:"text-center bg-label-primary text-white fw-bold",    
         key:"",   
         style:"", 
@@ -158,12 +158,12 @@ const columnas = [
         key:"", style:"", sort:true,  sortIcon:'bx-minus'
     },
     {
-        nombre:"Nombres Usuaria/o", 
+        nombre:"Nombres", 
         class:"text-center bg-label-primary text-white fw-bold",    
         key:"", style:"", sort:true,  sortIcon:'bx-minus'
     },
     {
-        nombre:"Apellidos Usuaria/o", 
+        nombre:"Apellidos", 
         class:"text-center bg-label-primary text-white fw-bold",    
         key:"",   
         style:"", 

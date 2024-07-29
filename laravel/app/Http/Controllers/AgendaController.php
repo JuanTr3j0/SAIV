@@ -31,7 +31,7 @@ class AgendaController extends Controller
 
             if($validator->fails()) { return response()->json(['error'=>$validator->errors()->all()]); }
 
-            $agenda = Agenda::whereRaw('md5(id) like "' . $request->key.'"')->first();
+            $agenda = Agenda::whereRaw('SHA1(id) like "' . $request->key.'"')->first();
             $agenda ??= new Agenda();
             $agenda -> title    =   $request -> titulo;
             $agenda -> modulo   =   $request -> modulo;
@@ -42,7 +42,7 @@ class AgendaController extends Controller
 
             return response()->json([
                 "mensaje" => 'Exito, se guardo el registro.',
-                "key" => DB::select(DB::raw("select md5(".$agenda->id.") as 'key';"))[0]->key
+                "key" => DB::select(DB::raw("select SHA1(".$agenda->id.") as 'key';"))[0]->key
             ]);
 
         }catch (\Exception $e) {
@@ -60,7 +60,7 @@ class AgendaController extends Controller
     public function destroy(Request $request)
     {
         try{
-            $ok = Agenda::whereRaw('md5(id) like "'.$request->key.'"')->update(['estado'=> false]);
+            $ok = Agenda::whereRaw('SHA1(id) like "'.$request->key.'"')->update(['estado'=> false]);
             if($ok){
                 return response()->json(
                     [
@@ -84,7 +84,7 @@ class AgendaController extends Controller
     public function fullCalendarEventsLudoteca(){
         try {
             $select = [
-                DB::raw('md5(ludotecas.id) as "key"'),
+                DB::raw('SHA1(ludotecas.id) as "key"'),
                 DB::raw("
                     concat( ' Próxima Cita ',
                         `casos`.`denuncia`,
@@ -103,7 +103,7 @@ class AgendaController extends Controller
             ];
 
             $selectAgenda = [
-                DB::raw('md5(id) as "key"'),
+                DB::raw('SHA1(id) as "key"'),
                 DB::raw('concat(title, " (Click Ver Detalles)") as "title"'), 
                 'start', 'end',
                 DB::raw('true as agendaItem')

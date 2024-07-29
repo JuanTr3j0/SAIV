@@ -220,7 +220,7 @@ class OpcionesController extends Controller
 
 
 
-        $atencion_brindada = AtencionBrindada::select([DB::raw('md5(id) as "key"'), 'opcion'])
+        $atencion_brindada = AtencionBrindada::select([DB::raw('SHA1(id) as "key"'), 'opcion'])
 
         ->orderBy('opcion', 'asc')->where('atencion_brindada_fk', null)->get();
 
@@ -274,9 +274,9 @@ class OpcionesController extends Controller
 
     public function indexSeguimientoJuridicoAtencionBrindada($key){
 
-        return AtencionBrindada::select([DB::raw('md5(id) as "key"'), 'opcion'])
+        return AtencionBrindada::select([DB::raw('SHA1(id) as "key"'), 'opcion'])
 
-        ->orderBy('opcion', 'asc')->whereRaw('md5(atencion_brindada_fk) like "'.$key.'"')->get();
+        ->orderBy('opcion', 'asc')->whereRaw('SHA1(atencion_brindada_fk) like "'.$key.'"')->get();
 
     }
 
