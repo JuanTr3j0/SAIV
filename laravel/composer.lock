@@ -5029,6 +5029,7 @@
             "time": "2023-10-25T05:12:01+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "stella-maris/clock",
             "version": "0.1.7",
             "source": {
@@ -5085,6 +5086,17 @@
             },
             "dist": {
                 "type": "zip",
+=======
+            "name": "symfony/console",
+            "version": "v6.4.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/console.git",
+                "reference": "504974cbe43d05f83b201d6498c206f16fc0cdbc"
+            },
+            "dist": {
+                "type": "zip",
+>>>>>>> 6fae89447b1876a13d5e1003c31409c84134e68b
                 "url": "https://api.github.com/repos/symfony/console/zipball/504974cbe43d05f83b201d6498c206f16fc0cdbc",
                 "reference": "504974cbe43d05f83b201d6498c206f16fc0cdbc",
                 "shasum": ""

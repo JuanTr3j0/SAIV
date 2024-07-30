@@ -310,12 +310,14 @@ class GraficasController extends Controller
                 case 'Casos por Tipo de Violencia':
                     $queryGet = DB::select("
                         select
-                            tipos_violencia label,
+                            tipo_violencia label,
                             count(1) frecuencia
-                        from casos 
-                        where casos.estado is true and casos.tipos_violencia is not null and casos.denuncia not like 'DIL%' and (denuncia like '".tipo_denuncia()->denuncia."' or
+                        from casos
+                        INNER JOIN casos_tipos_violencias ctv on ctv.casos_fk = id
+                        INNER JOIN tipo_violencias tv on tv.id = ctv.tipos_violencia_fk  
+                        where casos.estado is true and tv.tipo_violencia is not null and casos.denuncia not like 'DIL%' and (denuncia like '".tipo_denuncia()->denuncia."' or
                         denuncia like '".tipo_denuncia()->sin_denuncia."')".$queryAño." ".$queryMes."
-                        group by casos.tipos_violencia;
+                        group by tv.tipo_violencia;
                     ");
 
                     $titulo = 'Casos por Tipo de Violencia '. ($mes === 0 ? '':$this->getMes($mes)).' '.($periodo === 0 ? '':$periodo);

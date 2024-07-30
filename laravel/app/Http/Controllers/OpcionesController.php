@@ -33,7 +33,7 @@ class OpcionesController extends Controller
 
         // Casos
 
-      //  $tiposViolencia         = getEnunms('casos','tipos_violencia');
+        $tiposViolencia         = getEnunms('tipo_violencias','tipo_violencia');
 
         $delitoCodigoPenal      = getEnunms('casos','delito_codigo_penal');
 
