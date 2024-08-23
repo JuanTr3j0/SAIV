@@ -242,7 +242,6 @@ export default defineComponent({
 
         const handledBorrarArchivoCaso = async(key_caso, key_archivo) => {
             try {
-                console.log('archivo -> '+key_archivo)
                 if(typeof key_archivo !== 'undefined' && typeof key_caso !== 'undefined'){
                     cargando(true)
                     await servicio.borrar('saiv/archivos/caso/eliminar/'+key_archivo);

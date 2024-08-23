@@ -683,7 +683,6 @@ export default {
         };
 
         onMounted(() => {
-            console.log("holaaaaaaaaaaaaaaaaaaa")
             loading.value = true;
             cargarOpciones();
             let date = new Date();
@@ -794,7 +793,6 @@ export default {
         };
         const tabIsSelected = (_tag) => {
             const tab = tabs.value.find((item) => item.tag === _tag);
-            console.log(tab.nombre)
             return tab.selected;
         };
         const siguiente = (_tag) => {
@@ -862,19 +860,15 @@ export default {
         const cargarDocumentos = async (key) => {
             const archivos = archivosCasos.value.files;
             const longitud = archivos.length;
-
             for (let i = 0; i < longitud; i++) {
                 const item = archivos[i];
-                console.log("Array de archivos" + i);
-                mensajeArchivos.value = 'Cargando Archivo (' + (i + 1) + '/' + longitud + ')..';
-
-                let formData = new FormData();
-                formData.append('archivo', item);
-                formData.append('key', key);
-                console.log("Datos del formulario" + formData.archivo.name);
-                const json = await otros.archivos(formData, 'saiv/archivos/cargar/caso');
-                mensajeArchivos.value = json.data.mensaje;
-                await wait(2 * 1000);
+                try {
+                    const json = await otros.archivos(item.name, item, key, 'saiv/archivos/cargar/caso');
+                    mensajeArchivos.value = json.data.mensaje;
+                } catch (error) {
+                    console.error("Error al cargar archivo:", error);
+                }
+                await wait(1 * 1000);
             }
         }
 
@@ -902,7 +896,7 @@ export default {
                         formulario.archivosCasos = caso.archivosCasos;
                         mensajeArchivos.value = null;
 
-                        console.log(formulario.archivosCasos);
+                        
                         // Reset el input de archivos
                         formArchivosRef.value.reset();
                     }

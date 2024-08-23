@@ -23,7 +23,6 @@ export default{
             }else if (typeof response==='undefined' || !response.ok){  
                 console.log(store.getters.erroresResponse(response));
             }else if(response.ok){
-                console.log('Proceso Completado!');
                 ok = response.ok;
                 return response.json(); 
             }else return null;
@@ -96,9 +95,8 @@ export default{
                 router.push({ name: "acceso"})
             }else if (typeof response==='undefined' || !response.ok){  
                 console.log(store.getters.erroresResponse(response));
-            }else if(response.ok){
-                console.log('Proceso Completado!');
             }
+
             ok = response.ok; 
             return response.json();
         }).then(response =>{
@@ -130,9 +128,8 @@ export default{
                 router.push({ name: "acceso"})
             }else if (typeof response==='undefined' || !response.ok){  
                 console.log(store.getters.erroresResponse(response));
-            }else if(response.ok){
-                console.log('Proceso Completado!');
             }
+
             ok = response.ok; 
             return response.json();
         }).then(response =>{
@@ -168,9 +165,8 @@ export default{
                 router.push({ name: "acceso"})
             }else if (typeof response==='undefined' || !response.ok){  
                 console.log(store.getters.erroresResponse(response));
-            }else if(response.ok){
-                console.log('Proceso Completado!');
             }
+            
             ok = response.ok; 
             return response.json();
         }).then(response =>{
