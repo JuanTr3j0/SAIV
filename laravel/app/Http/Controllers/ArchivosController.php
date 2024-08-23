@@ -30,7 +30,7 @@ class ArchivosController extends Controller
 
         try {
 
-            $caso = Casos::whereRaw('md5(id) ="'.$request->key.'"')->first()->id;
+            $caso = Casos::whereRaw('SHA1(id) ="'.$request->key.'"')->first()->id;
 
             $caso ??= null;
 
@@ -38,10 +38,11 @@ class ArchivosController extends Controller
 
             if($caso !== null) {
 
-                
+             
 
                 $respuesta = $this->cargarArchivo($request);                
 
+                
                 if($respuesta !== null){
 
                     
@@ -101,9 +102,9 @@ class ArchivosController extends Controller
 
     public function showArchivosCasos($key){
 
-        return ArchivosCasos::whereRaw('md5(caso_fk)="'.$key.'"')
+        return ArchivosCasos::whereRaw('SHA1(caso_fk)="'.$key.'"')
 
-        ->select ([DB::raw('md5(archivos.id) as key'), 'archivos.nombre_unico as archivo'])
+        ->select ([DB::raw('SHA1(archivos.id) as key'), 'archivos.nombre_unico as archivo'])
 
         ->join('archivos','archivos.id','=', 'archivos_casos.archivo_fk')->get();
 
@@ -113,7 +114,7 @@ class ArchivosController extends Controller
 
     public function descargarArchivo($key){
 
-        $query = Archivos::whereRaw('md5(id)="'.$key.'"');
+        $query = Archivos::whereRaw('SHA1(id)="'.$key.'"');
 
         if($query->exists()){
 
@@ -139,7 +140,7 @@ class ArchivosController extends Controller
 
         try{
 
-            $query = Archivos::whereRaw('md5(id)="'.$key.'"')->first();
+            $query = Archivos::whereRaw('SHA1(id)="'.$key.'"')->first();
 
 
 
@@ -175,7 +176,7 @@ class ArchivosController extends Controller
 
     public function eliminarArchivoCaso($key){
 
-        ArchivosCasos::whereRaw('md5(archivos_casos.archivo_fk) ="'.$key.'"')->delete();
+        ArchivosCasos::whereRaw('SHA1(archivos_casos.archivo_fk) ="'.$key.'"')->delete();
 
         return response()->json($this->eliminarArchivo($key));
 

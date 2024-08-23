@@ -408,7 +408,7 @@ class CasosController extends Controller
             $caso->institucion_remitente_otra   = $request->institucionRemitenteOtra;
             $caso->municipio_ocurrencia_fk      = $request->municipioOcurrencia;
             $caso->circunstancia_del_hecho      = $request->circunstanciaDelHecho;
-
+            
             // Llaves Foreaneas
             if($_victima!==null) $caso->victima_fk = $_victima->id;
             if($_responsable!==null) $caso->responsable_fk = $_responsable->id;

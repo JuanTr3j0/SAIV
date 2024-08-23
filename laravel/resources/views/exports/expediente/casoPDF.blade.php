@@ -164,7 +164,7 @@
 
                     <tr>
                         <th scope="row">Dui</th>
-                        <td>{{$victima['dui']['label'] }}</td>
+                        <td>{{ $victima['dui']['label'] != null ? $victima['dui']['label'] : "No ingresado" }}</td>
                     </tr>
                     <tr>
                         <th scope="row">Estado familiar</th>
@@ -481,7 +481,7 @@
                             <td>
                         <tr>
                             <th scope="row">Nombre de archivo</th>
-                            <td>{{ $archivo }}</td>
+                            <td>{{ $archivo["nombre_original"] }}</td>
                         </tr>
 
                         </td>

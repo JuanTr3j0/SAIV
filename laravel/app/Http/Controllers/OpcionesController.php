@@ -102,7 +102,7 @@ class OpcionesController extends Controller
 
             "tipoAsistencia"            => $tiposAsistencia,
 
-         //   "tiposViolencia"            => $tiposViolencia,
+            "tiposViolencia"            => $tiposViolencia,
 
             "delitoCodigoPenal"         => $delitoCodigoPenal,
 

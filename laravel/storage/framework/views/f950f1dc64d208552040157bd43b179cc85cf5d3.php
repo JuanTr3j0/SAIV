@@ -165,7 +165,7 @@
 
                     <tr>
                         <th scope="row">Dui</th>
-                        <td><?php echo e($victima['dui']['label']); ?></td>
+                        <td><?php echo e($victima['dui']['label'] != null ? $victima['dui']['label'] : "No ingresado"); ?></td>
                     </tr>
                     <tr>
                         <th scope="row">Estado familiar</th>
@@ -485,7 +485,7 @@
                             <td>
                         <tr>
                             <th scope="row">Nombre de archivo</th>
-                            <td><?php echo e($archivo); ?></td>
+                            <td><?php echo e($archivo["nombre_original"]); ?></td>
                         </tr>
 
                         </td>
