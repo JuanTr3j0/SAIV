@@ -63,7 +63,7 @@ class CasosController extends Controller
                 ),
                 'casos.denuncia',
                 DB::raw("CONCAT(`casos`.`denuncia`, ' ', LPAD(`casos`.`correlativo`, 3, '0'), '-', LPAD(casos.mes, 2, '0'), '-', casos.anio)"),
-                'tipos_violencia',
+                'casos.id', //se paso a multiple
                 'modalidad_violencia',
                 'delito_codigo_penal',
                 'institucion_remitente',
