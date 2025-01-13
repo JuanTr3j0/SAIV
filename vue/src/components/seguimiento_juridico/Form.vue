@@ -6,13 +6,13 @@
                     <div class="col-md-12 mt-2">
                         <h3 class="align-text-bottom"><i class='bx bxs-certification bx-md ' ></i>Seguimiento Jurídico</h3>                            
                     </div>                    
-                    <slot name="codigo-caso"/>      
+                    <slot name="codigo-caso"/>  
                     <!--Forman Parte de las Opciones de Atención Brindada-->
                     <FormSelectOpcionVue  v-show="atencionBrindadaSubMenu.length>0"
                         :id="id+'-atencion-brindada-sub-menu'" 
                         :nombre="'Atención Brindada (Sub Menú)'"
                         :opciones="atencionBrindadaSubMenu"
-                        :clases="['col-md-2']" :loading="loading" :showVer="showVer ?? false"
+                        :clases="['col-md-2']" :loading="false" :showVer="showVer ?? false"
                         v-model:opcion="formulario.atencionBrindadaSubMenu"
                         @change="
                             handleShowAtencionBrindadaOtro(); 

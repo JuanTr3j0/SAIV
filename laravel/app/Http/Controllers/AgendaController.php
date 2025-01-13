@@ -31,7 +31,7 @@ class AgendaController extends Controller
 
             if($validator->fails()) { return response()->json(['error'=>$validator->errors()->all()]); }
 
-            $agenda = Agenda::whereRaw('SHA1(id) like "' . $request->key.'"')->first();
+            $agenda = Agenda::whereRaw('SHA1(id)  = "' . $request->key.'"')->first();
             $agenda ??= new Agenda();
             $agenda -> title    =   $request -> titulo;
             $agenda -> modulo   =   $request -> modulo;
@@ -60,7 +60,7 @@ class AgendaController extends Controller
     public function destroy(Request $request)
     {
         try{
-            $ok = Agenda::whereRaw('SHA1(id) like "'.$request->key.'"')->update(['estado'=> false]);
+            $ok = Agenda::whereRaw('SHA1(id)  = "'.$request->key.'"')->update(['estado'=> false]);
             if($ok){
                 return response()->json(
                     [

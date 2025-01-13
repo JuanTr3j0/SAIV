@@ -4,31 +4,17 @@
 
 use App\Http\Controllers\PdfController;
 use Illuminate\Support\Facades\Route;
-
-
-
 use App\Http\Controllers\AuthController;
-
 use App\Http\Controllers\ExcelController;
-
 use App\Http\Controllers\CasosController;
-
 use App\Http\Controllers\AgendaController;
-
 use App\Http\Controllers\GraficasController;
-
 use App\Http\Controllers\LudotecaController;
-
 use App\Http\Controllers\OpcionesController;
-
 use App\Http\Controllers\ArchivosController;
-
 use App\Http\Controllers\ProgramacionController;
-
 use App\Http\Controllers\BitacoraErroresController;
-
 use App\Http\Controllers\SeguimientoJuridicoController;
-
 use App\Http\Controllers\AtencionMenoresEdadController;
 use App\Http\Controllers\PersonaController;
 

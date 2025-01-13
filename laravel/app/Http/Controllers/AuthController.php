@@ -62,7 +62,7 @@ class AuthController extends Controller
 
         //Obtener usuario mediante su key SHA1 si existe
 
-        $_usuario  = User::select('id')->whereRaw("SHA1(id) like '".$request->key."'")->first();
+        $_usuario  = User::select('id')->whereRaw("SHA1(id)  = '".$request->key."'")->first();
 
         $_id_usuario = is_null($_usuario)? null : $_usuario->id; 
 
@@ -627,7 +627,7 @@ class AuthController extends Controller
 
             $user = User::select($select)
 
-                ->whereRaw('SHA1(id) like "'.$key.'"')
+                ->whereRaw('SHA1(id)  = "'.$key.'"')
 
             ->first();
 
@@ -635,7 +635,7 @@ class AuthController extends Controller
 
                 $permisos = [];
 
-                $_user = User::select('id')->whereRaw('SHA1(id) like "'.$user->key.'"')->first();
+                $_user = User::select('id')->whereRaw('SHA1(id)  = "'.$user->key.'"')->first();
 
                 /*
                 foreach ($this->getPermisos() as $key0 => $value0) {
@@ -779,7 +779,7 @@ class AuthController extends Controller
 
     public function destroy($key){
 
-        $user = User::whereRaw('SHA1(id) like "'.$key.'"')->first();
+        $user = User::whereRaw('SHA1(id)  = "'.$key.'"')->first();
 
         $user -> estado = !boolval($user->estado);
 

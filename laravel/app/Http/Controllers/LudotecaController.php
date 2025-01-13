@@ -505,7 +505,7 @@ class LudotecaController extends Controller
 
 
 
-            $ludoteca = Ludoteca::whereRaw('SHA1(id) like "' . $request->key . '"')->first();
+            $ludoteca = Ludoteca::whereRaw('SHA1(id)  = "' . $request->key . '"')->first();
 
             $ludoteca ??= new Ludoteca();
 
@@ -678,7 +678,7 @@ class LudotecaController extends Controller
 
 
 
-            $ludoteca = $ludoteca::select($select)->whereRaw('SHA1(id) like "'.$_key.'"')->first();
+            $ludoteca = $ludoteca::select($select)->whereRaw('SHA1(id)  = "'.$_key.'"')->first();
 
             $ludoteca -> ninoAdolecente = $this->getPersona($ludoteca->ninoAdolecente);
 
@@ -786,7 +786,7 @@ class LudotecaController extends Controller
 
         try{
 
-            $_update = Ludoteca::whereRaw('SHA1(id) like "'.$request->key.'"')->update(['estado'=>false]);
+            $_update = Ludoteca::whereRaw('SHA1(id)  = "'.$request->key.'"')->update(['estado'=>false]);
 
             
 
