@@ -2,3 +2,5 @@
 !lapagin1_saiv.sql
 !.gitignore
 ./laravel/vendor/
+laravel/app/Http/Controllers/laravel.log
+laravel/storage/logs/laravel.log
