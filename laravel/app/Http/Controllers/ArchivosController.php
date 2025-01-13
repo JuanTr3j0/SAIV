@@ -112,7 +112,7 @@ class ArchivosController extends Controller
 
             $path = storage_path('app/public/archivos/');
             $nombre_original = $fileName;
-            $nombre_unico = uniqid() . '.' . pathinfo($nombre_original, PATHINFO_EXTENSION);
+            $nombre_unico = uniqid();
 
             // Crear el directorio si no existe
             if (!is_dir($path)) {
