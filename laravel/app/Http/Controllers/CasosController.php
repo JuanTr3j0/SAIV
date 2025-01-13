@@ -381,7 +381,7 @@ class CasosController extends Controller
             else if(intval($request->correlativo) <= 0)
                 return response()->json(['error'=>['El correlativo debe ser mayor que cero.']]);
             else
-                Casos::whereRaw('SHA1(id) like "'.$request->key.'"')->where('estado', true)->update(['correlativo' => intval($request->correlativo)]);
+                Casos::whereRaw('SHA1(id)  = "'.$request->key.'"')->where('estado', true)->update(['correlativo' => intval($request->correlativo)]);
         }
 
         try{

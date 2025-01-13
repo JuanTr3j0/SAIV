@@ -277,7 +277,7 @@ class AtencionMenoresEdadController extends Controller
 
                 else
 
-                    AtencionMenoresEdad::whereRaw('SHA1(id) like "'.$request->key.'"')->where('estado', true)->update(['correlativo' => intval($request->correlativo)]);
+                    AtencionMenoresEdad::whereRaw('SHA1(id)  = "'.$request->key.'"')->where('estado', true)->update(['correlativo' => intval($request->correlativo)]);
 
             }
 
@@ -425,7 +425,7 @@ class AtencionMenoresEdadController extends Controller
 
 
 
-            $atencion = AtencionMenoresEdad::select($select)->whereRaw('SHA1(id) like "'.$key.'"')->first();
+            $atencion = AtencionMenoresEdad::select($select)->whereRaw('SHA1(id)  = "'.$key.'"')->first();
 
 
 
@@ -543,7 +543,7 @@ class AtencionMenoresEdadController extends Controller
 
         try{
 
-           return AtencionMenoresEdad::whereRaw('SHA1(id) like "'. ($request->key ?? null).'"')->update(['estado' => false]);
+           return AtencionMenoresEdad::whereRaw('SHA1(id)  = "'. ($request->key ?? null).'"')->update(['estado' => false]);
 
         } catch (\Exception $e) {
 

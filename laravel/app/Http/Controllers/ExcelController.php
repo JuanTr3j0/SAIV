@@ -33,7 +33,7 @@ class ExcelController extends Controller
             //         "responsable_fk"
             //     ]
             // )
-            // ->whereRaw("SHA1(id) like '".($id ?? "null")."'")
+            // ->whereRaw("SHA1(id)  = '".($id ?? "null")."'")
             // ->where('estado', true)
             // ->first();
 
