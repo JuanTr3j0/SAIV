@@ -1,0 +1,7 @@
+*
+!data
+!laravel-excel
+data/*
+laravel-excel/*
+!.gitignore
+
