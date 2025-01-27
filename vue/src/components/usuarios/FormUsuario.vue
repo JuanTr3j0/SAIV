@@ -1,7 +1,7 @@
 <template>
     <div class="border border-2 border-light mx-0 p-1 rounded">
       <form>
-          <div class="card-body p-2 clearfix"> 
+          <div class="p-1 clearfix"> 
             <div class="container-fluid border border-2 border-primary rounded-3">
               <div class="col-md mt-2">
                   <h3 class="my-2"> <i class="bx bx-user bx-md"></i> Usuaria/o</h3>
@@ -10,11 +10,11 @@
                 <FormInput
                   :id="'usuario'"
                   :obligatorio="true"
-                :loading="loading"
+                  :loading="loading"
                   :clases="'col-md-6  mb-2'"
                   :showVer ="showVer"
                   :disabled="loading"
-                  :titulo="'Usuario'"
+                  :titulo="'Usuaria/o'"
                   v-model:value="formulario.usuario"
                 />
                 <FormInput
@@ -41,7 +41,7 @@
                 <FormSelectOpcion
                   :id="'usuario-tipo-usuario'"
                   :obligatorio = "true"
-                  :nombre = "'Tipo Usuario'"
+                  :nombre = "'Tipo'"
                   :clases = "['col-md-6', 'mb-2']"
                   :opciones = "['Usuaria/o', 'Administrador']"
                   :showVer = "showVer"

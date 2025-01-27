@@ -7,11 +7,13 @@
         <code v-if="obligatorio ?? false">*</code>{{ titulo }}
       </label>
       <template v-if="(showVer ?? false) !== true">
-        <input 
+        <div class="input-group">
+          <input 
+          autocomplete="off"
           :id="id ?? ''" 
           :readonly="showVer ?? false" 
           :disabled="(loading ?? false) || (disabled ?? false)" 
-          :type="type ?? 'text'" 
+          :type="((type ?? 'text') == 'password')? icon_input_password?'password':'text' :'text'"
           :value="value" 
           @input="updateValue"
           class="form-control" 
@@ -20,7 +22,12 @@
           :min="min ?? 0"
           :max="max ?? 200"
           v-bind="getMask(titulo) ? { 'v-mask': getMask(titulo) } : {}"
-        />
+          />
+          <button v-if="type === 'password'" type="button" class="btn btn-outline-secondary" id="togglePassword" @click = changeClickIconInputPassword()>
+              <i :class='"bx "+ (icon_input_password?"bxs-hide":"bxs-show")'></i>
+          </button>
+        </div>
+        
       </template>       
       <label v-else class="form-control fw-bold text-primary">
         {{ getValueFormat(value) }}
@@ -29,7 +36,7 @@
   </template>
   
   <script>
-  import { defineComponent } from 'vue';
+  import { defineComponent, ref } from 'vue';
   import { mask } from 'vue-the-mask';
   
   export default defineComponent({
@@ -81,25 +88,36 @@
           });
   
         return _value;
-      },getMask(title) {
-    switch (title) {
-      case 'Dui':
-        return '########-#';
-      case 'Tel. Casa':
-        return '####-####';
-        case 'Tel. Móvil':
-        return '####-####';
-      default:
-        return '';
-    }
-  }
+      },
+      getMask(title) {
+        switch (title) {
+          case 'Dui':
+            return '########-#';
+          case 'Tel. Casa':
+            return '####-####';
+            case 'Tel. Móvil':
+            return '####-####';
+          default:
+            return '';
+        }
+      }
     },
     setup(props, { emit }) {
+      
+      const icon_input_password = ref(true) 
+
+      const changeClickIconInputPassword = () => icon_input_password.value = !icon_input_password.value; 
+
       const updateValue = (event) => {
         emit('update:value', event.target.value);
       };
+
       return {
-        updateValue
+        //VARIABLES
+        icon_input_password,
+        //FUNCIONES
+        updateValue,
+        changeClickIconInputPassword
       };
     },
     directives: {

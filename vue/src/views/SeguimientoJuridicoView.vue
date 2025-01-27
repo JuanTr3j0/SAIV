@@ -66,14 +66,12 @@
         >
             <template v-slot:cardBody>
                 <Transition name="fade">
-                    
                     <Form ref="formSeguimientoJuridicoRef"                    
                         :loading="loading"
                         :showVer="showVer ?? false"
                         v-show="intercambiarForm"
                     >
                         <template v-slot:codigo-caso>
-                            <label>{{ "showVer:" + showVer + ", show:" + intercambiarForm + ", cargando:" + loading }}</label>
                             <div class="col-md-6">
                                 <label class=" fw-semibold d-block" for="caso-tipo-hecho">
                                     {{!showVer && !existKey() ? 'Busqueda y Selección del Caso': 'Código del Caso'}}
@@ -419,7 +417,6 @@ export default defineComponent({
 
         const cargarRegistro = async (json) => {
             try {
-                console.log(json)
                 if(typeof json.key === 'undefined')
                     return;
 
@@ -427,17 +424,9 @@ export default defineComponent({
                 formSeguimientoJuridicoRef.value.resetForm();
                 const seguimiento_juridico = await servicio.obtener('saiv/seguimiento/juridico/obtener/'+json.key);
                 cargando(false);
-
                 
-                
-                if (typeof seguimiento_juridico === 'undefined'){
-                    alert("Json Seguimiento Juridico Undefined")
+                if (typeof seguimiento_juridico === 'undefined')
                     return;
-                }
-
-                console.log("Start Seguimiento Juridico Json")
-                console.log(seguimiento_juridico)
-                console.log("End Seguimiento Juridico Json")
 
                 codigoCaso.value = seguimiento_juridico.codigoCaso;
                 formSeguimientoJuridicoRef.value.editForm(seguimiento_juridico);
