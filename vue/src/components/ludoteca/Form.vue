@@ -234,10 +234,10 @@ import AlertVue                 from '@/components/Alert.vue';
 import servicios from '@/services/crud';
 import store from '@/store';
 
-import { defineComponent, ref, reactive, onMounted } from 'vue'
+import { defineComponent, ref, reactive, onMounted, watch, props } from 'vue'
 export default defineComponent({
-    props:['showVer'],    
-    setup(){
+    props:['showVer', 'caso'],
+    setup(props){
         // Variables
         const id = ref('ludoteca-');
         const vue_style_select = ref('--vs-font-size: 0.9375rem;')
@@ -334,6 +334,45 @@ export default defineComponent({
             opciones.value??=null;
             loading.value = false;
         })
+
+        // Watch para detectar cambios en 'caso' (prop del componente)
+        watch(() => props.caso, (nuevoValor, viejoValor) => {
+
+            Object.assign(formulario.responsable, JSON.parse(JSON.stringify(form.responsable)));
+            Object.assign(formulario.ninoAdolecente, JSON.parse(JSON.stringify(form.responsable)));
+           
+            if (nuevoValor === null || nuevoValor.responsable.key === null)
+                return
+            else{
+                let responsable = nuevoValor.responsable
+                let dui = typeof responsable.dui === 'object'? responsable.dui.label: responsable.dui
+                formulario.responsable.dui             = dui            
+                formulario.responsable.telefonoCasa    = responsable.telefonoCasa  
+                formulario.responsable.empresaMovil    = responsable.empresa  
+                formulario.responsable.primerNombre    = responsable.primerNombre   
+                formulario.responsable.telefonoMovil   = responsable.telefonoMovil  
+                formulario.responsable.segundoNombre   = responsable.segundoNombre  
+                formulario.responsable.primerApellido  = responsable.primerApellido 
+                formulario.responsable.nivelEducacion  = responsable.nivelEducacion 
+                formulario.responsable.segundoApellido = responsable.segundoApellido
+                formulario.responsable.fechaNacimiento = responsable.fechaNacimiento
+                formulario.responsable.areaResidencial = responsable.zonaResidencial
+                
+                let nino = nuevoValor.victima
+                formulario.ninoAdolecente.telefonoCasa    = nino.telefonoCasa  
+                formulario.ninoAdolecente.empresaMovil    = nino.empresa  
+                formulario.ninoAdolecente.primerNombre    = nino.primerNombre   
+                formulario.ninoAdolecente.telefonoMovil   = nino.telefonoMovil  
+                formulario.ninoAdolecente.segundoNombre   = nino.segundoNombre  
+                formulario.ninoAdolecente.primerApellido  = nino.primerApellido 
+                formulario.ninoAdolecente.nivelEducacion  = nino.nivelEducacion ?? 'Seleccione'
+                formulario.ninoAdolecente.segundoApellido = nino.segundoApellido
+                formulario.ninoAdolecente.fechaNacimiento = nino.fechaNacimiento
+                formulario.ninoAdolecente.areaResidencial = nino.zonaResidencial  
+            }
+
+        });
+        
         return {
             // Variables
             vue_style_select,

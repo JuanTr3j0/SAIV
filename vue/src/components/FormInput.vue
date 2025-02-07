@@ -7,13 +7,13 @@
         <code v-if="obligatorio ?? false">*</code>{{ titulo }}
       </label>
       <template v-if="(showVer ?? false) !== true">
-        <div class="input-group">
+        <div :class="((type ?? 'text') == 'password')? icon_input_password?'input-group':'' :''">
           <input 
           autocomplete="off"
           :id="id ?? ''" 
           :readonly="showVer ?? false" 
           :disabled="(loading ?? false) || (disabled ?? false)" 
-          :type="((type ?? 'text') == 'password')? icon_input_password?'password':'text' :'text'"
+          :type="((type ?? 'text') == 'password')? icon_input_password?'password':'text' :type"
           :value="value" 
           @input="updateValue"
           class="form-control" 
