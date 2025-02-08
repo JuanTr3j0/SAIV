@@ -105,6 +105,13 @@ export default defineComponent({
                     icono:"bx bxs-food-menu bx-sm  bx-burst-hover mx-2",
                     acceso:nivel_3
                 },
+                {
+                    tipo:"item",
+                    text:"Atención psicológica",	
+                    url:"/saiv/atencion-psicologica",
+                    icono:"bx bx bx-brain  bx-sm  bx-burst-hover mx-2",
+                    acceso:nivel_3
+                },
                
                 { 
                     tipo:"encabezado",    
