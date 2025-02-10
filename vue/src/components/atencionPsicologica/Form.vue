@@ -1,0 +1,275 @@
+<template>
+    <div class="card clearfix">
+        <div class="card-body">
+            <form action="">
+                <div class="row py-1 gy-2 mt-1 border border-2 border-primary rounded-3">
+                    <div class="col-md-12 mt-2">
+                        <h3 class="align-text-bottom"><i class='bx bxs-certification bx-md'></i>Atención psicológica
+                        </h3>
+                    </div>
+                    <slot name="codigo-caso" />
+
+                    <label class="fw-semibold d-block">
+                        <i class='bx bx-caret-right'></i> Nombre de usuaria
+                    </label>
+                    <FormNombreApellidoVue :showVer="showVer ?? false" :loading="loading"
+                        :primerNombre="formulario.ninoAdolecente.primerNombre"
+                        :segundoNombre="formulario.ninoAdolecente.segundoNombre"
+                        :primerApellido="formulario.ninoAdolecente.primerApellido"
+                        :segundoApellido="formulario.ninoAdolecente.segundoApellido"
+                        @update:primerNombre="value => updateCampoValue(value, 'ninoAdolecente', 'primerNombre')"
+                        @update:segundoNombre="value => updateCampoValue(value, 'ninoAdolecente', 'segundoNombre')"
+                        @update:primerApellido="value => updateCampoValue(value, 'ninoAdolecente', 'primerApellido')"
+                        @update:segundoApellido="value => updateCampoValue(value, 'ninoAdolecente', 'segundoApellido')">
+                    </FormNombreApellidoVue>
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <label class="fw-semibold d-block" for="fecha-nacimiento">Fecha y hora de atencion</label>
+                            <div class="row">
+                                <div class="col-md">
+                                    <FormInputVue :id="id + '-telefono-casa-responsable'" :titulo="'Fecha y Hora:'"
+                                        :loading="loading" :showVer="showVer" :type="'datetime-local'"
+                                        :clases="['input-group', 'my-2']"
+                                        v-model:value="formulario.tipoAtencion_fecha_hora" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <FormSelectOpcionVue :id="id + 'parentesco-responsable'" :nombre="'Objetivo de la sesión'"
+                            :opciones="opciones === null ? [] : opciones.parentescoResponsable" :clases="['col']"
+                            :loading="loading" :showVer="showVer ?? false"
+                            v-model:opcion="formulario.parentescoResponsable"
+                            @change="if (formulario.parentescoResponsable !== 'Otro') formulario.parentescoResponsableOtro = null;">
+                        </FormSelectOpcionVue>
+
+                        <FormInputVue :id="id + '-dui-responsable'" :titulo="'Otro (Especifique)'" :loading="loading"
+                            :showVer="showVer" :clases="['col']" v-model:value="formulario.responsable.dui" />
+                    </div>
+                    <div class="row mt-2">
+                        <FormSelectOpcionVue :id="id + '-area-residencial'" :nombre="'Situación actual del caso'"
+                            :opciones="opciones === null ? [] : opciones.zonaResidencial" :clases="['col']"
+                            :loading="loading" :showVer="showVer ?? false"
+                            v-model:opcion="formulario.responsable.areaResidencial"></FormSelectOpcionVue>
+
+                    </div>
+                    <div class="row mt-4">
+                        <label class="fw-semibold d-block">
+                            <i class='bx bx-caret-right'></i>Valoraciones y Observaciones profesionales:
+                        </label>
+
+                        <div class="col-md">
+                            <textarea class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <label class="fw-semibold d-block">
+                            <i class='bx bx-caret-right'></i>Recomendaciones:
+                        </label>
+                       
+                            <div class="col-md">
+                                <textarea class="form-control" />
+                            </div>
+
+                    </div>
+                        <div class="row mt-4 mb-4">
+                            <FormSelectOpcionVue :id="id + 'parentesco-responsable'" :nombre="'Referir a:'"
+                                :opciones="opciones === null ? [] : opciones.parentescoResponsable" :clases="['col']"
+                                :loading="loading" :showVer="showVer ?? false"
+                                v-model:opcion="formulario.parentescoResponsable"
+                                @change="if (formulario.parentescoResponsable !== 'Otro') formulario.parentescoResponsableOtro = null;">
+                            </FormSelectOpcionVue>
+
+                            <FormInputVue :id="id + '-dui-responsable'" :titulo="'Otro (Especifique)'" :loading="loading"
+                                :showVer="showVer" :clases="['col']" v-model:value="formulario.responsable.dui" />
+                        </div>
+
+                        <div class="px-2">
+                            <AlertVue :mensajesAlert="mensajesAlert" :alert="tipoAlert"></AlertVue>
+                        </div>
+                    </div>
+               
+                <ButtonsFormVue :showVer="showVer ?? false" :loading="loading" :showSig="false" :showAnt="false"
+                    @guardar="guardar">
+                    <template v-slot:nuevo-button>
+                        <slot name="nuevo-button" />
+                    </template>
+                </ButtonsFormVue>
+            </form>
+        </div>
+    </div>
+</template>
+<script>
+import FormSelectOpcionVue from '@/components/FormSelectOpcion.vue';
+import FormNombreApellidoVue from '@/components/FormNombreApellido.vue'
+import ButtonsFormVue from '@/components/ButtonsForm.vue';
+import FormInputVue from '@/components/FormInput.vue';
+import labelShowVer from '@/components/labelShowVer.vue';
+import AlertVue from '@/components/Alert.vue';
+
+import servicios from '@/services/crud';
+import store from '@/store';
+
+import { defineComponent, ref, reactive, onMounted } from 'vue'
+export default defineComponent({
+    props: ['showVer'],
+    setup() {
+        // Variables
+        const id = ref('atencion-psicologica-');
+        const vue_style_select = ref('--vs-font-size: 0.9375rem;')
+        const loading = ref(false);
+        const tipoAlert = ref(null);
+        const opciones = ref(null);
+        const mensajesAlert = ref(null);
+        const form = {
+            key: null,
+            codigoCaso: null,
+            tipoViolencia: [],
+            ninoAdolecente: {
+                key: null,
+                dui: null,
+                primerNombre: null,
+                segundoNombre: null,
+                primerApellido: null,
+                segundoApellido: null,
+                fechaNacimiento: null,
+                nivelEducacion: null,
+                areaResidencial: null,
+                telefonoMovil: null,
+                empresaMovil: null,
+                telefonoCasa: null,
+            },
+            responsable: {
+                key: null,
+                dui: null,
+                primerNombre: null,
+                segundoNombre: null,
+                primerApellido: null,
+                segundoApellido: null,
+                fechaNacimiento: null,
+                nivelEducacion: null,
+                areaResidencial: null,
+                telefonoMovil: null,
+                empresaMovil: null,
+                telefonoCasa: null,
+            },
+            parentescoResponsable: null,
+            parentescoResponsableOtro: null,
+            tipoAtencion: null,
+            tipoAtencion_fecha_hora: null,
+            orientacionResponsables: null,
+            orientacionResponsables_fecha_hora: null,
+            proximaCita: null,
+        };
+        const formulario = reactive(JSON.parse(JSON.stringify(form)));
+
+        // Metodos
+        function resetForm() {
+            tipoAlert.value = null;
+            mensajesAlert.value = null;
+            loading.value = false;
+            Object.assign(formulario, JSON.parse(JSON.stringify(form)));
+        };
+
+        function editForm(_form) {
+            Object.assign(formulario, JSON.parse(JSON.stringify(_form)));
+        };
+
+        const existKey = () => { return formulario.key !== null };
+        const handleChangeCodigoCaso = _CodigoCaso => formulario.codigoCaso = _CodigoCaso;
+        const handleChangeLoading = _loading => loading.value = _loading;
+        const guardar = async () => {
+            try {
+                loading.value = true;
+                const responseSeguimiento = await servicios.actualizarCrear(formulario, 'saiv/atencion-psicologica/guardar');
+                if (responseSeguimiento.ok) {
+                    if (responseSeguimiento.json.error) {
+                        tipoAlert.value = 'warning';
+                        mensajesAlert.value = responseSeguimiento.json.error;
+                    } else {
+                        formulario.ninoAdolecente.key = responseSeguimiento.json.ninoAdolecenteKey;
+                        formulario.responsable.key = responseSeguimiento.json.responsableKey;
+                        formulario.key = responseSeguimiento.json.key;
+                        tipoAlert.value = null;
+                        mensajesAlert.value = null;
+                    }
+                }
+                loading.value = false;
+            } catch (error) {
+                console.log('¡Ups ocurrió un error!, no se pudo guardar el registro ludoteca');
+                console.log(error)
+                loading.value = false;
+            }
+        };
+
+        onMounted(async () => {
+            loading.value = true;
+            let response = await servicios.obtener('saiv/opciones/ludoteca/index');
+            opciones.value = response;
+            opciones.value ??= null;
+            loading.value = false;
+        })
+        return {
+            // Variables
+            vue_style_select,
+            mensajesAlert,
+            formulario,
+            tipoAlert,
+            opciones,
+            loading,
+            id,
+
+            //Metodos
+            handleChangeCodigoCaso,
+            handleChangeLoading,
+            resetForm,
+            editForm,
+            existKey,
+            guardar,
+        }
+    },
+    components: {
+        AlertVue,
+        FormInputVue,
+        labelShowVer,
+        ButtonsFormVue,
+        FormSelectOpcionVue,
+        FormNombreApellidoVue,
+    },
+    methods: {
+        //Metodos
+        getEdadString(fechaNacimiento) {
+            if (fechaNacimiento === null) {
+                return '?';
+            }
+            let edad = this.calcularEdad(fechaNacimiento);
+            return edad > 0 && edad < 120 ? edad + ' Años ' : '?';
+        },
+        getEdadInt(fechaNacimiento) {
+            let edad = this.calcularEdad(fechaNacimiento);
+            return edad > 0 && edad < 120 ? edad : 0;
+        },
+        calcularEdad(setFechaNacimiento) {
+            if (setFechaNacimiento === null || typeof setFechaNacimiento === "undefined")
+                return null;
+
+            let fechaArray = setFechaNacimiento.split('-');
+            let hoy = new Date()
+            let fechaNacimiento_aux = new Date(fechaArray[0], fechaArray[1] - 1, fechaArray[2])
+            let edad_aux = hoy.getFullYear() - fechaNacimiento_aux.getFullYear()
+            let diferenciaMeses = hoy.getMonth() - fechaNacimiento_aux.getMonth()
+
+            if (
+                diferenciaMeses < 0 ||
+                (diferenciaMeses === 0 && hoy.getDate() < fechaNacimiento_aux.getDate())
+            ) {
+                edad_aux--
+            }
+            return edad_aux;
+        },
+        updateCampoValue(value, key_0, key_1) {
+            this.formulario[key_0][key_1] = value;
+        },
+    },
+})
+</script>

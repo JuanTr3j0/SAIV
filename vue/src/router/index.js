@@ -43,6 +43,10 @@ const routes = [
         name: 'camaraGessell',
         component: () => import('../views/CamaraGessellView.vue'),
       },{
+        path: '/saiv/atencion-psicologica',
+        name: 'atencionPsicologica',
+        component: () => import('../views/AtencionPsicologicaView.vue'),
+      },{
         path: '/saiv/testeo',
         name: 'testeo',
         component: () => import('../views/AuxTest.vue'),
