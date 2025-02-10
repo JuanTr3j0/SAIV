@@ -100,12 +100,18 @@ export default defineComponent({
                 },
                 {
                     tipo:"item",
+                    text:"Atención Psicologica",
+                    url:"/saiv/atencion/psicologica",
+                    icono:"bx bxs-brain bx-sm  bx-burst-hover mx-2",
+                    acceso:nivel_3
+                },
+                {
+                    tipo:"item",
                     text:"Cámara Gesell",
                     url:"/saiv/camara/gessell",
                     icono:"bx bxs-food-menu bx-sm  bx-burst-hover mx-2",
                     acceso:nivel_3
                 },
-               
                 { 
                     tipo:"encabezado",    
                     text:"Administración",      

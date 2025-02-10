@@ -1,6 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import store from '@/store'
-
 const routes = [
   { path: '/:pathMatch(.*)*', component: () => import('../views/PathNotFound') }, // 404
   {
@@ -68,6 +66,10 @@ const routes = [
         path: '/bitacora/errores',
         name: 'bitacoraErrores',
         component: () => import('../views/BitacoraErrores.vue'),
+      },{
+        path: '/saiv/atencion/psicologica',
+        name: 'atencionPsicologica',
+        component: () => import('../views/AtencionPsicologicaView.vue'),
       },
     ]
   }
