@@ -1,6 +1,7 @@
 <template>    
     <TabsVue :tabs="tabs" @selectedTab="selectedTab">
-        <template v-slot:informacion-victima>            
+        <template v-slot:informacion-victima>  
+                  
             <InformacionPersonalVue
                 :id="'victima'" 
                 ref="victimaRef"

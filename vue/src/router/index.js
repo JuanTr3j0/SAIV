@@ -71,6 +71,7 @@ const routes = [
         name: 'atencionPsicologica',
         component: () => import('../views/AtencionPsicologicaView.vue'),
       },
+    
     ]
   }
 ]

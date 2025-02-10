@@ -179,10 +179,10 @@ export default defineComponent({
                     formulario.correlativo = _response.json.correlativo;
                     tipoAlert.value = mensajesAlert.value = null;
                     
-                }
-                loading.value = false;                
+                }   
             } catch (error) {                
                 console.log('¡Ups ocurrio un error!, no se pudo guardar el registro seguimiento');
+            }finally{
                 loading.value = false;
             }
         }; 

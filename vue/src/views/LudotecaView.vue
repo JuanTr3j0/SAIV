@@ -68,9 +68,10 @@
                 <Transition name="fade">
                     <Form
                         ref="formLudotecaRef"                    
-                        :loading="loading"
-                        :showVer="showVer"
-                        v-show="intercambiarForm === 0"
+                        :loading    = "loading"
+                        :showVer    = "showVer"
+                        :caso       = "casoRef"
+                        v-show      = "intercambiarForm === 0"
                     >
                         <template v-slot:codigo-caso>
                             <div class="col-md-6">
@@ -209,7 +210,7 @@
     </div>
 </template>
 <script>
-import { defineComponent, ref, onMounted } from 'vue';
+import { defineComponent, ref, onMounted, reactive } from 'vue';
 // Servicios
 import store                from '@/store/index'
 import servicio             from '@/services/crud'
@@ -303,18 +304,21 @@ export default defineComponent({
         const codigoCaso        = ref(null);
         const intercambiarForm  = ref(0);
         const mensajeBorrar     = ref('Borrar el Registro, ¿Continuar?');  
+        const casoRef           = ref(null)
+
 
         // Ref
-        const modalLudotecaRef      = ref(null);
         const ActividadCalendarRef  = ref(null);
+        const modalLudotecaRef      = ref(null);
         const tablaLudotecaRef      = ref(null);
-        const formCasoRef           = ref(null);
+        const formHistoricoRef      = ref(null);
         const formLudotecaRef       = ref(null);
+        const fullcalendarRef       = ref(null);     
         const advertenciaRef        = ref(null);
         const modalBorrarRef        = ref(null);
-        const fullcalendarRef       = ref(null);     
         const modalAgendaRef        = ref(null);     
-        const formHistoricoRef      = ref(null);
+        const formCasoRef           = ref(null);
+
 
         // Metodos
         const handleChangedLoading = _loading => {
@@ -373,6 +377,7 @@ export default defineComponent({
                 formCasoRef.value.editForm(_caso);
                 formCasoRef.value.visibleTab('agresores', _caso.agresores.length > 0);
                 formCasoRef.value.visibleTab('responsables', _caso.responsable.key!== null);
+                casoRef.value =  _caso;
             }
         };
 
@@ -524,6 +529,7 @@ export default defineComponent({
             modalBorrarRef,
             modalAgendaRef,
             formCasoRef,
+            casoRef,
 
             // Variables
             intercambiarForm,

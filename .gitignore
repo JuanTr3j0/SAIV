@@ -1,0 +1,16 @@
+!lapagin1_saiv-03-2024.sql
+!lapagin1_saiv.sql
+./laravel/vendor/
+laravel/app/Http/Controllers/laravel.log
+laravel/storage/logs/laravel.log
+/storage/*
+!/storage/app
+!/storage/app/public
+/storage/*/*
+!/storage/framework
+!/storage/framework/cache
+!/storage/framework/cache/data
+!/storage/framework/sessions
+!/storage/framework/testing
+!/storage/framework/views
+/storage/logs/*

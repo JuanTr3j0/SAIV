@@ -35,7 +35,7 @@ class CasosController extends Controller
             $periodo = $request->periodo ?? 'Todos';
 
             $select = [
-                DB::raw('md5(`casos`.`id`)  as `key`'),
+                DB::raw('SHA1(`casos`.`id`)  as `key`'),
                 DB::raw('case when `casos`.`fecha_registro` is NULL
                     then
                         DATE_FORMAT(`casos`.`created_at`, "%d/%m/%Y %H:%i")
@@ -44,7 +44,7 @@ class CasosController extends Controller
                     end as "fechaRegistro"'
                 ),
                 DB::raw("concat(`casos`.`denuncia`,' ', LPAD(`casos`.`correlativo`,3,'0'), '-',LPAD( `casos`.`mes`,2,'0'), '-', `casos`.`anio`) as codigo"),
-                'tipos_violencia            as tiposViolencia',
+                'casos.id            as tiposViolencia', //se paso a multiple
                 'modalidad_violencia        as modalidadViolencia',
                 DB::raw(" date_format(casos.fecha_hecho, \"%d/%m/%Y\") as fechaHecho"),
                 'departamentos.departamento as departamento',
@@ -63,7 +63,7 @@ class CasosController extends Controller
                 ),
                 'casos.denuncia',
                 DB::raw("CONCAT(`casos`.`denuncia`, ' ', LPAD(`casos`.`correlativo`, 3, '0'), '-', LPAD(casos.mes, 2, '0'), '-', casos.anio)"),
-                'tipos_violencia',
+                'casos.id', //se paso a multiple
                 'modalidad_violencia',
                 'delito_codigo_penal',
                 'institucion_remitente',
@@ -157,19 +157,16 @@ class CasosController extends Controller
                     $paginado->orderBy('municipios.municipio', $columna->order);
             }
             
-            
-            
             if($request->filtro !== 'Todos' && $request->filtro!== null && $user_oficina !== 'ES'){
                 $tipo_caso = $request->filtro === 'Denuncia' ? tipo_denuncia()->denuncia:($request->filtro === 'Sin Denuncia' ? tipo_denuncia()->sin_denuncia : ($request->filtro === 'Diligencia' ? tipo_denuncia()->diligencia: null));
                 $paginado->whereRaw('casos.denuncia like "'.$tipo_caso.'"');
             }
           
-
             if($periodo !== 'Todos')
                 $paginado->where('casos.anio', intval($periodo));
-            #return $paginado->toSql();
+        
             $paginado = $paginado->paginate($por_pagina);
-
+            #return $paginado->toSql();
             $paginado->getCollection()->transform( function($value){
 
                 $value -> institucionDondeSeRemite = InstitucionSeRemitira::where('caso_fk', $value -> institucionDondeSeRemite)
@@ -179,13 +176,28 @@ class CasosController extends Controller
 
                 return $value;
             });
+            
+            $paginado->getCollection()->transform( function($value){
 
+                $value -> tiposViolencia = CasosTiposViolencia::
+                where('casos_tipos_violencias.casos_fk', $value -> tiposViolencia)
+                ->select('tipo_violencia')
+                ->join('tipo_violencias','tipos_violencia_fk','=','tipo_violencias.id')
+                    // ->whereRaw('SHA1(casos_tipos_violencias.casos_fk) = ?',[$value->key])
+                    ->get()
+                ->map(function($value){ return $value->tipo_violencia; });
+
+                return $value;
+            });
+
+          
             return  $paginado;
             
         }catch (\Exception $e) {
             bitacora_errores('CasosController.php', $e);
             return response()->json(['error' => 'Linea -> '.$e->getLine().' Error -> '.$e->getMessage()]);
         }
+
     }
 
     public function indexSelect(Request $request){
@@ -194,7 +206,7 @@ class CasosController extends Controller
             $por_pagina ??= 10;
 
             $select = [
-                DB::raw('md5(`casos`.`id`)  as `key`'),
+                DB::raw('SHA1(`casos`.`id`)  as `key`'),
                 DB::raw("concat(`casos`.`denuncia`,' ', LPAD(`casos`.`correlativo`,3,'0'), '-',LPAD( `casos`.`mes`,2,'0'), '-', `casos`.`anio`) as label"),
             ];
 
@@ -348,8 +360,8 @@ class CasosController extends Controller
         $validator = Validator::make($request->all(), $this->reglasVictima($edadVictima), $this->mensajesVictima());
         if($validator->fails()) { return response()->json(['error'=>$validator->errors()->all()]); }
 
-        $__responsable = (object)$request->responsable;
-        $edadResponsable= edad($__responsable->fechaNacimiento);
+        //$__responsable = (object)$request->responsable;
+        //$edadResponsable= edad($__responsable->fechaNacimiento);
 
         $validator = Validator::make($request->all(), $this->reglasReponsable(), $this->mensajesReponsable());
         if($validator->fails()) { return response()->json(['error'=>$validator->errors()->all()]); }
@@ -358,7 +370,7 @@ class CasosController extends Controller
         //     return response()->json(['error'=>['El responsable debe ser mayor de edad (edad: '.intval($edadResponsable).' años).']]);
         
         if($request -> correlativo !== null){
-            $correlativoExist = Casos::whereRaw('md5(id) not like "'.$request->key.'"')
+            $correlativoExist = Casos::whereRaw('SHA1(id) not like "'.$request->key.'"')
                 ->where('denuncia', $request->denuncia)
                 ->where('anio', $request->anio)
                 ->where('correlativo', $request->correlativo)
@@ -369,16 +381,15 @@ class CasosController extends Controller
             else if(intval($request->correlativo) <= 0)
                 return response()->json(['error'=>['El correlativo debe ser mayor que cero.']]);
             else
-                Casos::whereRaw('md5(id) like "'.$request->key.'"')->where('estado', true)->update(['correlativo' => intval($request->correlativo)]);
+                Casos::whereRaw('SHA1(id)  = "'.$request->key.'"')->where('estado', true)->update(['correlativo' => intval($request->correlativo)]);
         }
 
-        try {
-            $caso = Casos::whereRaw('md5(`casos`.`id`)="'.trim($request->key).'"')->where('estado', true)->first();
-            $caso ??= new Casos;
+        try{
+            $caso = Casos::whereRaw('SHA1(`casos`.`id`) = ?', [trim($request->key)])->where('estado', true)->first();
+            $caso ??= new Casos();
 
             $_victima = $this->actualizarCrearPersona((object)$request->victima);
             $_responsable = $this->actualizarCrearPersona((object)$request->responsable);
-
 
             $fecha_registracion = $request->fechaRegistro===null?null:str_replace('T', ' ', $request->fechaRegistro);
             $caso->fecha_registro               = $fecha_registracion;
@@ -387,6 +398,7 @@ class CasosController extends Controller
             $caso->anio                         = intval($request->anio);
             $caso->fecha_hecho                  = $request->fechaHecho;
             $caso->hora_hecho                   = $request->horaHecho;
+            $caso->observaciones                = $request->observaciones;
             #$caso->tipos_violencia              = $request->tiposViolencia; // FUE CAMBIADO A DE SINGLE A MULTIPLE
             $caso->modalidad_violencia          = $request->modalidadViolencia;
             $caso->delito_codigo_penal          = $request->delitoCodigoPenal;
@@ -396,10 +408,11 @@ class CasosController extends Controller
             $caso->institucion_remitente_otra   = $request->institucionRemitenteOtra;
             $caso->municipio_ocurrencia_fk      = $request->municipioOcurrencia;
             $caso->circunstancia_del_hecho      = $request->circunstanciaDelHecho;
-
+            
             // Llaves Foreaneas
             if($_victima!==null) $caso->victima_fk = $_victima->id;
             if($_responsable!==null) $caso->responsable_fk = $_responsable->id;
+            
             // Crear o actualizar el caso en la base de datos
             $caso_guardado = $caso->save();
 
@@ -427,7 +440,7 @@ class CasosController extends Controller
 
             return response()->json([
                 "mensaje" => 'Exito, se registro el caso.',
-                "key" => DB::select(DB::raw("select md5(".$caso->id.") as 'key';"))[0]->key,
+                "key" => DB::select(DB::raw("select SHA1(".$caso->id.") as 'key';"))[0]->key,
                 "correlativo"=>$correlativo,
             ]);
 
@@ -448,9 +461,15 @@ class CasosController extends Controller
 
             $persona = null;
             //$persona = Persona::whereRaw('dui = "'.$_persona->dui.'"')->first();
-            $persona ??= Persona::whereRaw('md5(id) = "'.$_persona->key.'"')->first();
+            $persona = Persona::whereRaw('SHA1(id) = "'.$_persona->key.'"')->first();
             $persona ??= new Persona;
-            $persona->dui                           =  trim($_persona->dui);
+            
+            if($_persona->dui !== null){
+                $dui = (object)$_persona->dui;
+                $_persona -> dui = $dui -> label === 'N/A'? null : trim($dui->label);
+            }
+
+            $persona->dui                           =  $_persona->dui;
             $persona->fecha_nacimiento              =  $_persona->fechaNacimiento;
             $persona->primer_nombre                 =  ucfirst($_persona->primerNombre);
             $persona->segundo_nombre                =  ucfirst($_persona->segundoNombre);
@@ -490,17 +509,17 @@ class CasosController extends Controller
 
             // Ingreso registros nuevos Otras Personas (Hijos y OtrasPersonas)
             $hijos = $_persona->hijos ?? [];
-            foreach ($hijos as $key => $value) {
+            foreach ($hijos as $value) {
                 $this->updateCreateOtraPersona($persona->id, 'hijo', (object)$value);
             }
 
             $otras_personas = $_persona->otrasPersonas ?? [];
-            foreach ($otras_personas as $key => $value) {
+            foreach ($otras_personas as $value) {
                 $this->updateCreateOtraPersona($persona->id, 'otra', (object)$value);
             }
 
             // Ingreso registros de opciones multiples Fuente de Ingreso
-            foreach ($_persona->fuenteIngresos as $key => $value) {
+            foreach ($_persona->fuenteIngresos as $value) {
                 Ingresos::updateOrCreate(
                     [
                         'fuente_ingreso'=> $value,
@@ -578,7 +597,7 @@ class CasosController extends Controller
 
             AgresoresCasos::where('caso_fk', $caso->id)->delete();
 
-            foreach ($_agresores as $key => $value) {
+            foreach ($_agresores as $value) {
                 $_agresor = (object)$value;
 
                 AgresoresCasos::updateOrCreate([
@@ -615,7 +634,7 @@ class CasosController extends Controller
     public function actualizarCrearInstitucionSeRemite($caso, $institucionSeRemite){
         try{
             InstitucionSeRemitira::where('caso_fk', $caso->id)->delete();
-            foreach ($institucionSeRemite as $key => $value) {
+            foreach ($institucionSeRemite as $value) {
                 InstitucionSeRemitira::updateOrCreate(["caso_fk" => $caso->id,"institucion" => $value]);
             }
         } catch (\Exception $e) {
@@ -652,7 +671,7 @@ class CasosController extends Controller
 
     public function actualizarCrearTipoAsistencia($caso, $tipoAsistencia){
         try{
-            foreach ($tipoAsistencia as $key => $value) {
+            foreach ($tipoAsistencia as $value) {
                 TipoAsistencia::updateOrCreate(["caso_fk" => $caso->id, "asistencia" => $value,]);
             }
         } catch (\Exception $e) {
@@ -665,7 +684,7 @@ class CasosController extends Controller
     public function destroy(Request $request)
     {
         try{
-            return Casos::whereRaw('md5(id)="'.$request->key.'"')->update(['estado' => false]);
+            return Casos::whereRaw('SHA1(id)="'.$request->key.'"')->update(['estado' => false]);
         }catch (\Exception $e) {
             bitacora_errores('CasosController.php', $e);
         }
@@ -678,7 +697,7 @@ class CasosController extends Controller
             $query = 'select casos.denuncia as denuncia, count(p.dui) as cantidad from casos
             right join personas p on casos.victima_fk = p.id';
 
-            $query .= $bool ? ' where p.dui like "'.$dui.'"' : ' where p.dui like "'.$dui.'" and md5(casos.id) not like "'.$key.'"';
+            $query .= $bool ? ' where p.dui like "'.$dui.'"' : ' where p.dui like "'.$dui.'" and SHA1(casos.id) not like "'.$key.'"';
             $query .=' group by casos.denuncia';
             return DB::select(DB::raw($query));
 

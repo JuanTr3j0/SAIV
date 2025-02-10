@@ -40,33 +40,38 @@ if (! function_exists('query_busqueda')) {
 
 
 
-if (! function_exists('getEnunms')) {
+if (!function_exists('getEnunms')) {
 
-    function getEnunms($tabla, $column){
+    function getEnunms($tabla, $column) {
+        try {
+            $result = \Illuminate\Support\Facades\DB::select(
+                \Illuminate\Support\Facades\DB::raw('SHOW COLUMNS FROM ' . $tabla . ' WHERE Field = ?'),
+                [$column]
+            );
 
-        $type = \Illuminate\Support\Facades\DB::select(\Illuminate\Support\Facades\DB::raw('SHOW COLUMNS FROM '.$tabla.' WHERE Field = "'.$column.'"'))[0]->Type;
+            // Validar si el resultado está vacío
+            if (empty($result)) {
+                throw new Exception("No se encontró la columna '{$column}' en la tabla '{$tabla}' o no es del tipo ENUM.");
+            }
 
-        
+            $type = $result[0]->Type;
 
-        preg_match('/^enum\((.*)\)$/', $type, $matches);
+            // Validar si el tipo es ENUM
+            if (!preg_match('/^enum\((.*)\)$/', $type, $matches)) {
+                throw new Exception("La columna '{$column}' no es del tipo ENUM.");
+            }
 
-        $values = array();
-
-
-
-        foreach(explode('\',', $matches[1]) as $value){
-
-            $values[] = trim($value, "'");
-
+            // Extraer y limpiar los valores
+            return array_map(function ($value) {
+                return trim($value, "'");
+            }, explode(',', $matches[1]));
+        } catch (Exception $e) {
+            // Manejo de errores
+            return ['error' => $e->getMessage()];
         }
-
-
-
-        return $values;
-
     }
-
 }
+
 
 
 

@@ -122,7 +122,7 @@ class LudotecaController extends Controller
 
             $select = [
 
-                DB::raw('md5(ludotecas.id) as "key"'),
+                DB::raw('SHA1(ludotecas.id) as "key"'),
 
                 DB::raw("concat(`casos`.`denuncia`,' ', LPAD(`casos`.`correlativo`,3,'0'), '-',LPAD( `casos`.`mes`,2,'0'), '-', `casos`.`anio`) as codigo"),
 
@@ -269,7 +269,7 @@ class LudotecaController extends Controller
 
             $select = [
 
-                DB::raw('md5(ludotecas.id) as "key"'),
+                DB::raw('SHA1(ludotecas.id) as "key"'),
 
                 DB::raw("concat(`casos`.`denuncia`,' ', LPAD(`casos`.`correlativo`,3,'0'), '-',LPAD( `casos`.`mes`,2,'0'), '-', `casos`.`anio`) as codigo"),
 
@@ -439,7 +439,7 @@ class LudotecaController extends Controller
 
             
 
-            $paginado->whereRaw('md5(casos.id) like ?', ($request->filtro ?? 'XXXX'));            
+            $paginado->whereRaw('SHA1(casos.id) like ?', ($request->filtro ?? 'XXXX'));            
 
 
 
@@ -501,11 +501,11 @@ class LudotecaController extends Controller
 
 
 
-            $caso_fk = Casos::whereRaw('md5(id) = "'.((object) $request -> codigoCaso) -> key.'"')->first()->id;
+            $caso_fk = Casos::whereRaw('SHA1(id) = "'.((object) $request -> codigoCaso) -> key.'"')->first()->id;
 
 
 
-            $ludoteca = Ludoteca::whereRaw('md5(id) like "' . $request->key . '"')->first();
+            $ludoteca = Ludoteca::whereRaw('SHA1(id)  = "' . $request->key . '"')->first();
 
             $ludoteca ??= new Ludoteca();
 
@@ -559,11 +559,11 @@ class LudotecaController extends Controller
 
                 "mensaje" => 'Exito, se guardo el registro.', 
 
-                "key" => DB::select(DB::raw("select md5(".$ludoteca->id.") as 'key';"))[0]->key,
+                "key" => DB::select(DB::raw("select SHA1(".$ludoteca->id.") as 'key';"))[0]->key,
 
-                "ninoAdolecenteKey" => DB::select(DB::raw("select md5(".$ludoteca->adolecente_nino_fk.") as 'key';"))[0]->key,
+                "ninoAdolecenteKey" => DB::select(DB::raw("select SHA1(".$ludoteca->adolecente_nino_fk.") as 'key';"))[0]->key,
 
-                "responsableKey" => DB::select(DB::raw("select md5(".$ludoteca->responsable_fk.") as 'key';"))[0]->key,
+                "responsableKey" => DB::select(DB::raw("select SHA1(".$ludoteca->responsable_fk.") as 'key';"))[0]->key,
 
             ]);
 
@@ -587,7 +587,7 @@ class LudotecaController extends Controller
 
             //$persona = Persona::whereRaw('dui = "'.$_persona->dui.'"')->first();
 
-            $persona ??= Persona::whereRaw('md5(id) = "'.$_persona->key.'"')->first();
+            $persona ??= Persona::whereRaw('SHA1(id) = "'.$_persona->key.'"')->first();
 
             $persona ??= new Persona;
 
@@ -648,7 +648,7 @@ class LudotecaController extends Controller
 
             $select = [
 
-                DB::raw('md5(id) as "key"'),
+                DB::raw('SHA1(id) as "key"'),
 
                 'caso_fk                                as codigoCaso',
 
@@ -678,7 +678,7 @@ class LudotecaController extends Controller
 
 
 
-            $ludoteca = $ludoteca::select($select)->whereRaw('md5(id) like "'.$_key.'"')->first();
+            $ludoteca = $ludoteca::select($select)->whereRaw('SHA1(id)  = "'.$_key.'"')->first();
 
             $ludoteca -> ninoAdolecente = $this->getPersona($ludoteca->ninoAdolecente);
 
@@ -688,7 +688,7 @@ class LudotecaController extends Controller
 
             $ludoteca -> codigoCaso = Casos::select([
 
-                DB::raw('md5(id) as "key"'), 
+                DB::raw('SHA1(id) as "key"'), 
 
                 DB::raw("CONCAT(`casos`.`denuncia`, ' ', LPAD(`casos`.`correlativo`, 3, '0'), '-', LPAD(casos.mes, 2, '0'), '-', casos.anio) as 'label'")]
 
@@ -726,7 +726,7 @@ class LudotecaController extends Controller
 
             $select = [
 
-                DB::raw('md5(id) as "key"'),
+                DB::raw('SHA1(id) as "key"'),
 
                 'dui               as  dui',
 
@@ -786,7 +786,7 @@ class LudotecaController extends Controller
 
         try{
 
-            $_update = Ludoteca::whereRaw('md5(id) like "'.$request->key.'"')->update(['estado'=>false]);
+            $_update = Ludoteca::whereRaw('SHA1(id)  = "'.$request->key.'"')->update(['estado'=>false]);
 
             
 

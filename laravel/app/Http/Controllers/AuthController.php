@@ -57,141 +57,82 @@ class AuthController extends Controller
      */
 
     public function signUp(Request $request)
-
     {
-
-        //Obtener usuario mediante su key md5 si existe
-
-        $_usuario  = User::select('id')->whereRaw("md5(id) like '".$request->key."'")->first();
-
+        //Obtener usuario mediante su key SHA1 si existe
+        $_usuario  = User::select('id')->whereRaw("SHA1(id)  = '".$request->key."'")->first();
         $_id_usuario = is_null($_usuario)? null : $_usuario->id; 
 
-        /* Este es un método de validación que verifica si el usuario ha ingresado la información
-
-        requerida. Si el usuario no ha ingresado la información requerida, el usuario recibirá un
-
-        mensaje de error. */
-
-
-
-        $validator = Validator::make($request->all(),([
-
-            'usuario'       =>  'required',
-
-            'correo'        =>  ['required','email:rfc,dns','max:25','string','unique:users,email'.(is_null($_usuario) ? null : ','.$_id_usuario)],
-
-            'oficina'       =>  'required',
-
-            'tipo_usuario'  =>  'required',
-
-            'contraseña'    =>  'required|min:8',
-
-            'repetir_contraseña' => ['required','same:contraseña','min:8']
-
-        ]));
-
-
-
-        if($validator->fails()) { 
-
-            return response()->json(['error'=>$validator->errors()->all()]); 
-
-        }
-
+        /**Variables a utilizar*/
         $oficina = null;
+        $contrasena = $request -> contraseña;
+        $repetir_contrasena = $request -> repetir_contraseña;
+        $params_validator = [
+            'usuario'       =>  'required',
+            'correo'        =>  ['required','email:rfc,dns','max:25','string','unique:users,email'.(is_null($_usuario) ? null : ','.$_id_usuario)],
+            'oficina'       =>  'required',
+            'tipo_usuario'  =>  'required'
+        ]; 
+        $params_usuario =  [
+            'name' => $request->usuario,
+            'email' => $request->correo,
+            'oficina' => intval($request->oficina??null)
+        ];
 
-        if(auth()->user()->hasRole('Super Administrador') || auth()->user()->hasRole('Administrador'))
+        /**Validamos si es necesario realizar un cambio de contrasena */
+        if(is_null($_id_usuario) || ((trim($contrasena ?? "")) != "" && (trim($repetir_contrasena ?? "")) != "")){
+            // Agregamos las reglas de validación de contraseña y repetir contraseña
+            $params_validator['contraseña'] = 'required|min:8';
+            $params_validator['repetir_contraseña'] = ['required', 'same:contraseña', 'min:8'];
 
-            $oficina = auth()->user()->hasRole('Super Administrador') ? $request->oficina :  auth()->user()->oficina;
+            // Agregamos el password cifrado a los parámetros de usuario a guardar
+            $params_usuario['password'] = bcrypt($request->contraseña);
+        }
+        
+        /* Este es un método de validación que verifica si el usuario ha ingresado la información
+        requerida. Si el usuario no ha ingresado la información requerida, el usuario recibirá un
+        mensaje de error. */
+        $validator = Validator::make($request->all(),($params_validator));
 
-
-
+        if($validator->fails())
+            return response()->json(['error'=>$validator->errors()->all()]);
+        
        /* Este es el código que crea el usuario. */
-
-        $user = User::updateOrCreate(
-
-            [ 'id' =>  $_id_usuario],
-
-            [
-
-                'name' => $request->usuario,
-
-                'email' => $request->correo,
-
-                'oficina' => $oficina,
-
-                'password' => bcrypt($request->contraseña)
-
-            ]
-
-        );
-
-
+        $user = User::updateOrCreate(['id' =>  $_id_usuario], $params_usuario);
 
         // Eliminacion de roles y permisos para usuario
-
         $user->roles()->detach();
 
-        
-
         // Obtengo el rol que se desea asignar
-
         $rol = $request->tipo_usuario;
 
-        
-
         // Asigno el rol al usuario
-
         if($rol === 'Usuaria/o' && auth()->user()->hasRole('Administrador'))
-
             $user->assignRole($rol);
 
         else if(($rol === 'Administrador' || $rol === 'Usuaria/o') && auth()->user()->hasRole('Super Administrador'))
-
             $user->assignRole($rol);
 
-
-
         // Asigno permisos para usuario        
-
         /*foreach ($request->permisos as $key => $value) {
-
             $modulo = (object)$value;
-
             foreach ($modulo->permisos as $key => $value) {
-
                 $permiso = (object) $value;
-
                 if(boolval($permiso->bool) && $rol === 'Usuaria/o'){
-
                     $user->givePermissionTo($modulo->modulo.' '.$permiso->name);
-
                 }else{
-
                     $user->revokePermissionTo($modulo->modulo.' '.$permiso->name);
-
                 }
-
             }
-
         }*/
 
         /* Esta es la respuesta que se enviará al usuario. Contiene un mensaje de que el usuario se ha
-
         creado correctamente. */
-
         return response()->json([
-
-            'key' => DB::select(DB::raw("select md5(".$user->id.") as 'key';"))[0]->key,
-
-            'mensaje' => 'Registro Guardado',
-
+            'key' => DB::select(DB::raw("select SHA1(".$user->id.") as 'key';"))[0]->key,
+            'mensaje' => "Registro ".(is_null($_id_usuario)? "Guardado":"Actualizado"),
             'usuario' => $user->hasRole($rol)
-
         ], 201);
-
     }
-
 
 
     /**
@@ -224,7 +165,7 @@ class AuthController extends Controller
 
         /* Este es el código que crea las credenciales. */
 
-        $credentials = array("email"=>$request->correo, 'password'=>$request->contrasena, 'estado'=>true);
+        $credentials = array("email"=>strval($request->correo), 'password'=>strval($request->contrasena), 'estado'=>true);
 
         
 
@@ -251,15 +192,10 @@ class AuthController extends Controller
         dia. La última línea guarda el token. */
 
         
-
         $tokenResult = $user->createToken('Personal Access Token');
-
         $date_expires = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now()->addDay(2))->format('Y-m-d H:i:s');
-
         $token = $tokenResult->token;
-
         $token->expires_at = $date_expires;
-
         $token->save();
 
        
@@ -599,7 +535,7 @@ class AuthController extends Controller
         try{
             $select = [
 
-                DB::raw('md5(id) as "key"'),
+                DB::raw('SHA1(id) as "key"'),
 
                 'name as usuario',
 
@@ -627,7 +563,7 @@ class AuthController extends Controller
 
             $user = User::select($select)
 
-                ->whereRaw('md5(id) like "'.$key.'"')
+                ->whereRaw('SHA1(id)  = "'.$key.'"')
 
             ->first();
 
@@ -635,7 +571,7 @@ class AuthController extends Controller
 
                 $permisos = [];
 
-                $_user = User::select('id')->whereRaw('md5(id) like "'.$user->key.'"')->first();
+                $_user = User::select('id')->whereRaw('SHA1(id)  = "'.$user->key.'"')->first();
 
                 /*
                 foreach ($this->getPermisos() as $key0 => $value0) {
@@ -713,7 +649,7 @@ class AuthController extends Controller
 
 
 
-        $selectRaw = "md5(users.id) as 'key', 
+        $selectRaw = "SHA1(users.id) as 'key', 
 
             CASE WHEN estado THEN \"Activo\" ELSE \"Inactivo\" END as estado, 
 
@@ -779,7 +715,7 @@ class AuthController extends Controller
 
     public function destroy($key){
 
-        $user = User::whereRaw('md5(id) like "'.$key.'"')->first();
+        $user = User::whereRaw('SHA1(id)  = "'.$key.'"')->first();
 
         $user -> estado = !boolval($user->estado);
 

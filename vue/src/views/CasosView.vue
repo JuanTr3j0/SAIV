@@ -48,7 +48,7 @@
                                 <span>{{caso.fechaRegistro}}</span>
                             </td>
                             <td class="text-nowrap">
-                                {{caso.tiposViolencia ?? '-'}}
+                                {{getValueLabel(caso.tiposViolencia) ?? '-'}}
                             </td> 
                             <td class="text-nowrap">
                                 {{caso.modalidadViolencia ?? '-'}}
@@ -93,6 +93,7 @@
                     :loading="loading"
                     :showVer="showVer ?? false"
                 />
+             
             </template>
         </Modal>
         <Modal ref="modalCasoBorrarRef">
@@ -116,22 +117,22 @@ import modalArchivos        from '@/components/ModalArchivos.vue'
 import AdvertenciaVue       from '@/components/layout/Advertencia.vue'
 import AccionesTable        from '@/components/layout/AccionesTable.vue'
 import FormSelectOpcionVue  from '@/components/FormSelectOpcion.vue';
-
+import otros from '@/services/otros';
 import otros_servicio   from '@/services/otros'
 import servicio         from '@/services/crud'
 import store            from '@/store'
 
 const columnas = [
-{nombre:"Acciones",                 class:"bg-primary text-white fw-bold text-center",        sort:false, sortIcon:'bx-minus', key:'acciones'},
-    {nombre:"Codigo",                   class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-sort-down', key:"codigo"},
-    {nombre:"Fecha Registro",           class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"fechaRegistro"},
-    {nombre:"Violencia",                class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"tiposViolencia"},
-    {nombre:"Mod. Violencia",           class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"modalidadViolencia"},
-    {nombre:"Instit. Que Remite",       class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"institucionRemitente"},
-    {nombre:"Instit. Dónde se Remite",  class:"text-center bg-label-primary text-white fw-bold",  sort:false, sortIcon:'bx-minus', key:"institucionDondeSeRemite"},
-    {nombre:"Fecha Hecho",              class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"fechaHecho"},
-    {nombre:"Departamento",             class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"departamento"},
-    {nombre:"Municipio",                class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus', key:"municipio"},
+    {nombre:"Acciones",                 class:"bg-primary text-white fw-bold text-center",        sort:false, sortIcon:'bx-minus',      key:'acciones'},
+    {nombre:"Codigo",                   class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-sort-down',  key:"codigo"},
+    {nombre:"Fecha Registro",           class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus',      key:"fechaRegistro"},
+    {nombre:"Violencia",                class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus',      key:"tiposViolencia"},
+    {nombre:"Mod. Violencia",           class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus',      key:"modalidadViolencia"},
+    {nombre:"Instit. Que Remite",       class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus',      key:"institucionRemitente"},
+    {nombre:"Instit. Dónde se Remite",  class:"text-center bg-label-primary text-white fw-bold",  sort:false, sortIcon:'bx-minus',      key:"institucionDondeSeRemite"},
+    {nombre:"Fecha Hecho",              class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus',      key:"fechaHecho"},
+    {nombre:"Departamento",             class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus',      key:"departamento"},
+    {nombre:"Municipio",                class:"text-center bg-label-primary text-white fw-bold",  sort:true,  sortIcon:'bx-minus',      key:"municipio"},
     
 ]
 
@@ -208,7 +209,7 @@ export default defineComponent({
         const handleClickVer =  (json) => {showVer.value  = true; cargarCaso(json)};
         const handleClickEditar = (json) => {showVer.value  = false; cargarCaso(json)};
         const handleClickBorrar = (json) => {advertenciaRef.value.setJson(json); modalCasoBorrarRef.value.showModal(); }
-        const handleClickImprimir =  (json) => {showVer.value  = true; cargarCaso(json)};;
+        const handleClickImprimir =  (json) => {showVer.value  = true; descargarCaso(json)};;
         
         // Cargo archivos en el modal
         const handleClickArchivos = (json) => cargarArchivos(json);
@@ -241,7 +242,6 @@ export default defineComponent({
 
         const handledBorrarArchivoCaso = async(key_caso, key_archivo) => {
             try {
-                console.log('archivo -> '+key_archivo)
                 if(typeof key_archivo !== 'undefined' && typeof key_caso !== 'undefined'){
                     cargando(true)
                     await servicio.borrar('saiv/archivos/caso/eliminar/'+key_archivo);
@@ -270,6 +270,23 @@ export default defineComponent({
                 formCasoRef.value.visibleTab('agresores', _caso.agresores.length > 0);
                 formCasoRef.value.visibleTab('responsables', _caso.responsable.key!== null);
                 modalCasoRef.value.showModal();
+                cargando(false)
+            }
+        }
+
+        const descargarCaso = async (json) => {
+            if(typeof json.key !== 'undefined'){
+                cargando(true)
+              //  window.open(store.state.URL_SERVER + 'saiv/archivosPDF/caso/'+json.key)
+             
+                try {
+                await otros.descargarArchivo('saiv/archivosPDF/caso/'+json.key, json.codigo+".pdf")
+                loading.value = false
+            } catch (error) {
+                console.log(error)
+            } finally {
+                loading.value = false
+            }
                 cargando(false)
             }
         }

@@ -61,20 +61,60 @@ export default{
             cargando = false;
         }
     },
-    archivos: async (formData, url) => {      
+    archivos: async (name_file, file, key, url) => {
+    
         let _error = null;
         let _response = null;
-        let response = await axios.post(store.state.URL_SERVER+url, formData, {headers: store.state.HEADERS})
-        .then( function( response ){
+    
+        // Función para convertir un archivo a base64
+        const convertToBase64 = (file) => {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        };
+    
+        try {
+            // Convertir el archivo a base64
+            const fileBase64 = await convertToBase64(file);
+    
+            // Crear el objeto JSON a enviar
+            const dataToSend = {
+                key: key,
+                archivo: fileBase64,
+                nombre: name_file
+            };
+    
+            const response = await fetch(store.state.URL_SERVER + url, {
+                method: 'POST',
+                headers: {
+                    ...store.state.HEADERS,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dataToSend)
+            });
+    
             _response = response;
-        }.bind(this))
-        .catch( function( error ){
+            const data = await response.json();
+    
+            // Manejo de errores basado en la respuesta
+            if (!response.ok) {
+                _error = data;
+            }
+    
+            toast.toasPeticionesHttp(data, _error, response.status === 200);
+    
+            return { data, error: _error, status: response.status };
+    
+        } catch (error) {
             _error = error;
-        }.bind(this));
-        //toast.toasPeticionesHttp(_response.data, _error, _response.status==200)
-        return {data:_response.data, error:_error, status:_response.status}
-         
-    },
+            console.error("Error en la carga de archivo:", error);
+            toast.toasPeticionesHttp(null, _error, false);
+            return { data: null, error: _error, status: null };
+        }
+    },    
     descargarArchivo: async (url, _nombre) => {
         await axios({
             url: store.state.URL_SERVER+url,
@@ -96,8 +136,6 @@ export default{
         try {
             let _error = null;
             let _response = null;
-            console.log(store.state.HEADERS)
-            console.log(JSON.stringify(store.state.HEADERS))
             await axios.post(store.state.URL_SERVER+url, 
                 json, { method:"POST", headers: JSON.stringify(store.state.HEADERS) }
             )

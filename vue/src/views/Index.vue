@@ -39,7 +39,7 @@
     </div>
 
     <div class="col-lg-3 order-2 order-lg-1">
-      <img src="assets/img/logo-csj.png" class="img-fluid" alt="" data-aos="zoom-out" data-aos-delay="100">
+      <img src="/assets/img/logo-csj.png" class="img-fluid" alt="" data-aos="zoom-out" data-aos-delay="100">
     </div>
 
   </div>

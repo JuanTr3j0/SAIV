@@ -44,13 +44,13 @@ trait TraitCasos{
 
         try{
 
-            $whereIdCaso = 'md5(casos.id) like "'.$key.'"';
+            $whereIdCaso = 'SHA1(casos.id) like "'.$key.'"';
 
             if(!Casos::whereRaw($whereIdCaso)->where('estado', true)->exists())
                 return response()->json(['error'=>'No se encontro el caso.('.$key.')'],204);
 
             $select = [
-                DB::raw('md5(`casos`.`id`) as `key`'),
+                DB::raw('SHA1(`casos`.`id`) as `key`'),
                 DB::raw('case when `casos`.`fecha_registro` is NULL
                     then
                         DATE_FORMAT(`casos`.`created_at`, "%Y-%m-%d %H:%i")
@@ -62,6 +62,7 @@ trait TraitCasos{
                 'denuncia                       as denuncia',
                 'mes                            as mes',
                 'correlativo',
+                'observaciones                  as observaciones',
                 'anio                           as  anio',
                 'circunstancia_del_hecho        as  circunstanciaDelHecho',
                 'victima_fk                     as  victima',
@@ -73,6 +74,7 @@ trait TraitCasos{
                 'delito_codigo_penal            as  delitoCodigoPenal',
                 'delito_codigo_penal_otro       as  delitoCodigoPenalOtro',
                 'departamentos.id               as  departamentoOcurrencia',
+                'departamentos.departamento     as  nombreDepartamento',
                 'municipio_ocurrencia_fk        as  municipioOcurrencia',
                 'institucion_remitente          as  institucionRemitente',
                 'institucion_remitente_otra     as  institucionRemitenteOtra',
@@ -97,7 +99,7 @@ trait TraitCasos{
 
             // Obtener Archivos
 
-            $caso->archivosCasos = ArchivosCasos::select([DB::raw('md5(`archivos`.`id`) as `key`'), 'archivos.nombre_original'])
+            $caso->archivosCasos = ArchivosCasos::select([DB::raw('SHA1(`archivos`.`id`) as `key`'), 'archivos.nombre_original'])
 
             ->where('archivos_casos.caso_fk', '=', $caso->archivosCasos)
 
@@ -156,8 +158,8 @@ trait TraitCasos{
     public function getPersona ($_id){
 
         try{
-
-            if( $_id === null){
+            //Validamos si existe el registro de la persona en la BD 
+            if(!Persona::where('id', $_id)->exists()){
 
                 return[
 
@@ -242,10 +244,9 @@ trait TraitCasos{
             }
 
 
-
             $select = [
 
-                DB::raw('md5(personas.id) as `key`'),
+                DB::raw('SHA1(personas.id) as `key`'),
 
                 'dui               as dui',
 
@@ -324,7 +325,6 @@ trait TraitCasos{
             ];
 
 
-
             $persona = Persona::select($select)
 
             ->leftJoin('municipios', 'municipios.id', '=', 'personas.municipio_fk')
@@ -347,11 +347,17 @@ trait TraitCasos{
 
             $persona -> fuenteIngresos = Ingresos::select('fuente_ingreso')
 
-                ->whereRaw('md5(persona_fk) like "'.$persona -> key.'"')
+            ->whereRaw('SHA1(persona_fk) like "'.$persona -> key.'"')
 
-                ->get()->map(function($value){ return $value->fuente_ingreso; });
+            ->get()->map(function($value){ return $value->fuente_ingreso; });
 
+            // Obtener dui
 
+            if ($persona->dui !== null) {
+                $query = "SELECT ? AS 'key', ? AS 'label'";
+                $bindings = [$persona->key, $persona->dui];
+                $persona->dui = DB::select($query, $bindings)[0];
+            }
 
             return $persona;
 
@@ -371,7 +377,7 @@ trait TraitCasos{
 
             $select = [
 
-                DB::raw('md5(`agresores_casos`.`id`) as `key`'),
+                DB::raw('SHA1(`agresores_casos`.`id`) as `key`'),
 
                 'primer_nombre              as primerNombre',
 
@@ -601,7 +607,7 @@ trait TraitCasos{
 
                  '-',LPAD( `casos`.`mes`,2,'0'), '-', `casos`.`anio`) as codigo"),
 
-                DB::raw('md5(`casos`.`id`) as `key`'),
+                DB::raw('SHA1(`casos`.`id`) as `key`'),
 
                 DB::raw('case when `casos`.`fecha_registro` is NULL
 
@@ -871,7 +877,7 @@ trait TraitCasos{
 
                  '-',LPAD( `casos`.`mes`,2,'0'), '-', `casos`.`anio`) as codigo"),
 
-                DB::raw('md5(`agresores_casos`.`id`) as `key`'),
+                DB::raw('SHA1(`agresores_casos`.`id`) as `key`'),
 
                 'primer_nombre                 as primerNombre',
 

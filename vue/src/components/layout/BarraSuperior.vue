@@ -30,7 +30,7 @@
                 <a class="nav-link dropdown-toggle hide-arrow" @click="showPopper=!showPopper;" @focus="falseShowPopper">
                     <div class="avatar avatar-online">
                         <!-- <img src="@/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" /> -->
-                        <img src="https://www.csj.gob.sv/wp-content/uploads/2021/06/cropped-logocsj-1-180x180.png" alt class="w-px-40 h-auto rounded-circle" />
+                        <img src="/assets/img/logo-csj.png" alt class="w-px-40 h-auto rounded-circle" />
                     </div> 
                 </a>            
                <template #content>

@@ -585,6 +585,9 @@ export default {
             tipoAsistencia:[
                 /**String */
             ],
+            tiposViolencia:[
+                /**String */
+            ],
             archivosCasos:[]
         };
 
