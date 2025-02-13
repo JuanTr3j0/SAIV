@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('atencion_psicologica', function (Blueprint $table) {
             $table->id();
-            $table -> unsignedBigInteger('caso_fk');
-            $table->date('fecha_atencion'); 
-            $table->time('hora_atencion');
-            $table->integer('numero_sesion');
+            $table ->unsignedBigInteger('caso_fk')->default(1);
+            $table->date('fecha_atencion')->default(now());
+            $table->time('hora_atencion')->default('09:00:00');
+            $table->integer('numero_sesion')->default(1);;
 
             $table->enum('objetivo_atencion', $this->ENUM_OBJETIVO_ATENCION());
             $table->string('objetivo_atencion_otro')->nullable();
@@ -33,9 +33,10 @@ return new class extends Migration
             $table->enum('referencias',$this->ENUM_REFERENCIAS());
             $table->string('referencias_otro')->nullable();
 
-            $table->unsignedBigInteger('profesional_responsable_fk')->nullable();//por defecto el input se llenara con el nombre del usuario logeado, pero se puede modificar ya que puede ser que el nombre del usuario no corresponda
+            $table->unsignedBigInteger('profesional_responsable_fk')->nullable()->default(1);//por defecto el input se llenara con el nombre del usuario logeado, pero se puede modificar ya que puede ser que el nombre del usuario no corresponda
 
             $table->timestamps();
+            $table->boolean('estado')->default(true);
 
             
             //Llaves foráneas

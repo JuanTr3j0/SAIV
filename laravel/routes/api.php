@@ -1,8 +1,11 @@
+
 <?php
 
 
 
+use App\Http\Controllers\AtencionPsicologicaController;
 use App\Http\Controllers\PdfController;
+use App\Models\AtencionPsicologica;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExcelController;
@@ -295,5 +298,25 @@ Route::controller(ExcelController::class)->prefix('/saiv/descargar/excel')
     //Route::get('caso/{id}', 'caso');
 
     Route::get('reporte/{reporte}/{tipo}/{mes}/{anio}', 'casos');
+
+});
+
+
+// Modulo atencion psicologica
+
+Route::controller(AtencionPsicologicaController::class)->prefix('/saiv/atencion-psicologica')
+->middleware(['auth:api', 'role:Super Administrador|Administrador|Usuaria'])
+->group(function (){
+
+    Route::post('index','index');
+    Route::post('guardar','store');
+    Route::post('obtener/{key}','show');
+    
+
+    Route::middleware('auth:api')->group(function(){
+
+        Route::post('indexSelect','indexSelect');
+
+    });
 
 });
